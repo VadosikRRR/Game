@@ -23,23 +23,32 @@ class main_hero {
         main_hero(string name_hero, fighter fighter_class_hero);
 
         char get_designation();
-        int get_xp();
-        int get_money();
-        int get_health();
-        int get_max_health();
-        int get_mana();
-        int get_max_mana();
-        int get_protection();
-        int get_probability_of_hit();
+        unsigned int get_xp();
+        unsigned int get_money();
+        unsigned int get_health();
+        unsigned int get_max_health();
+        unsigned int get_mana();
+        unsigned int get_max_mana();
+        unsigned int get_protection();
+        unsigned int get_probability_of_hit();
         string get_name();
         fighter get_fighter_class();
 
-        void reduce_xp(int amount_xp);
-        void reduce_money(int amount_money);
-        void reduce_health(int amount_health);
-        void reduce_max_health(int amount_health);
-        void reduce_mana(int amount_mana);
-        void reduce_max_mana(int amount_mana);
-        void reduce_protection(int amount_protection);
-        void reduce_probability_of_hit(int change_in_probability);
+        void reduce_xp(unsigned int amount_xp);
+        void reduce_money(unsigned int amount_money);
+        void reduce_health(unsigned int amount_health);
+        void reduce_max_health(unsigned int amount_health);
+        void reduce_mana(unsigned int amount_mana);
+        void reduce_max_mana(unsigned int amount_mana);
+        void reduce_protection(unsigned int amount_protection);
+        void reduce_probability_of_hit(unsigned int change_in_probability);
+
+        void increase_xp(unsigned int amount_xp);
+        void increase_money(unsigned int amount_money);
+        void increase_health(unsigned int amount_health);
+        void increase_max_health(unsigned int amount_health);
+        void increase_mana(unsigned int amount_mana);
+        void increase_max_mana(unsigned int amount_mana);
+        void increase_protection(unsigned int amount_protection);
+        void increase_probability_of_hit(unsigned int change_in_probability);
 };

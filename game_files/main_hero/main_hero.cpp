@@ -36,35 +36,35 @@ char main_hero::get_designation() {
     return designation;
 }
 
-int main_hero::get_xp() {
+unsigned int main_hero::get_xp() {
     return xp;
 }
 
-int main_hero::get_money() {
+unsigned int main_hero::get_money() {
     return money;
 }
 
-int main_hero::get_health() {
+unsigned int main_hero::get_health() {
     return health;
 }
 
-int main_hero::get_max_health() {
+unsigned int main_hero::get_max_health() {
     return max_health;
 }
 
-int main_hero::get_mana() {
+unsigned int main_hero::get_mana() {
     return mana;
 }
 
-int main_hero::get_max_mana() {
+unsigned int main_hero::get_max_mana() {
     return max_mana;
 }
 
-int main_hero::get_protection() {
+unsigned int main_hero::get_protection() {
     return protection;
 }
 
-int main_hero::get_probability_of_hit() {
+unsigned int main_hero::get_probability_of_hit() {
     return probability_of_hit;
 }
 
@@ -76,34 +76,66 @@ fighter main_hero::get_fighter_class() {
     return fighter_class;
 }
 
-void main_hero::reduce_xp(int amount_xp) {
+void main_hero::reduce_xp(unsigned int amount_xp) {
     xp = amount_xp > xp ? 0 : xp - amount_xp;
 }
 
-void main_hero::reduce_money(int amount_money) {
+void main_hero::reduce_money(unsigned int amount_money) {
     money = amount_money > money ? 0 : money - amount_money;
 }
 
-void main_hero::reduce_health(int amount_health) {
+void main_hero::reduce_health(unsigned int amount_health) {
     health = amount_health > health ? 0 : health - amount_health;
 }
 
-void main_hero::reduce_max_health(int amount_health) {
+void main_hero::reduce_max_health(unsigned int amount_health) {
     max_health = amount_health > max_health ? 0 : max_health - amount_health;
 }
 
-void main_hero::reduce_mana(int amount_mana) {
+void main_hero::reduce_mana(unsigned int amount_mana) {
     mana = amount_mana > mana ? 0 : mana - amount_mana;
 }
 
-void main_hero::reduce_max_mana(int amount_mana) {
+void main_hero::reduce_max_mana(unsigned int amount_mana) {
     max_mana = amount_mana > max_mana ? 0 : max_mana - amount_mana;
 }
 
-void main_hero::reduce_protection(int amount_protection) {
+void main_hero::reduce_protection(unsigned int amount_protection) {
     protection = amount_protection > protection ? 0 : protection - amount_protection;
 }
 
-void main_hero::reduce_probability_of_hit(int change_in_probability) {
+void main_hero::reduce_probability_of_hit(unsigned int change_in_probability) {
     probability_of_hit = change_in_probability > probability_of_hit ? 0 : probability_of_hit - change_in_probability;
+}
+
+void main_hero::increase_xp(unsigned int amount_xp) {
+    xp += amount_xp;
+}
+
+void main_hero::increase_money(unsigned int amount_money) {
+    money += amount_money;
+}
+
+void main_hero::increase_health(unsigned int amount_health) {
+    health = amount_health + health > max_health ? max_health : amount_health + health;
+}
+
+void main_hero::increase_max_health(unsigned int amount_health) {
+    max_health += amount_health;
+}
+
+void main_hero::increase_mana(unsigned int amount_mana) {
+    mana = amount_mana + mana > max_mana ? max_mana : amount_mana + mana;
+}
+
+void main_hero::increase_max_mana(unsigned int amount_mana) {
+    max_mana += amount_mana;
+}
+
+void main_hero::increase_protection(unsigned int amount_protection) {
+    protection += amount_protection;
+}
+
+void main_hero::increase_probability_of_hit(unsigned int change_in_probability) {
+    probability_of_hit = change_in_probability + probability_of_hit > 1 ? 1 : change_in_probability + probability_of_hit;
 }
