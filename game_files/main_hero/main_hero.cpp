@@ -137,5 +137,5 @@ void main_hero::increase_protection(unsigned int amount_protection) {
 }
 
 void main_hero::increase_probability_of_hit(unsigned int change_in_probability) {
-    probability_of_hit = change_in_probability + probability_of_hit > 1 ? 1 : change_in_probability + probability_of_hit;
+    probability_of_hit = change_in_probability + probability_of_hit > 100 ? 100 : change_in_probability + probability_of_hit;
 }
