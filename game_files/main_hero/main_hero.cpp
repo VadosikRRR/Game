@@ -32,6 +32,10 @@ main_hero::main_hero(string name_hero, fighter fighter_class_hero): designation(
     put_fighter_class_characteristics(fighter_class_hero);
 }
 
+char main_hero::get_designation() {
+    return designation;
+}
+
 int main_hero::get_xp() {
     return xp;
 }
@@ -70,4 +74,36 @@ string main_hero::get_name() {
 
 fighter main_hero::get_fighter_class() {
     return fighter_class;
+}
+
+void main_hero::reduce_xp(int amount_xp) {
+    xp = amount_xp > xp ? 0 : xp - amount_xp;
+}
+
+void main_hero::reduce_money(int amount_money) {
+    money = amount_money > money ? 0 : money - amount_money;
+}
+
+void main_hero::reduce_health(int amount_health) {
+    health = amount_health > health ? 0 : health - amount_health;
+}
+
+void main_hero::reduce_max_health(int amount_health) {
+    max_health = amount_health > max_health ? 0 : max_health - amount_health;
+}
+
+void main_hero::reduce_mana(int amount_mana) {
+    mana = amount_mana > mana ? 0 : mana - amount_mana;
+}
+
+void main_hero::reduce_max_mana(int amount_mana) {
+    max_mana = amount_mana > max_mana ? 0 : max_mana - amount_mana;
+}
+
+void main_hero::reduce_protection(int amount_protection) {
+    protection = amount_protection > protection ? 0 : protection - amount_protection;
+}
+
+void main_hero::reduce_probability_of_hit(int change_in_probability) {
+    probability_of_hit = change_in_probability > probability_of_hit ? 0 : probability_of_hit - change_in_probability;
 }

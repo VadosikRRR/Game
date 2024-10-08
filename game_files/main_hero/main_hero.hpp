@@ -21,6 +21,8 @@ class main_hero {
 
     public:
         main_hero(string name_hero, fighter fighter_class_hero);
+
+        char get_designation();
         int get_xp();
         int get_money();
         int get_health();
@@ -31,4 +33,13 @@ class main_hero {
         int get_probability_of_hit();
         string get_name();
         fighter get_fighter_class();
+
+        void reduce_xp(int amount_xp);
+        void reduce_money(int amount_money);
+        void reduce_health(int amount_health);
+        void reduce_max_health(int amount_health);
+        void reduce_mana(int amount_mana);
+        void reduce_max_mana(int amount_mana);
+        void reduce_protection(int amount_protection);
+        void reduce_probability_of_hit(int change_in_probability);
 };
