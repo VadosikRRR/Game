@@ -1,4 +1,5 @@
 #include "item.hpp"
+#pragma once
 
 
 Item::~Item() {}
