@@ -7,7 +7,7 @@ string Item::get_name() {
     return name;
 }
 
-float Item::get_weight() {
+int Item::get_weight() {
     return weight;
 }
 
