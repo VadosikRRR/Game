@@ -89,6 +89,11 @@ namespace game
         return position;
     }
 
+    unsigned int Hero::get_damage() 
+    {
+        return damage;
+    }
+
     string Hero::get_name()
     {
         return name;
@@ -139,6 +144,11 @@ namespace game
         probability_of_hit = change_in_probability > probability_of_hit ? 0 : probability_of_hit - change_in_probability;
     }
 
+    void Hero::reduce_damage(unsigned int amount_damage) 
+    {
+        damage = amount_damage > damage ? 0 : damage - amount_damage;
+    }
+
     void Hero::increase_xp(unsigned int amount_xp)
     {
         xp += amount_xp;
@@ -177,6 +187,10 @@ namespace game
     void Hero::increase_probability_of_hit(unsigned int change_in_probability)
     {
         probability_of_hit = change_in_probability + probability_of_hit > 100 ? 100 : change_in_probability + probability_of_hit;
+    }
+
+    void Hero::increase_damage(unsigned int amount_damage) {
+        damage += amount_damage;
     }
 
     void Hero::move(int add_x, int add_y, const game::Map &map)

@@ -13,14 +13,15 @@ namespace game
     {
     private:
         char designation;
-        int xp;
-        int money;
-        int health;
-        int max_health;
-        int mana;
-        int max_mana;
-        float probability_of_hit;
-        int protection;
+        unsigned int xp;
+        unsigned int money;
+        unsigned int health;
+        unsigned int max_health;
+        unsigned int mana;
+        unsigned int max_mana;
+        unsigned int probability_of_hit;
+        unsigned int protection;
+        unsigned int damage;
         Point position;
         string name;
         fighter fighter_class;
@@ -40,6 +41,7 @@ namespace game
         unsigned int get_max_mana();
         unsigned int get_protection();
         unsigned int get_probability_of_hit();
+        unsigned int get_damage();
         Point get_position();
         string get_name();
         fighter get_fighter_class();
@@ -52,6 +54,7 @@ namespace game
         void reduce_max_mana(unsigned int amount_mana);
         void reduce_protection(unsigned int amount_protection);
         void reduce_probability_of_hit(unsigned int change_in_probability);
+        void reduce_damage(unsigned int amount_damage);
 
         void increase_xp(unsigned int amount_xp);
         void increase_money(unsigned int amount_money);
@@ -61,6 +64,7 @@ namespace game
         void increase_max_mana(unsigned int amount_mana);
         void increase_protection(unsigned int amount_protection);
         void increase_probability_of_hit(unsigned int change_in_probability);
+        void increase_damage(unsigned int amount_damage);
 
         void move(int add_x, int add_y, const game::Map &map);
         void SetPositions(const Point &point);
