@@ -1,12 +1,12 @@
 struct Point {
 private:
-    int x;
-    int y;
+    int x_;
+    int y_;
 
 public:
     Point(int new_x = 0, int new_y = 0);
-    int get_x();
-    int get_y();
-    void change_x(int new_x);
-    void change_y(int new_y);
+    int getX();
+    int getY();
+    void changeX(int new_x);
+    void changeX(int new_y);
 };

@@ -1,19 +1,19 @@
 #include "point.hpp"
 
-Point::Point(int new_x = 0, int new_y = 0) : x(new_x), y(new_y) {}
+Point::Point(int new_x = 0, int new_y = 0) : x_(new_x), y_(new_y) {}
 
-int Point::get_x() {
-    return x;
+int Point::getX() {
+    return x_;
 }
 
-int Point::get_y() {
-    return y;
+int Point::getY() {
+    return y_;
 }
 
-void Point::change_x(int new_x) {
-    x = new_x;
+void Point::changeX(int new_x) {
+    x_ = new_x;
 }
 
-void Point::change_y(int new_y) {
-    y = new_y;
+void Point::changeX(int new_y) {
+    y_ = new_y;
 }

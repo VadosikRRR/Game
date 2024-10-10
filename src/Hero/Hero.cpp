@@ -195,20 +195,20 @@ namespace game
 
     void Hero::Move(int add_x, int add_y, const game::Map &map)
     {
-        int new_x = position_.get_x() + add_x;
+        int new_x = position_.getX() + add_x;
 
-        int new_y = position_.get_y() + add_y;
+        int new_y = position_.getY() + add_y;
 
         if (new_x >= 0 && new_x < kMapHeight && new_y >= 0 && new_y < kMapWidth && map.IsWalkable(new_x, new_y))
         {
-            position_.change_x(new_x);
-            position_.change_y(new_y);
+            position_.changeX(new_x);
+            position_.changeX(new_y);
         }
     }
 
     void Hero::SetPositions(const Point &point)
     {
-        position_.change_x(point.get_x());
-        position_.change_y(point.get_y());
+        position_.changeX(point.getX());
+        position_.changeX(point.getY());
     }
 }
