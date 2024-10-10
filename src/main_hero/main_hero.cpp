@@ -155,6 +155,6 @@ void main_hero::move_right() {
     position.change_x(position.get_x() + 1);
 }
 
-void main_hero::move_up() {
+void main_hero::move_left() {
     position.change_x(position.get_x() - 1);
 }
