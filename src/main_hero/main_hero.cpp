@@ -25,7 +25,7 @@ void main_hero::put_fighter_class_characteristics(fighter fighter_class_hero) {
     }
 }
 
-main_hero::main_hero(string name_hero, fighter fighter_class_hero): designation('@'), xp(0), money(0),
+main_hero::main_hero(string name_hero, fighter fighter_class_hero): designation(DESIGNATION_MAIN_HERO), xp(0), money(0),
         health(START_MAX_HEALTH), max_health(START_MAX_HEALTH), probability_of_hit(START_PROBABILITY_OF_HIT), position(Point(0, 0)), fighter_class(fighter_class_hero) {
     check_name(name_hero);
     put_fighter_class_characteristics(fighter_class_hero);
