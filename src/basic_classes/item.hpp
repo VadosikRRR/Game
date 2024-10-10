@@ -7,15 +7,15 @@ namespace game{
     class Item {
     private:
         string name_;
-        int weight_;
+        unsigned int weight_;
         bool is_thrown_;
         Point position_;
 
 
     public:
-        Item(string name, int weight, bool is_trown, Point position_ = Point());
+        Item(string name, unsigned int weight, bool is_trown, Point position_ = Point());
         string get_name();
-        int get_weight();
+        unsigned int get_weight();
         virtual void execute();
         virtual ~Item();
         void put_item();

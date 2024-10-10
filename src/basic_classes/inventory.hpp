@@ -9,8 +9,8 @@ using namespace std;
 namespace game{
     class Inventory{
     private:
-        int max_weight;
-        int current_weight;
+        unsigned int max_weight;
+        unsigned int current_weight;
         vector<Item> stuff;
         ~Inventory();
     public:
@@ -19,7 +19,7 @@ namespace game{
         void drop_item(int index);
         void use_item(int index);
         void increase_max_weight(int val);
-        int get_max_weight();
-        int get_current_weight();
+        unsigned int get_max_weight();
+        unsigned int get_current_weight();
     };
 }
