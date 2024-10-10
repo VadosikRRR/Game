@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "item.hpp"
-#include "../main_hero/fighter.hpp"
+#include "../basic_classes/fighter.hpp"
 #pragma once
 
 using namespace std;
