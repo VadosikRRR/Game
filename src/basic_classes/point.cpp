@@ -1,6 +1,6 @@
 #include "point.hpp"
 
-Point::Point(int new_x, int new_y) : x(new_x), y(new_y) {}
+Point::Point(int new_x = 0, int new_y = 0) : x(new_x), y(new_y) {}
 
 int Point::get_x() {
     return x;
