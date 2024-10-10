@@ -22,9 +22,12 @@ namespace game{
         LongRangeWeapon(name, weight, is_thrown, damage, range, pos) {}
     Bow::~Bow() {}
 
-    Stick::Stick(string name, int weight, bool is_thrown, int damage, int range,Point pos = Point()):
-        LongRangeWeapon(name, weight, is_thrown, damage, range, pos) {}
+    Stick::Stick(string name, int weight, bool is_thrown, int damage, int range, int mana_consumption, Point pos = Point()) :
+        LongRangeWeapon(name, weight, is_thrown, damage, range, pos), mana_consumption_(mana_consumption){}
     Stick::~Stick() {}
+    unsigned int Stick::get_mana_consumption(){
+        return mana_consumption_;
+    }
 
 
     

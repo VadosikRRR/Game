@@ -1,5 +1,6 @@
 #include <iostream>
 #include "creature_type.hpp"
+#pragma once
 using namespace std;
 
 class Creature{

@@ -5,7 +5,7 @@
 using namespace std;
 
 namespace game{
-    class Weapon : Item{
+    class Weapon : public Item{
     private:
         int damage_;
     public:
@@ -14,13 +14,13 @@ namespace game{
         int get_damage();
     };
 
-    class Sword : Weapon{
+    class Sword : public Weapon{
     public: 
         Sword(string name, int weight, bool is_thrown, int damage, Point pos = Point());
         virtual ~Sword();
     };
 
-    class LongRangeWeapon : Weapon{
+    class LongRangeWeapon : public Weapon{
     private:
         int range_;
     public:
@@ -28,15 +28,20 @@ namespace game{
         virtual ~LongRangeWeapon();
         int get_range();
     };
-    class Bow : LongRangeWeapon{
+    
+    class Bow : public LongRangeWeapon{
     public:
         Bow(string name, int weight, bool is_thrown, int damage, int range,Point pos = Point());
         ~Bow();
 
     };
-    class Stick : LongRangeWeapon{
+
+    class Stick : public LongRangeWeapon{
+    private:
+        unsigned int mana_consumption_;
     public:
-        Stick(string name, int weight, bool is_thrown, int damage, int range, Point pos = Point());
+        Stick(string name, int weight, bool is_thrown, int damage, int range, int mana_consumption, Point pos = Point());
         ~Stick();
+        unsigned int get_mana_consumption();
     };
 }
