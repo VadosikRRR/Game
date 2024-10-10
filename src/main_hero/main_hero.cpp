@@ -1,6 +1,5 @@
 #include "main_hero.hpp"
 
-
 void main_hero::check_name(string name_hero) {
     name = (name_hero != "") ? name_hero : NAME_REPLACEMENT_IF_INCORRECT;
 }

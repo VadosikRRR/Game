@@ -8,6 +8,7 @@ using namespace std;
 
 class main_hero {
 private:
+
     char designation;
     int xp;
     int money;
