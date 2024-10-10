@@ -10,10 +10,10 @@ int Point::get_y() {
     return y;
 }
 
-int Point::change_x(int new_x) {
+void Point::change_x(int new_x) {
     x = new_x;
 }
 
-int Point::change_y(int new_y) {
+void Point::change_y(int new_y) {
     y = new_y;
 }
