@@ -158,3 +158,23 @@ void main_hero::move_right() {
 void main_hero::move_left() {
     position.change_x(position.get_x() - 1);
 }
+// Проблема с границами??? будет ли чел выходить за границу???
+void main_hero::move_up_right() {
+    move_up();
+    move_right();
+}
+
+void main_hero::move_up_left() {
+    move_up();
+    move_left();
+}
+
+void main_hero::move_down_right() {
+    move_down();
+    move_right();
+}
+
+void main_hero::move_down_left() {
+    move_down();
+    move_left();
+}

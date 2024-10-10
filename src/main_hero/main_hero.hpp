@@ -63,4 +63,8 @@ public:
     void move_down();
     void move_right();
     void move_left();
+    void move_up_right();
+    void move_up_left();
+    void move_down_right();
+    void move_down_left();
 };
