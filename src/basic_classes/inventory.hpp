@@ -18,4 +18,6 @@ public:
     void drop_item(int index);
     void use_item(int index);
     void increase_max_weight(int val);
+    int get_max_weight();
+    int get_current_weight();
 };

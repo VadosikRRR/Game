@@ -25,3 +25,9 @@ Inventory::~Inventory(){
     stuff.clear();
     stuff.shrink_to_fit();
 }
+int Inventory::get_max_weight(){
+    return max_weight;
+}
+int Inventory::get_current_weight(){
+    return current_weight;
+}
