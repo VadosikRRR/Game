@@ -2,213 +2,213 @@
 
 namespace game
 {
-    void Hero::check_name(string name_hero)
+    void Hero::CheckName(string name_hero)
     {
-        name = (name_hero != "") ? name_hero : NAME_REPLACEMENT_IF_INCORRECT;
+        name_ = (name_hero != "") ? name_hero : NAME_REPLACEMENT_IF_INCORRECT;
     }
 
-    void Hero::put_fighter_class_characteristics(fighter fighter_class_hero)
+    void Hero::PutFighterClassCharacteristics(fighter fighter_class_hero)
     {
         if (fighter_class_hero == warrior)
         {
-            mana = START_MAX_MANA_NO_WIZARD;
-            max_mana = START_MAX_MANA_NO_WIZARD;
-            protection = START_PROTECTION_WARRIOR;
+            mana_ = START_MAX_MANA_NO_WIZARD;
+            max_mana_ = START_MAX_MANA_NO_WIZARD;
+            protection_ = START_PROTECTION_WARRIOR;
         }
 
         else if (fighter_class_hero == archer)
         {
             // Тут обязательно будут крутые характеристики, но пока нет
-            mana = START_MAX_MANA_NO_WIZARD;
-            max_mana = START_MAX_MANA_NO_WIZARD;
-            protection = START_PROTECTION_NO_WARRIOR;
+            mana_ = START_MAX_MANA_NO_WIZARD;
+            max_mana_ = START_MAX_MANA_NO_WIZARD;
+            protection_ = START_PROTECTION_NO_WARRIOR;
         }
 
         else
         {
-            mana = START_MAX_MANA_WIZARD;
-            max_mana = START_MAX_MANA_WIZARD;
-            protection = START_PROTECTION_NO_WARRIOR;
+            mana_ = START_MAX_MANA_WIZARD;
+            max_mana_ = START_MAX_MANA_WIZARD;
+            protection_ = START_PROTECTION_NO_WARRIOR;
         }
     }
 
-    Hero::Hero(string name_hero, fighter fighter_class_hero) : designation('@'), xp(0), money(0),
-                                                               health(START_MAX_HEALTH), max_health(START_MAX_HEALTH), probability_of_hit(START_PROBABILITY_OF_HIT), position(Point(0, 0)), fighter_class(fighter_class_hero)
+    Hero::Hero(string name_hero, fighter fighter_class_hero) : designation_('@'), xp_(0), money_(0),
+                                                               health_(START_MAX_HEALTH), max_health_(START_MAX_HEALTH), probability_of_hit_(START_PROBABILITY_OF_HIT), position_(Point(0, 0)), fighter_class_(fighter_class_hero)
     {
-        check_name(name_hero);
-        put_fighter_class_characteristics(fighter_class_hero);
+        CheckName(name_hero);
+        PutFighterClassCharacteristics(fighter_class_hero);
     }
 
-    char Hero::get_designation()
+    char Hero::GetDesignation()
     {
-        return designation;
+        return designation_;
     }
 
-    unsigned int Hero::get_xp()
+    unsigned int Hero::GetXp()
     {
-        return xp;
+        return xp_;
     }
 
-    unsigned int Hero::get_money()
+    unsigned int Hero::GetMoney()
     {
-        return money;
+        return money_;
     }
 
-    unsigned int Hero::get_health()
+    unsigned int Hero::GetHealth()
     {
-        return health;
+        return health_;
     }
 
-    unsigned int Hero::get_max_health()
+    unsigned int Hero::GetMaxHealth()
     {
-        return max_health;
+        return max_health_;
     }
 
-    unsigned int Hero::get_mana()
+    unsigned int Hero::GetMana()
     {
-        return mana;
+        return mana_;
     }
 
-    unsigned int Hero::get_max_mana()
+    unsigned int Hero::GetMaxMana()
     {
-        return max_mana;
+        return max_mana_;
     }
 
-    unsigned int Hero::get_protection()
+    unsigned int Hero::GetProtection()
     {
-        return protection;
+        return protection_;
     }
 
-    unsigned int Hero::get_probability_of_hit()
+    unsigned int Hero::GetProbabilityOfHit()
     {
-        return probability_of_hit;
+        return probability_of_hit_;
     }
 
-    Point Hero::get_position()
+    Point Hero::GetPosition()
     {
-        return position;
+        return position_;
     }
 
-    unsigned int Hero::get_damage() 
+    unsigned int Hero::GetDamage() 
     {
-        return damage;
+        return damage_;
     }
 
-    string Hero::get_name()
+    string Hero::GetName()
     {
-        return name;
+        return name_;
     }
 
-    fighter Hero::get_fighter_class()
+    fighter Hero::GetFighterClass()
     {
-        return fighter_class;
+        return fighter_class_;
     }
 
-    void Hero::reduce_xp(unsigned int amount_xp)
+    void Hero::ReduceXp(unsigned int amount_xp)
     {
-        xp = amount_xp > xp ? 0 : xp - amount_xp;
+        xp_ = amount_xp > xp_ ? 0 : xp_ - amount_xp;
     }
 
-    void Hero::reduce_money(unsigned int amount_money)
+    void Hero::ReduceMoney(unsigned int amount_money)
     {
-        money = amount_money > money ? 0 : money - amount_money;
+        money_ = amount_money > money_ ? 0 : money_ - amount_money;
     }
 
-    void Hero::reduce_health(unsigned int amount_health)
+    void Hero::ReduceHealth(unsigned int amount_health)
     {
-        health = amount_health > health ? 0 : health - amount_health;
+        health_ = amount_health > health_ ? 0 : health_ - amount_health;
     }
 
-    void Hero::reduce_max_health(unsigned int amount_health)
+    void Hero::ReduceMaxHealth(unsigned int amount_health)
     {
-        max_health = amount_health > max_health ? 0 : max_health - amount_health;
+        max_health_ = amount_health > max_health_ ? 0 : max_health_ - amount_health;
     }
 
-    void Hero::reduce_mana(unsigned int amount_mana)
+    void Hero::ReduceMana(unsigned int amount_mana)
     {
-        mana = amount_mana > mana ? 0 : mana - amount_mana;
+        mana_ = amount_mana > mana_ ? 0 : mana_ - amount_mana;
     }
 
-    void Hero::reduce_max_mana(unsigned int amount_mana)
+    void Hero::ReduceMaxMana(unsigned int amount_mana)
     {
-        max_mana = amount_mana > max_mana ? 0 : max_mana - amount_mana;
+        max_mana_ = amount_mana > max_mana_ ? 0 : max_mana_ - amount_mana;
     }
 
-    void Hero::reduce_protection(unsigned int amount_protection)
+    void Hero::ReduceProtection(unsigned int amount_protection)
     {
-        protection = amount_protection > protection ? 0 : protection - amount_protection;
+        protection_ = amount_protection > protection_ ? 0 : protection_ - amount_protection;
     }
 
-    void Hero::reduce_probability_of_hit(unsigned int change_in_probability)
+    void Hero::ReduceProbabilityOfHit(unsigned int change_in_probability)
     {
-        probability_of_hit = change_in_probability > probability_of_hit ? 0 : probability_of_hit - change_in_probability;
+        probability_of_hit_ = change_in_probability > probability_of_hit_ ? 0 : probability_of_hit_ - change_in_probability;
     }
 
-    void Hero::reduce_damage(unsigned int amount_damage) 
+    void Hero::ReduceDamage(unsigned int amount_damage) 
     {
-        damage = amount_damage > damage ? 0 : damage - amount_damage;
+        damage_ = amount_damage > damage_ ? 0 : damage_ - amount_damage;
     }
 
-    void Hero::increase_xp(unsigned int amount_xp)
+    void Hero::IncreaseXp(unsigned int amount_xp)
     {
-        xp += amount_xp;
+        xp_ += amount_xp;
     }
 
-    void Hero::increase_money(unsigned int amount_money)
+    void Hero::IncreaseMoney(unsigned int amount_money)
     {
-        money += amount_money;
+        money_ += amount_money;
     }
 
-    void Hero::increase_health(unsigned int amount_health)
+    void Hero::IncreaseHealth(unsigned int amount_health)
     {
-        health = amount_health + health > max_health ? max_health : amount_health + health;
+        health_ = amount_health + health_ > max_health_ ? max_health_ : amount_health + health_;
     }
 
-    void Hero::increase_max_health(unsigned int amount_health)
+    void Hero::IncreaseMaxHealth(unsigned int amount_health)
     {
-        max_health += amount_health;
+        max_health_ += amount_health;
     }
 
-    void Hero::increase_mana(unsigned int amount_mana)
+    void Hero::IncreaseMana(unsigned int amount_mana)
     {
-        mana = amount_mana + mana > max_mana ? max_mana : amount_mana + mana;
+        mana_ = amount_mana + mana_ > max_mana_ ? max_mana_ : amount_mana + mana_;
     }
 
-    void Hero::increase_max_mana(unsigned int amount_mana)
+    void Hero::IncreaseMaxMana(unsigned int amount_mana)
     {
-        max_mana += amount_mana;
+        max_mana_ += amount_mana;
     }
 
-    void Hero::increase_protection(unsigned int amount_protection)
+    void Hero::IncreaseProtection(unsigned int amount_protection)
     {
-        protection += amount_protection;
+        protection_ += amount_protection;
     }
 
-    void Hero::increase_probability_of_hit(unsigned int change_in_probability)
+    void Hero::IncreaseProbabilityOfHit(unsigned int change_in_probability)
     {
-        probability_of_hit = change_in_probability + probability_of_hit > 100 ? 100 : change_in_probability + probability_of_hit;
+        probability_of_hit_ = change_in_probability + probability_of_hit_ > 100 ? 100 : change_in_probability + probability_of_hit_;
     }
 
-    void Hero::increase_damage(unsigned int amount_damage) {
-        damage += amount_damage;
+    void Hero::IncreaseDamage(unsigned int amount_damage) {
+        damage_ += amount_damage;
     }
 
-    void Hero::move(int add_x, int add_y, const game::Map &map)
+    void Hero::Move(int add_x, int add_y, const game::Map &map)
     {
-        int new_x = position.get_x() + add_x;
+        int new_x = position_.get_x() + add_x;
 
-        int new_y = position.get_y() + add_y;
+        int new_y = position_.get_y() + add_y;
 
         if (new_x >= 0 && new_x < kMapHeight && new_y >= 0 && new_y < kMapWidth && map.IsWalkable(new_x, new_y))
         {
-            position.change_x(new_x);
-            position.change_y(new_y);
+            position_.change_x(new_x);
+            position_.change_y(new_y);
         }
     }
 
     void Hero::SetPositions(const Point &point)
     {
-        position.change_x(point.get_x());
-        position.change_y(point.get_y());
+        position_.change_x(point.get_x());
+        position_.change_y(point.get_y());
     }
 }

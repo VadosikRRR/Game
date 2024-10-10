@@ -7,16 +7,16 @@ namespace game
         switch (input)
         {
         case 'w':
-            player_.move(-1, 0, levels_[current_level_]);
+            player_.Move(-1, 0, levels_[current_level_]);
             break;
         case 'a':
-            player_.move(0, -1, levels_[current_level_]);
+            player_.Move(0, -1, levels_[current_level_]);
             break;
         case 'd':
-            player_.move(0, 1, levels_[current_level_]);
+            player_.Move(0, 1, levels_[current_level_]);
             break;
         case 's':
-            player_.move(1, 0, levels_[current_level_]);
+            player_.Move(1, 0, levels_[current_level_]);
             break;
         case 'q':
             exit(0);
@@ -44,7 +44,7 @@ namespace game
         while (true)
         {
             clear();
-            levels_[current_level_].Draw(player_.get_position().get_x(), player_.get_position().get_y());
+            levels_[current_level_].Draw(player_.GetPosition().get_x(), player_.GetPosition().get_y());
             refresh();
             int input = getchar();
             HandleInput(input);
@@ -53,8 +53,8 @@ namespace game
     }
     void Game::CheckLevelTransition()
     {
-        int player_x = player_.get_position().get_x();
-        int player_y = player_.get_position().get_y();
+        int player_x = player_.GetPosition().get_x();
+        int player_y = player_.GetPosition().get_y();
         if (levels_[current_level_].IsStairsDown(player_x, player_y))
         {
             if (current_level_ >= kCountLevels)

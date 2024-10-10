@@ -12,61 +12,61 @@ namespace game
     class Hero
     {
     private:
-        char designation;
-        unsigned int xp;
-        unsigned int money;
-        unsigned int health;
-        unsigned int max_health;
-        unsigned int mana;
-        unsigned int max_mana;
-        unsigned int probability_of_hit;
-        unsigned int protection;
-        unsigned int damage;
-        Point position;
-        string name;
-        fighter fighter_class;
+        char designation_;
+        unsigned int xp_;
+        unsigned int money_;
+        unsigned int health_;
+        unsigned int max_health_;
+        unsigned int mana_;
+        unsigned int max_mana_;
+        unsigned int probability_of_hit_;
+        unsigned int protection_;
+        unsigned int damage_;
+        Point position_;
+        string name_;
+        fighter fighter_class_;
 
-        void check_name(string name_hero);
-        void put_fighter_class_characteristics(fighter fighter_class_hero);
+        void CheckName(string name_hero);
+        void PutFighterClassCharacteristics(fighter fighter_class_hero);
 
     public:
         Hero(string name_hero, fighter fighter_class_hero);
 
-        char get_designation();
-        unsigned int get_xp();
-        unsigned int get_money();
-        unsigned int get_health();
-        unsigned int get_max_health();
-        unsigned int get_mana();
-        unsigned int get_max_mana();
-        unsigned int get_protection();
-        unsigned int get_probability_of_hit();
-        unsigned int get_damage();
-        Point get_position();
-        string get_name();
-        fighter get_fighter_class();
+        char GetDesignation();
+        unsigned int GetXp();
+        unsigned int GetMoney();
+        unsigned int GetHealth();
+        unsigned int GetMaxHealth();
+        unsigned int GetMana();
+        unsigned int GetMaxMana();
+        unsigned int GetProtection();
+        unsigned int GetProbabilityOfHit();
+        unsigned int GetDamage();
+        Point GetPosition();
+        string GetName();
+        fighter GetFighterClass();
 
-        void reduce_xp(unsigned int amount_xp);
-        void reduce_money(unsigned int amount_money);
-        void reduce_health(unsigned int amount_health);
-        void reduce_max_health(unsigned int amount_health);
-        void reduce_mana(unsigned int amount_mana);
-        void reduce_max_mana(unsigned int amount_mana);
-        void reduce_protection(unsigned int amount_protection);
-        void reduce_probability_of_hit(unsigned int change_in_probability);
-        void reduce_damage(unsigned int amount_damage);
+        void ReduceXp(unsigned int amount_xp);
+        void ReduceMoney(unsigned int amount_money);
+        void ReduceHealth(unsigned int amount_health);
+        void ReduceMaxHealth(unsigned int amount_health);
+        void ReduceMana(unsigned int amount_mana);
+        void ReduceMaxMana(unsigned int amount_mana);
+        void ReduceProtection(unsigned int amount_protection);
+        void ReduceProbabilityOfHit(unsigned int change_in_probability);
+        void ReduceDamage(unsigned int amount_damage);
 
-        void increase_xp(unsigned int amount_xp);
-        void increase_money(unsigned int amount_money);
-        void increase_health(unsigned int amount_health);
-        void increase_max_health(unsigned int amount_health);
-        void increase_mana(unsigned int amount_mana);
-        void increase_max_mana(unsigned int amount_mana);
-        void increase_protection(unsigned int amount_protection);
-        void increase_probability_of_hit(unsigned int change_in_probability);
-        void increase_damage(unsigned int amount_damage);
+        void IncreaseXp(unsigned int amount_xp);
+        void IncreaseMoney(unsigned int amount_money);
+        void IncreaseHealth(unsigned int amount_health);
+        void IncreaseMaxHealth(unsigned int amount_health);
+        void IncreaseMana(unsigned int amount_mana);
+        void IncreaseMaxMana(unsigned int amount_mana);
+        void IncreaseProtection(unsigned int amount_protection);
+        void IncreaseProbabilityOfHit(unsigned int change_in_probability);
+        void IncreaseDamage(unsigned int amount_damage);
 
-        void move(int add_x, int add_y, const game::Map &map);
+        void Move(int add_x, int add_y, const game::Map &map);
         void SetPositions(const Point &point);
     };
 }
