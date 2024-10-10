@@ -1,4 +1,5 @@
-enum fighter {
+enum fighter
+{
     warrior,
     archer,
     wizard

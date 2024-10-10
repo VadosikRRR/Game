@@ -1,13 +1,11 @@
-#include <iostream>
-#include "map/map.h"
+#include "Game.h"
 
-namespace Game{
+using namespace game;
 
 
-    int main(){
-    std::vector<Map> levels;
-    
-
+int main()
+{
+    Game game;
+    game.run();
     return 0;
-    }
 }

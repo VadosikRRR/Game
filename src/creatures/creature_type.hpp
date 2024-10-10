@@ -1,4 +1,5 @@
-enum Creature_type{
+enum Creature_type
+{
     goblin,
     troll,
     elf_wizard,
