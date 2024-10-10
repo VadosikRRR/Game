@@ -3,49 +3,49 @@
 namespace game
 {
 
-  Map::Map(ssize_t width, ssize_t height)
+  Map::Map() : map_(kMapHeight, std::vector<char>(kMapWidth, '#'))
   {
+    srand(time(0));
     Generate();
     PlaceItems();
     PlaceStairs();
   }
   void Map::ConnectRooms(const Room &room_1, const Room &room_2)
   {
-    int x1 = room_1.GetX() + room_1.GetWidth() / 2;
-    int y1 = room_1.GetY() + room_1.GetHeight() / 2;
-    int x2 = room_2.GetX() + room_2.GetWidth() / 2;
-    int y2 = room_2.GetY() + room_2.GetHeight() / 2;
+    int x_1 = room_1.GetX() + room_1.GetWidth() / 2;
+    int y_1 = room_1.GetY() + room_1.GetHeight() / 2;
+    int x_2 = room_2.GetX() + room_2.GetWidth() / 2;
+    int y_2 = room_2.GetY() + room_2.GetHeight() / 2;
 
     if (rand() % 2)
     {
-      CreateHorizontalCorridor(x1, x2, y1);
-      CreateVerticalCorridor(y1, y2, x2);
+      CreateHorizontalCorridor(x_1, x_2, y_1);
+      CreateVerticalCorridor(y_1, y_2, x_2);
     }
     else
     {
-      CreateVerticalCorridor(y1, y2, x1);
-      CreateHorizontalCorridor(x1, x2, y2);
+      CreateVerticalCorridor(y_1, y_2, x_1);
+      CreateHorizontalCorridor(x_1, x_2, y_2);
     }
   }
-  void Map::CreateHorizontalCorridor(int x1, int x2, int y)
+  void Map::CreateHorizontalCorridor(int x_1, int x_2, int y)
   {
-    for (int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
+    for (int x = std::min(x_1, x_2); x <= std::max(x_1, x_2); x++)
     {
       map_[y][x] = '.';
     }
   }
 
-  void Map::CreateVerticalCorridor(int y1, int y2, int x)
+  void Map::CreateVerticalCorridor(int y_1, int y_2, int x)
   {
-    for (int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
+    for (int y = std::min(y_1, y_2); y <= std::max(y_1, y_2); y++)
     {
       map_[y][x] = '.';
     }
   }
   void Map::Generate()
   {
-    srand(time(0));
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kCountGenerationRooms; ++i)
     {
       int room_width = 6 + rand() % 10;
       int room_height = 4 + rand() % 6;
@@ -76,24 +76,31 @@ namespace game
       }
     }
   }
-  void Map::Draw() const
+  void Map::Draw(ssize_t player_x, ssize_t player_y) const
   {
     for (int i = 0; i < kMapHeight; ++i)
     {
       for (int j = 0; j < kMapWidth; ++j)
       {
-        mvaddch(i, j, map_[i][j]);
+        if (i == player_x && j == player_y)
+        {
+          mvaddch(i, j, '@');
+        }
+        else
+        {
+          mvaddch(i, j, map_[i][j]);
+        }
       }
     }
   }
 
   bool Map::IsStairsUp(ssize_t x, ssize_t y) const
   {
-    return x == stairUp_.first && y == stairUp_.second;
+    return x == stairUp_.second && y == stairUp_.first;
   }
   bool Map::IsStairsDown(ssize_t x, ssize_t y) const
   {
-    return x == stairDown_.first && y == stairDown_.second;
+    return x == stairDown_.second && y == stairDown_.first;
   }
   void Map::PlaceStairs()
   {
@@ -101,14 +108,46 @@ namespace game
     stairUp_ = std::make_pair(
         rooms_[room_index].GetX() + rooms_[room_index].GetWidth() / 2,
         rooms_[room_index].GetY() + rooms_[room_index].GetHeight() / 2);
-    map_[stairUp_.first][stairUp_.second] = '>';
+    map_[stairUp_.second][stairUp_.first] = '>';
     room_index = rand() % rooms_.size();
     stairDown_ = std::make_pair(
         rooms_[room_index].GetX() + rooms_[room_index].GetWidth() / 2,
         rooms_[room_index].GetY() + rooms_[room_index].GetHeight() / 2);
-    map_[stairDown_.first][stairDown_.second] = '<';
+    map_[stairDown_.second][stairDown_.first] = '<';
   }
 
-  void Map::PlaceItems() {}
+  void Map::PlaceItems()
+  {
+    for (Item &item : items_)
+    {
+      int x = rand() % kMapWidth;
+      int y = rand() % kMapHeight;
 
+      while (map_[x][y] != '.')
+      {
+        x = rand() % kMapWidth;
+        y = rand() % kMapHeight;
+      }
+      map_[x][y] = item.GetChar();
+    }
+  }
+  bool Map::IsWalkable(int x, int y) const
+  {
+    
+    return map_[x][y] != '#';
+  }
+  const Room &Map::GetRandomRoom() const
+  {
+    int index = rand() % rooms_.size();
+    return rooms_[index];
+  }
+
+  const std::pair<ssize_t, ssize_t> &Map::GetStairUp() const
+  {
+    return stairUp_;
+  }
+  const std::pair<ssize_t, ssize_t> &Map::GetStairDown() const
+  {
+    return stairDown_;
+  }
 };

@@ -2,7 +2,8 @@
 #include "creature_type.hpp"
 using namespace std;
 
-class Creature{
+class Creature
+{
 private:
     unsigned int health;
     unsigned int damage;
@@ -10,6 +11,7 @@ private:
     string name;
     char designation;
     Creature_type type;
+
 public:
     Creature(Creature_type type, string name, char designation);
     virtual ~Creature();
