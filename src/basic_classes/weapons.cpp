@@ -1,18 +1,18 @@
-#include "weapon.hpp"
+#include "weapons.hpp"
 namespace game{
-    Weapon::Weapon(string name, unsigned int weight, bool is_thrown,  unsigned int damage, Point pos = Point()): Item(name,weight, is_thrown, pos), 
+    Weapons::Weapons(string name, unsigned int weight, bool is_thrown,  unsigned int damage, Point pos = Point()): Item(name,weight, is_thrown, pos), 
         damage_(damage) {}
-    Weapon::~Weapon() {}
-    unsigned int Weapon::get_damage(){
+    Weapons::~Weapons() {}
+    unsigned int Weapons::get_damage(){
         return damage_;
     }
 
     Sword::Sword(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point()):
-        Weapon(name, weight, is_thrown, damage, pos) {}
+        Weapons(name, weight, is_thrown, damage, pos) {}
     Sword::~Sword() {}
 
     LongRangeWeapon::LongRangeWeapon(string name, unsigned int weight, bool is_thrown, unsigned int damage, unsigned int range,Point pos = Point()):
-        Weapon(name, weight, is_thrown, damage, pos), range_(range) {}
+        Weapons(name, weight, is_thrown, damage, pos), range_(range) {}
     LongRangeWeapon::~LongRangeWeapon() {}
     unsigned int LongRangeWeapon::get_range(){
         return range_;

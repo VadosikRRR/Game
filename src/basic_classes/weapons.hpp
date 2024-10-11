@@ -5,22 +5,22 @@
 using namespace std;
 
 namespace game{
-    class Weapon : public Item{
+    class Weapons : public Item{
     private:
         unsigned int damage_;
     public:
-        Weapon(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point());
-        virtual ~Weapon();
+        Weapons(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point());
+        virtual ~Weapons();
         unsigned int get_damage();
     };
 
-    class Sword : public Weapon{
+    class Sword : public Weapons{
     public: 
         Sword(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point());
         virtual ~Sword();
     };
 
-    class LongRangeWeapon : public Weapon{
+    class LongRangeWeapon : public Weapons{
     private:
         unsigned int range_;
     public:
