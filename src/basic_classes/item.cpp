@@ -26,4 +26,7 @@ namespace game{
     bool Item::get_is_trown(){
         return is_thrown_;
     }
+    char Item::GetChar() const{
+        return symbol;
+    }
 }

@@ -37,7 +37,7 @@ namespace game
     Hero::Hero(string name_hero, fighter fighter_class_hero) : designation_('@'), xp_(0), money_(0),
                                                                health_(START_MAX_HEALTH), max_health_(START_MAX_HEALTH), 
                                                                probability_of_hit_(START_PROBABILITY_OF_HIT), position_(Point(0, 0)), 
-                                                               fighter_class_(fighter_class_hero), inventory(Inventory(fighter_class_hero))
+                                                               fighter_class_(fighter_class_hero), inventory_(Inventory(fighter_class_hero))
     {
         CheckName(name_hero);
         PutFighterClassCharacteristics(fighter_class_hero);

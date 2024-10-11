@@ -10,6 +10,7 @@ namespace game{
         unsigned int weight_;
         bool is_thrown_;
         Point position_;
+        char symbol;
 
 
     public:
@@ -22,5 +23,6 @@ namespace game{
         void throw_item(Point pos);
         Point & get_position();
         bool get_is_trown();
+        char GetChar() const;
     };
 }
