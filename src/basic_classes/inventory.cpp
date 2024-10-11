@@ -1,6 +1,6 @@
 #include "inventory.hpp"
 #include "fighter.hpp"
-#include "weapon.hpp"
+#include "weapons.hpp"
 #include "../constants/inventory_constants.hpp"
 
 namespace game{
