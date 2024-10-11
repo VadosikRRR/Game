@@ -12,8 +12,8 @@ namespace game{
         unsigned int max_weight;
         unsigned int current_weight;
         vector<Item> stuff;
-        ~Inventory();
     public:
+        ~Inventory();
         Inventory(fighter hero_type);
         void put_item(Item & item);
         void drop_item(int index);
