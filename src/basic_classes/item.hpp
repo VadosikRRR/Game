@@ -10,11 +10,11 @@ namespace game{
         unsigned int weight_;
         bool is_thrown_;
         Point position_;
-        char symbol;
+        char symbol_;
 
 
     public:
-        Item(string name, unsigned int weight, bool is_trown, Point position_ = Point());
+        Item(string name, unsigned int weight, char symbol, bool is_trown, Point position_ = Point());
         string get_name();
         unsigned int get_weight();
         virtual void execute();

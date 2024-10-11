@@ -1,6 +1,7 @@
 #include "item.hpp"
 namespace game{
-    Item::Item(string name, unsigned int weight, bool is_thrown, Point pos = Point()) : name_(name), weight_(weight), is_thrown_(is_thrown), position_(pos){}
+    Item::Item(string name, unsigned int weight, char symbol, bool is_thrown, Point pos = Point()) : name_(name), weight_(weight), 
+                                                                                        is_thrown_(is_thrown), position_(pos), symbol_(symbol) {}
     Item::~Item() {}
 
     string Item::get_name() {
@@ -27,6 +28,6 @@ namespace game{
         return is_thrown_;
     }
     char Item::GetChar() const{
-        return symbol;
+        return symbol_;
     }
 }
