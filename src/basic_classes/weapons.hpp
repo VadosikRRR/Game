@@ -9,7 +9,7 @@ namespace game{
     private:
         unsigned int damage_;
     public:
-        Weapons(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point());
+        Weapons(string name, unsigned int weight, char symbol, bool is_thrown, unsigned int damage, Point pos = Point());
         virtual ~Weapons();
         unsigned int get_damage();
     };

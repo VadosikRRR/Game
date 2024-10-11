@@ -1,6 +1,6 @@
 #include "weapons.hpp"
 namespace game{
-    Weapons::Weapons(string name, unsigned int weight, bool is_thrown,  unsigned int damage, Point pos = Point()): Item(name,weight, is_thrown, pos), 
+    Weapons::Weapons(string name, unsigned int weight, char symbol, bool is_thrown,  unsigned int damage, Point pos = Point()): Item(name,weight, symbol, is_thrown, pos), 
         damage_(damage) {}
     Weapons::~Weapons() {}
     unsigned int Weapons::get_damage(){
@@ -8,11 +8,11 @@ namespace game{
     }
 
     Sword::Sword(string name, unsigned int weight, bool is_thrown, unsigned int damage, Point pos = Point()):
-        Weapons(name, weight, is_thrown, damage, pos) {}
+        Weapons(name, weight, '|', is_thrown, damage, pos) {}
     Sword::~Sword() {}
 
     LongRangeWeapon::LongRangeWeapon(string name, unsigned int weight, bool is_thrown, unsigned int damage, unsigned int range,Point pos = Point()):
-        Weapons(name, weight, is_thrown, damage, pos), range_(range) {}
+        Weapons(name, weight, '|', is_thrown, damage, pos), range_(range) {}
     LongRangeWeapon::~LongRangeWeapon() {}
     unsigned int LongRangeWeapon::get_range(){
         return range_;
