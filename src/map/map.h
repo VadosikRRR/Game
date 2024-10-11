@@ -9,7 +9,7 @@
 #include <vector>
 namespace game
 {
-  const ssize_t kMapWidth = 100;
+  const ssize_t kMapWidth = 80;
   const ssize_t kMapHeight = 40;
   const int kCountGenerationRooms = 10;
   class Map
