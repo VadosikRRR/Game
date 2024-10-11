@@ -12,10 +12,10 @@ namespace game
   }
   void Map::ConnectRooms(const Room &room_1, const Room &room_2)
   {
-    int x_1 = room_1.GetX() + room_1.GetWidth() / 2;
-    int y_1 = room_1.GetY() + room_1.GetHeight() / 2;
-    int x_2 = room_2.GetX() + room_2.GetWidth() / 2;
-    int y_2 = room_2.GetY() + room_2.GetHeight() / 2;
+    int x_1 = room_1.GetX() + rand() % room_1.GetWidth();
+    int y_1 = room_1.GetY() + rand() %room_1.GetHeight();
+    int x_2 = room_2.GetX() + rand() %room_2.GetWidth();
+    int y_2 = room_2.GetY() + rand() %room_2.GetHeight();
 
     if (rand() % 2)
     {
@@ -40,6 +40,7 @@ namespace game
   {
     for (int y = std::min(y_1, y_2); y <= std::max(y_1, y_2); y++)
     {
+      
       map_[y][x] = '.';
     }
   }
@@ -104,15 +105,15 @@ namespace game
   }
   void Map::PlaceStairs()
   {
-    ssize_t room_index = rand() % rooms_.size();
+    Room room = GetRandomRoom();
     stairUp_ = std::make_pair(
-        rooms_[room_index].GetX() + rooms_[room_index].GetWidth() / 2,
-        rooms_[room_index].GetY() + rooms_[room_index].GetHeight() / 2);
+        room.GetX() + rand() % room.GetWidth(),
+        room.GetY() + rand() % room.GetHeight());
     map_[stairUp_.second][stairUp_.first] = '>';
-    room_index = rand() % rooms_.size();
+    room = GetRandomRoom();
     stairDown_ = std::make_pair(
-        rooms_[room_index].GetX() + rooms_[room_index].GetWidth() / 2,
-        rooms_[room_index].GetY() + rooms_[room_index].GetHeight() / 2);
+        room.GetX() + rand() % room.GetWidth(),
+        room.GetY() + rand() % room.GetHeight());
     map_[stairDown_.second][stairDown_.first] = '<';
   }
 
@@ -133,7 +134,7 @@ namespace game
   }
   bool Map::IsWalkable(int x, int y) const
   {
-    
+
     return map_[x][y] != '#';
   }
   const Room &Map::GetRandomRoom() const

@@ -1,32 +1,41 @@
 #include "item.hpp"
-namespace game{
-    Item::Item(string name, unsigned int weight, bool is_thrown, Point pos = Point()) : name_(name), weight_(weight), is_thrown_(is_thrown), position_(pos){}
+namespace game
+{
+    Item::Item(string name, unsigned int weight, char symbol, bool is_thrown, Point pos) 
+    : name_(name), weight_(weight), is_thrown_(is_thrown), position_(pos), symbol_(symbol) {}
     Item::~Item() {}
 
-    string Item::get_name() {
+    string Item::get_name()
+    {
         return name_;
     }
 
-    unsigned int Item::get_weight() {
+    unsigned int Item::get_weight()
+    {
         return weight_;
     }
 
     void Item::execute() {}
-    void Item::put_item(){
+    void Item::put_item()
+    {
         is_thrown_ = false;
     }
-    void Item::throw_item(Point pos){
+    void Item::throw_item(Point pos)
+    {
         is_thrown_ = true;
         position_ = pos;
     }
-    Point & Item::get_position(){
+    Point &Item::get_position()
+    {
         // TODO: вернуть ошибку, если предмет не на земле
         return position_;
     }
-    bool Item::get_is_trown(){
+    bool Item::get_is_trown()
+    {
         return is_thrown_;
     }
     char Item::GetChar() const{
-        return symbol;
+        return symbol_;
     }
+
 }

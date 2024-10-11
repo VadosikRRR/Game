@@ -1,12 +1,15 @@
-struct Point {
+#pragma once
+
+struct Point
+{
 private:
-    int x_;
-    int y_;
+    int x;
+    int y;
 
 public:
     Point(int new_x = 0, int new_y = 0);
-    int getX() const;
-    int getY() const;
-    void changeX(int new_x);
-    void changeX(int new_y);
+    int get_x() const;
+    int get_y() const;
+    void change_x(int new_x);
+    void change_y(int new_y);
 };
