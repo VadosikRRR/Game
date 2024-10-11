@@ -2,11 +2,11 @@
 
 Point::Point(int new_x = 0, int new_y = 0) : x_(new_x), y_(new_y) {}
 
-int Point::getX() {
+int Point::getX() const {
     return x_;
 }
 
-int Point::getY() {
+int Point::getY() const {
     return y_;
 }
 

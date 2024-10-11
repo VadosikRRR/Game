@@ -5,8 +5,8 @@ private:
 
 public:
     Point(int new_x = 0, int new_y = 0);
-    int getX();
-    int getY();
+    int getX() const;
+    int getY() const;
     void changeX(int new_x);
     void changeX(int new_y);
 };
