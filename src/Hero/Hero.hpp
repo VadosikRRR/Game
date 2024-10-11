@@ -4,6 +4,7 @@
 #include "../basic_classes/point.hpp"
 #include "../constants/Hero_constants.hpp"
 #include "../map/map.h"
+#include "../basic_classes/inventory.hpp"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ namespace game
         Point position_;
         string name_;
         fighter fighter_class_;
+        Inventory inventory_;
 
         void CheckName(string name_hero);
         void PutFighterClassCharacteristics(fighter fighter_class_hero);
@@ -45,6 +47,7 @@ namespace game
         Point GetPosition();
         string GetName();
         fighter GetFighterClass();
+        Inventory &GetInventory();
 
         void ReduceXp(unsigned int amount_xp);
         void ReduceMoney(unsigned int amount_money);

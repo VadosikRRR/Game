@@ -11,6 +11,7 @@ namespace game
     {
         if (fighter_class_hero == warrior)
         {
+            damage_ = START_DAMAGE_WARRIOR;
             mana_ = START_MAX_MANA_NO_WIZARD;
             max_mana_ = START_MAX_MANA_NO_WIZARD;
             protection_ = START_PROTECTION_WARRIOR;
@@ -18,7 +19,7 @@ namespace game
 
         else if (fighter_class_hero == archer)
         {
-            // Тут обязательно будут крутые характеристики, но пока нет
+            damage_ = START_DAMAGE_NO_WARRIOR;
             mana_ = START_MAX_MANA_NO_WIZARD;
             max_mana_ = START_MAX_MANA_NO_WIZARD;
             protection_ = START_PROTECTION_NO_WARRIOR;
@@ -26,6 +27,7 @@ namespace game
 
         else
         {
+            damage_ = START_DAMAGE_NO_WARRIOR;
             mana_ = START_MAX_MANA_WIZARD;
             max_mana_ = START_MAX_MANA_WIZARD;
             protection_ = START_PROTECTION_NO_WARRIOR;
@@ -33,7 +35,9 @@ namespace game
     }
 
     Hero::Hero(string name_hero, fighter fighter_class_hero) : designation_('@'), xp_(0), money_(0),
-                                                               health_(START_MAX_HEALTH), max_health_(START_MAX_HEALTH), probability_of_hit_(START_PROBABILITY_OF_HIT), position_(Point(0, 0)), fighter_class_(fighter_class_hero)
+                                                               health_(START_MAX_HEALTH), max_health_(START_MAX_HEALTH), 
+                                                               probability_of_hit_(START_PROBABILITY_OF_HIT), position_(Point(0, 0)), 
+                                                               fighter_class_(fighter_class_hero), inventory(Inventory(fighter_class_hero))
     {
         CheckName(name_hero);
         PutFighterClassCharacteristics(fighter_class_hero);
@@ -102,6 +106,11 @@ namespace game
     fighter Hero::GetFighterClass()
     {
         return fighter_class_;
+    }
+
+    Inventory &Hero::GetInventory() 
+    {
+        return inventory_;
     }
 
     void Hero::ReduceXp(unsigned int amount_xp)
