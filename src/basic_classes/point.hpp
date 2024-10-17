@@ -1,3 +1,5 @@
+#pragma once
+
 struct Point {
 private:
   int x_;
@@ -8,5 +10,5 @@ public:
   int getX() const;
   int getY() const;
   void changeX(int new_x);
-  void changeX(int new_y);
+  void changeY(int new_y);
 };

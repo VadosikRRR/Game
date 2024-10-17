@@ -148,12 +148,12 @@ void Hero::Move(int add_x, int add_y, const game::Map &map) {
   if (new_x >= 0 && new_x < kMapHeight && new_y >= 0 && new_y < kMapWidth &&
       map.IsWalkable(new_x, new_y)) {
     position_.changeX(new_x);
-    position_.changeX(new_y);
+    position_.changeY(new_y);
   }
 }
 
 void Hero::SetPositions(const Point &point) {
   position_.changeX(point.getX());
-  position_.changeX(point.getY());
+  position_.changeY(point.getY());
 }
 } // namespace game
