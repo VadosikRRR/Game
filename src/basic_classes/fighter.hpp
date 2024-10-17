@@ -1,6 +1,1 @@
-enum fighter
-{
-    warrior,
-    archer,
-    wizard
-};
+enum fighter { warrior, archer, wizard };
