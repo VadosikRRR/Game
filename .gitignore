@@ -1,0 +1,14 @@
+cmake-build-debug/
+build/
+Build/
+BUILD/
+bUILD/
+Datasets/
+.sconsign.dblite
+lib/
+.csv
+.idea/
+.vscode/
+**/myeasylog.log
+dist
+venv
