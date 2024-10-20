@@ -9,25 +9,33 @@
 #include <vector>
 namespace game {
 const ssize_t kMapWidth = 80;
-const ssize_t kMapHeight = 40;
+const ssize_t kMinMapWidth = 6;
+const ssize_t kMapHeight = 30;
+const ssize_t kMinMapHeight = 5;
 const int kCountGenerationRooms = 10;
 class Map {
 private:
   std::vector<Room> rooms_;
   std::vector<std::vector<char>> map_;
+  std::vector<std::vector<bool>> explored_;
   std::vector<Item> items_;
   std::pair<ssize_t, ssize_t> stairUp_;
   std::pair<ssize_t, ssize_t> stairDown_;
 
-  void ConnectRooms(const Room &room_1, const Room &room_2);
-  void CreateHorizontalCorridor(int x1, int x2, int y);
-  void CreateVerticalCorridor(int y1, int y2, int x);
+  void Generate();
+  void CreateRooms();
+  void ConnectRooms();
   void PlaceItems();
   void PlaceStairs();
 
+  void CreateCorridor(int x_1, int y_1, int x_2, int y_2);
+
+  Room *GetRoomAt(int x, int y);
+  void ExploreRoom(const Room &room);
+
 public:
   Map();
-  void Generate();
+  void Explore(int x, int y);
   void Draw(ssize_t player_x, ssize_t player_y) const;
 
   const Room &GetRandomRoom() const;
@@ -37,5 +45,8 @@ public:
   bool IsStairsUp(ssize_t x, ssize_t y) const;
   bool IsStairsDown(ssize_t x, ssize_t y) const;
   bool IsWalkable(int x, int y) const;
+  bool CanPlaceRoom(Room const &room) const;
+  bool IsExplored(int x, int y) const;
+  bool IsInsideRoom(int x, int y, const Room &room) const;
 };
 } // namespace game

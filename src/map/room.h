@@ -19,5 +19,7 @@ public:
   ssize_t GetY() const;
   ssize_t GetWidth() const;
   ssize_t GetHeight() const;
+  size_t centerX() const;
+  size_t centerY() const;
 };
 } // namespace game

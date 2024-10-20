@@ -145,7 +145,7 @@ void Hero::Move(int add_x, int add_y, const game::Map &map) {
 
   int new_y = position_.getY() + add_y;
 
-  if (new_x >= 0 && new_x < kMapHeight && new_y >= 0 && new_y < kMapWidth &&
+  if (new_x >= 0 && new_x < kMapWidth && new_y >= 0 && new_y < kMapHeight &&
       map.IsWalkable(new_x, new_y)) {
     position_.changeX(new_x);
     position_.changeY(new_y);

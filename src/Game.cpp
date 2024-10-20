@@ -4,16 +4,27 @@ namespace game {
 void Game::HandleInput(int input) {
   switch (input) {
   case 'w':
-    player_.Move(-1, 0, levels_[current_level_]);
+    player_.Move(0, -1, levels_[current_level_]);
+
+    levels_[current_level_].Explore(player_.GetPosition().getX(),
+                                    player_.GetPosition().getY());
     break;
   case 'a':
-    player_.Move(0, -1, levels_[current_level_]);
+    player_.Move(-1, 0, levels_[current_level_]);
+
+    levels_[current_level_].Explore(player_.GetPosition().getX(),
+                                    player_.GetPosition().getY());
     break;
   case 'd':
-    player_.Move(0, 1, levels_[current_level_]);
+    player_.Move(1, 0, levels_[current_level_]);
+
+    levels_[current_level_].Explore(player_.GetPosition().getX(),
+                                    player_.GetPosition().getY());
     break;
   case 's':
-    player_.Move(1, 0, levels_[current_level_]);
+    player_.Move(0, 1, levels_[current_level_]);
+    levels_[current_level_].Explore(player_.GetPosition().getX(),
+                                    player_.GetPosition().getY());
     break;
   case 'q':
     exit(0);
@@ -30,7 +41,7 @@ void Game::HandleInput(int input) {
 Game::Game() : current_level_(0), player_("IAM", fighter::warrior) {
   levels_.push_back(Map());
   auto stair_up = levels_[current_level_].GetStairUp();
-  player_.SetPositions(Point(stair_up.second, stair_up.first));
+  player_.SetPositions(Point(stair_up.first, stair_up.second));
 }
 void Game::run() {
   initscr();
@@ -59,14 +70,14 @@ void Game::CheckLevelTransition() {
     current_level_++;
 
     auto stair_up = levels_[current_level_].GetStairUp();
-    player_.SetPositions(Point(stair_up.second, stair_up.first));
+    player_.SetPositions(Point(stair_up.first, stair_up.second));
   } else if (levels_[current_level_].IsStairsUp(player_x, player_y)) {
     if (current_level_ <= 0) {
       return;
     }
     current_level_--;
     auto stair_up = levels_[current_level_].GetStairDown();
-    player_.SetPositions(Point(stair_up.second, stair_up.first));
+    player_.SetPositions(Point(stair_up.first, stair_up.second));
   }
 }
 
