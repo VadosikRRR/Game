@@ -1,11 +1,11 @@
-#include "Game.h"
+#include "mainmenu.h"
+#include <QApplication>
 
-using namespace game;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
 
+    MainMenu mainMenu;
+    mainMenu.show();
 
-int main()
-{
-    Game game;
-    game.run();
-    return 0;
+    return app.exec();
 }
