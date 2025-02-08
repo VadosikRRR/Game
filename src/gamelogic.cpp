@@ -25,7 +25,6 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     playerPoint.setX(startRoom.x + startRoom.width / 2);
     playerPoint.setY(startRoom.y + startRoom.height / 2);
 
-    maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '@');
 }
 
 void GameLogic::movePlayer(int dx, int dy) {
@@ -33,21 +32,12 @@ void GameLogic::movePlayer(int dx, int dy) {
     int newY = playerPoint.y() + dy;
 
     const Map& map = maps[currentLevel];
-    char nextTile = map.getTile(newX, newY);
     
     if (map.isWalkable(newX, newY)) {
         changedTiles.push_back({playerPoint.x(), playerPoint.y()});
-        
-        if (nextTile != '<') {
-            maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '.');
-        }
-        maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '.');
-
 
         playerPoint.setX(newX);
         playerPoint.setY(newY);
-
-        maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '@');
 
         changedTiles.push_back({playerPoint.x(), playerPoint.y()});
     }
@@ -72,7 +62,6 @@ void GameLogic::switchLevel(int direction) {
             }
         }
 
-        maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '@');
     }
 }
 

@@ -54,6 +54,9 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
     } else if (event->key() == Qt::Key_D) {
         gameLogic->movePlayer(1, dy);
         render();
+    } else if (event->key() == Qt::Key_Less || event->key() == Qt::Key_Greater){
+        gameLogic->interactWithStairs();
+        render();
     }
 }
 void GameWindow::updateTile(int x, int y, char tile) {
@@ -89,5 +92,9 @@ void GameWindow::render() {
             updateTile(x, y, mapData[y][x]);
         }
     }
+
+    int playerX = gameLogic->getPlayerX();
+    int playerY = gameLogic->getPlayerY();
+    updateTile(playerX, playerY, '@');
 }
 

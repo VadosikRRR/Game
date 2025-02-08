@@ -10,7 +10,7 @@ Map::Map(int mapWidth, int mapHeight)
 }
 
 void Map::generateMap() {
-    std::srand(std::time(nullptr));
+    // std::srand(std::time(nullptr));
     generateRooms(10, 5, 10);
     connectRooms();
 }

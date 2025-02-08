@@ -17,13 +17,13 @@ public:
     std::vector<QPoint> getChangedTiles() const;
     bool isPlayerOnStairs() const;
     void clearChangedTiles();
+    void interactWithStairs();
 
 private:
     std::vector<Map> maps;
     int currentLevel;
     QPoint playerPoint;
     std::vector<QPoint> changedTiles;
-    void interactWithStairs();
 };
 
 #endif // GAMELOGIC_H
