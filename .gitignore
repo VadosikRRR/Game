@@ -21,6 +21,7 @@ core
 !core/
 tags
 build
+build/
 DS_Store
 .directory
 *.debug

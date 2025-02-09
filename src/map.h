@@ -20,6 +20,7 @@ public:
 
     const std::vector<std::vector<char>>& getData() const;
     Room getRandomRoom() const;
+    void setData(const std::vector<std::vector<char>>& newData);
 
 private:
     int mapWidth, mapHeight;

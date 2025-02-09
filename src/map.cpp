@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <stdexcept>
 
 Map::Map(int mapWidth, int mapHeight)
     : mapWidth(mapWidth), mapHeight(mapHeight) {
@@ -10,7 +11,6 @@ Map::Map(int mapWidth, int mapHeight)
 }
 
 void Map::generateMap() {
-    // std::srand(std::time(nullptr));
     generateRooms(10, 5, 10);
     connectRooms();
 }
@@ -107,4 +107,12 @@ char Map::getTile(int x, int y) const {
 
 const std::vector<std::vector<char>>& Map::getData() const {
     return mapData;
+}
+
+void Map::setData(const std::vector<std::vector<char>>& newData) {
+    if (newData.size() == mapHeight && !newData.empty() && newData[0].size() == mapWidth) {
+        mapData = newData;
+    } else {
+        throw std::invalid_argument("Invalid map data size");
+    }
 }

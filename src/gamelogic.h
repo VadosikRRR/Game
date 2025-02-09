@@ -18,6 +18,12 @@ public:
     bool isPlayerOnStairs() const;
     void clearChangedTiles();
     void interactWithStairs();
+    void setCurrentLevel(int level);
+    void setPlayerPosition(int x, int y);
+    void setMapData(const std::vector<std::vector<char>>& data);
+    const std::vector<Map>& getAllMaps() const;
+    void setAllMaps(const std::vector<Map>& maps);
+
 
 private:
     std::vector<Map> maps;
