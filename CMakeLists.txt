@@ -47,6 +47,8 @@ else()
             src/gamelogic.cpp
             src/mainmenu.h
             src/mainmenu.cpp
+            src/playernamedialog.h
+            src/playernamedialog.cpp
 
         )
     endif()

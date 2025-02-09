@@ -1,6 +1,5 @@
 #include "gamelogic.h"
-#include <random>
-#include<time.h>
+#include <time.h>
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0) {
     srand(time(nullptr));
@@ -96,4 +95,27 @@ void GameLogic::interactWithStairs() {
         int direction = (stair == '<') ? -1 : 1;
         switchLevel(direction);
     }
+}
+void GameLogic::setCurrentLevel(int level) {
+    if (level >= 0 && level < maps.size()) {
+        currentLevel = level;
+    }
+}
+
+void GameLogic::setPlayerPosition(int x, int y) {
+    playerPoint.setX(x);
+    playerPoint.setY(y);
+}
+
+void GameLogic::setMapData(const std::vector<std::vector<char>>& data) {
+    if (currentLevel >= 0 && currentLevel < maps.size()) {
+        maps[currentLevel].setData(data);
+    }
+}
+const std::vector<Map>& GameLogic::getAllMaps() const {
+    return maps;
+}
+
+void GameLogic::setAllMaps(const std::vector<Map>& newMaps) {
+    maps = newMaps;
 }
