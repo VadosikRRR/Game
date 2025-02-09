@@ -9,10 +9,12 @@
 #include <QDateTime>
 #include <QDir>
 
-
-GameWindow::GameWindow(const QString& playerName,int mapWidth, int mapHeight, QWidget* parent)
-    : QMainWindow(parent), scene(new QGraphicsScene(this)), gameLogic(new GameLogic(mapWidth, mapWidth, 10)), playerName(playerName) {
+const char kPLayerChar = '@';
+GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, QWidget* parent)
+    : QMainWindow(parent), scene(new QGraphicsScene(this)), gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName) {
     setFixedSize(1280, 720);
+
+    gameSaverLoader = new GameSaverLoader(playerName); // Инициализация GameSaverLoader
 
     menuBar = new QMenuBar(this);
     setMenuBar(menuBar);
@@ -33,7 +35,21 @@ GameWindow::GameWindow(const QString& playerName,int mapWidth, int mapHeight, QW
 }
 
 void GameWindow::onSaveClicked() {
-    saveGameState();
+    if (gameSaverLoader->saveGame(*gameLogic)) {
+        QMessageBox::information(this, "Game Saved", "Game saved successfully!");
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to save the game.");
+    }
+}
+
+bool GameWindow::loadGameState() {
+    if (gameSaverLoader->loadGame(*gameLogic)) {
+        render();
+        return true;
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to load the game.");
+        return false;
+    }
 }
 
 void GameWindow::onReturnToMenuClicked() {
@@ -45,80 +61,7 @@ GameWindow::~GameWindow() {
     delete scene;
     delete gameLogic;
 }
-void GameWindow::saveGameState() {
-    QDir().mkdir("saves");
 
-    QString filename = QString("saves/%1_save.txt").arg(playerName);
-
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly)) {
-        QTextStream out(&file);
-
-        out << playerName << "\n";
-        out << gameLogic->getCurrentLevel() << "\n";
-        out << gameLogic->getPlayerX() << " " << gameLogic->getPlayerY() << "\n";
-
-        for (const auto& map : gameLogic->getAllMaps()) {
-            const auto& mapData = map.getData();
-            for (const auto& row : mapData) {
-                out << QString::fromStdString(std::string(row.begin(), row.end())) << "\n";
-            }
-            out << "---\n";
-        }
-
-        file.close();
-        QMessageBox::information(this, "Game Saved", "Game saved successfully!");
-    } else {
-        QMessageBox::warning(this, "Error", "Failed to save the game.");
-    }
-}
-bool GameWindow::loadGameState() {
-    QString filename = QString("saves/%1_save.txt").arg(playerName);
-
-    QFile file(filename);
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream in(&file);
-
-        playerName = in.readLine();
-
-        int currentLevel;
-        in >> currentLevel;
-        gameLogic->setCurrentLevel(currentLevel);
-
-        int playerX, playerY;
-        in >> playerX >> playerY;
-        gameLogic->setPlayerPosition(playerX, playerY);
-
-        in.readLine();
-
-        std::vector<Map> maps;
-        std::vector<std::vector<char>> mapData;
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            if (line == "---") {
-                Map map(mapData[0].size(), mapData.size());
-                map.setData(mapData);
-                maps.push_back(map);
-                mapData.clear();
-            } else {
-                std::vector<char> row;
-                for (QChar qchar : line) {
-                    row.push_back(qchar.toLatin1());
-                }
-                mapData.push_back(row);
-            }
-        }
-        gameLogic->setAllMaps(maps);
-
-        render();
-
-        file.close();
-        return true;
-    } else {
-        QMessageBox::warning(this, "Error", "Failed to load the game.");
-        return false;
-    }
-}
 void GameWindow::keyPressEvent(QKeyEvent *event) {
     int dx = 0, dy = 0;
 
@@ -175,6 +118,6 @@ void GameWindow::render() {
 
     int playerX = gameLogic->getPlayerX();
     int playerY = gameLogic->getPlayerY();
-    updateTile(playerX, playerY, '@');
+    updateTile(playerX, playerY, kPLayerChar);
 }
 

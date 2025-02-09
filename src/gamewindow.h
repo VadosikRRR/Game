@@ -9,20 +9,21 @@
 #include <QMenuBar>
 #include <QAction>
 
+#include "gamesaverloader.h"
+
 class GameWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit GameWindow(const QString& playerName,int mapWidth, int mapHeight, QWidget* parent = nullptr);
+    explicit GameWindow(const QString& playerName, int mapWidth, int mapHeight, QWidget* parent = nullptr);
     ~GameWindow();
-
-    void saveGameState();
     bool loadGameState();
 
 private:
     QGraphicsScene* scene;
     GameLogic* gameLogic;
     QString playerName;
+    GameSaverLoader* gameSaverLoader;
 
     QMenuBar* menuBar;
     QAction* saveAction;

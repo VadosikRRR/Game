@@ -2,8 +2,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-const int kMapWidth = 60;
-const int kMapHeight = 80;
+const int kMapWidth = 80;
+const int kMapHeight = 60;
 
 class MainMenu : public QWidget {
     Q_OBJECT

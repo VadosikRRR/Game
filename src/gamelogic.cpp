@@ -47,8 +47,6 @@ void GameLogic::switchLevel(int direction) {
     int newLevel = currentLevel + direction;
 
     if (newLevel >= 0 && newLevel < maps.size()) {
-        maps[currentLevel].setTile(playerPoint.x(), playerPoint.y(), '.');
-
         currentLevel = newLevel;
         const Map& newMap = maps[currentLevel];
         for (int y = 0; y < newMap.getData().size(); ++y) {

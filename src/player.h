@@ -1,9 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QGraphicsTextItem>
+#include <QString>
 
-class Player : public QGraphicsSimpleTextItem {
+class Player {
 public:
     Player();
     Player(QString name);

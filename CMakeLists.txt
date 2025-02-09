@@ -49,6 +49,8 @@ else()
             src/mainmenu.cpp
             src/playernamedialog.h
             src/playernamedialog.cpp
+            src/gamesaverloader.h
+            src/gamesaverloader.cpp
 
         )
     endif()
