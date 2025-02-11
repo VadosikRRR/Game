@@ -4,6 +4,7 @@
 #include <vector>
 #include <QPoint>
 #include "map.h"
+#include "player.h"
 class GameLogic {
 public:
     GameLogic(int mapWidth, int mapHeight, int levels);
@@ -25,11 +26,15 @@ public:
     void setAllMaps(const std::vector<Map>& maps);
 
 
+
+
 private:
     std::vector<Map> maps;
     int currentLevel;
     QPoint playerPoint;
     std::vector<QPoint> changedTiles;
+
+    Player player_;
 };
 
 #endif // GAMELOGIC_H

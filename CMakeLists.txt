@@ -51,6 +51,10 @@ else()
             src/playernamedialog.cpp
             src/gamesaverloader.h
             src/gamesaverloader.cpp
+            src/item.h
+            src/item.cpp
+            src/inventory.h
+            src/inventory.cpp
 
         )
     endif()

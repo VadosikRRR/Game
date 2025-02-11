@@ -3,6 +3,9 @@
 #include <ctime>
 #include <algorithm>
 #include <stdexcept>
+#include <cmath>
+
+const int DAMAGE = 10;
 
 Map::Map(int mapWidth, int mapHeight)
     : mapWidth(mapWidth), mapHeight(mapHeight) {
@@ -13,6 +16,7 @@ Map::Map(int mapWidth, int mapHeight)
 void Map::generateMap() {
     generateRooms(10, 5, 10);
     connectRooms();
+    addItemsToMap();
 }
 
 void Map::generateRooms(int roomCount, int minSize, int maxSize) {
@@ -114,5 +118,56 @@ void Map::setData(const std::vector<std::vector<char>>& newData) {
         mapData = newData;
     } else {
         throw std::invalid_argument("Invalid map data size");
+    }
+}
+
+int getRandomInRange(int min, int max) {
+    return min + std::rand() % (max - min + 1);
+}
+
+bool canPlaceItem(const Map& map, int x, int y) {
+    return map.getTile(x, y) == '.';
+}
+
+bool findNearbyPosition(const Map& map, int& x, int& y) {
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue;
+            if (canPlaceItem(map, x + dx, y + dy)) {
+                x += dx;
+                y += dy;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+void Map::addItemsToMap() {
+    std::srand(std::time(nullptr));
+
+    for (const auto& room : rooms) {
+
+        int centerX = room.x + room.width / 2;
+        int centerY = room.y + room.height / 2;
+
+
+        if (!canPlaceItem(*this, centerX, centerY)) {
+
+            if (!findNearbyPosition(*this, centerX, centerY)) {
+                continue; 
+            }
+        }
+
+        if (std::rand() % 5 == 0) {
+            setTile(centerX, centerY, kMedKitTile);
+            items_[QPoint(centerX, centerY)] = std::make_shared<MedKit>();
+        }
+        else if (std::rand() % 10 == 0) {
+            int damage = getRandomInRange(DAMAGE / 2, 3 * DAMAGE / 2);
+            setTile(centerX, centerY, kSwordTile);
+            items_[QPoint(centerX, centerY)] = std::make_shared<Sword>(damage);
+        }
     }
 }

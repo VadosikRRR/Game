@@ -117,3 +117,5 @@ const std::vector<Map>& GameLogic::getAllMaps() const {
 void GameLogic::setAllMaps(const std::vector<Map>& newMaps) {
     maps = newMaps;
 }
+
+

@@ -2,8 +2,17 @@
 #include <QFont>
 
 Player::Player()
-    : health(100), attackPower(10) {
+    : health(100), basePower(10), inventory_(), attackPower(basePower) {
 }
-Player::Player(QString name): Player() {
-    this->name = name;
+
+void Player::EquipSword() {
+    Item * currItem = inventory_.GetCurrItem();
+    if (currItem) {
+        Sword* sword = dynamic_cast<Sword*>(currItem);
+        if (sword) {
+            sword_ = sword; 
+            attackPower = basePower + sword_->GetDamage();
+            inventory_.Drop();
+        }
+    }
 }

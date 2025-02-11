@@ -9,6 +9,14 @@
 #include <QDateTime>
 #include <QDir>
 
+//TODO: Релизовать логику подбора предмета [добавлять в  Player::inventory_] [использовать метод Inventory::Add(Item *), получать предмет по координате 
+// из Map::items_], когда стоишь на нём. Если предмет является наследником CollectiblesItem, то либо добавить его инвентарь, если объекта этого типа в инвентаре не было,
+// либо увеличить у объекта этого типа поле count_ [с помощью метода Add()]
+// сделать отрисовку инвентаря в окошке, или хотя бы вывод предмета, на который сейчас указывает Inventory::currItem [итератор по списку]
+// сделать так чтобы стрелки двигали Inventory::currItem [использовать методы Inventory::Next(), Inventory::Previous()]
+// реализовать логику выкидывания предмета, на который указывает Inventory::currItem [Inventory::Drop() удаляет как раз этот предмет из инвентаря]
+// после подбора предмет должен пропасть из Map::items_, а при выкидывании наоборот [ну и соответственно надо поменять на карте тайлы].
+
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, QWidget* parent)
     : QMainWindow(parent), scene(new QGraphicsScene(this)), gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName) {
