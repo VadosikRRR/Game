@@ -1,4 +1,5 @@
 #include "map.h"
+#include "enemies.h"
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
@@ -35,6 +36,8 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
         if (!intersects) {
             rooms.push_back(room);
             drawRoom(room);
+            Enemy easy_enemy = CreateEnemy(x, y, width, height);
+            setTile(easy_enemy.GetX(), easy_enemy.GetY(), easy_enemy.GetDesignation());
         }
     }
 }
