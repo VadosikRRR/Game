@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "gamelogic.h"
+#include <QListWidget>
 #include <QPushButton>
 
 #include <QMenuBar>
@@ -24,6 +25,7 @@ private:
     GameLogic* gameLogic;
     QString playerName;
     GameSaverLoader* gameSaverLoader;
+    QListWidget* inventoryWidget;
 
     QMenuBar* menuBar;
     QAction* saveAction;
@@ -33,6 +35,7 @@ private:
     void updateTile(int x, int y, char tile);
     void updateChangedTiles();
     void keyPressEvent(QKeyEvent* event) override;
+    void updateInventoryDisplay();
 
 private slots:
     void onSaveClicked();

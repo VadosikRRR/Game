@@ -1,5 +1,7 @@
-#pragma once
+#ifndef ITEM_H
+#define ITEM_H
 
+#include <QString>
 const int kMedKitHeal = 20;
 const char kSwordTile = '!';
 const char kMedKitTile = '+';
@@ -9,6 +11,7 @@ protected:
     Item() = default;
 public:
     virtual ~Item() = default;
+    virtual QString GetName() const = 0;
 };
 
 class CollectiblesItem : public Item {
@@ -26,7 +29,8 @@ class Sword : public Item {
 public:
     Sword(int damage);
     ~Sword() = default;
-    int GetDamage();
+    int GetDamage() const;
+    QString GetName() const override;
 private:
     int damage_;
 };
@@ -35,4 +39,6 @@ class MedKit : public CollectiblesItem {
 public:
     MedKit() = default;
     ~MedKit() = default;
+    QString GetName() const override;
 };
+#endif // ITEM_H

@@ -9,22 +9,28 @@ class GameLogic {
 public:
     GameLogic(int mapWidth, int mapHeight, int levels);
 
-    void movePlayer(int dx, int dy);
-    int getPlayerX() const;
-    int getPlayerY() const;
-    void switchLevel(int direction);
-    const Map& getCurrentMap() const;
-    int getCurrentLevel() const;
-    std::vector<QPoint> getChangedTiles() const;
+    void MovePlayer(int dx, int dy);
+    int GetPlayerX() const;
+    int GetPlayerY() const;
+    void SwitchLevel(int direction);
+    const Map& GetCurrentMap() const;
+    int GetCurrentLevel() const;
+    std::vector<QPoint> GetChangedTiles() const;
     bool isPlayerOnStairs() const;
     void clearChangedTiles();
     void interactWithStairs();
     void setCurrentLevel(int level);
     void setPlayerPosition(int x, int y);
     void setMapData(const std::vector<std::vector<char>>& data);
-    const std::vector<Map>& getAllMaps() const;
-    void setAllMaps(const std::vector<Map>& maps);
-
+    const std::vector<Map>& GetAllMaps() const;
+    std::vector<std::shared_ptr<Item>> GetPlayerItems() const;
+    void SetAllMaps(const std::vector<Map>& maps);
+    void PickUpItem();
+    void DropItem();
+    void UseItem();
+    int GetCurrentItemIndex() const;
+    void SelectNextItem();
+    void SelectPreviousItem();
 
 
 

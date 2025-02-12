@@ -1,26 +1,29 @@
 #include "playernamedialog.h"
-
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QLabel>
+#include <qwidget.h>
+#include <qdialog.h>
+#include <qboxlayout.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
 PlayerNameDialog::PlayerNameDialog(QWidget* parent)
-    : QDialog(parent) {
+    : QDialog(parent), nameInput(new QLineEdit(this)) {
     setWindowTitle("Enter Player Name");
     setFixedSize(300, 150);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
 
-    QLabel* label = new QLabel("Enter your character's name:", this);
+    auto* label = new QLabel("Enter your character's name:", this);
     layout->addWidget(label);
 
-    nameInput = new QLineEdit(this);
+    
     layout->addWidget(nameInput);
 
-    QPushButton* confirmButton = new QPushButton("Confirm", this);
+    auto* confirmButton = new QPushButton("Confirm", this);
     connect(confirmButton, &QPushButton::clicked, this, &PlayerNameDialog::accept);
     layout->addWidget(confirmButton);
 }
 
-QString PlayerNameDialog::getPlayerName() const {
+QString PlayerNameDialog::getPlayerName() const
+{
     return nameInput->text();
 }

@@ -1,11 +1,11 @@
 #include "mainmenu.h"
-#include <QApplication>
+#include <qapplication.h>
 
-int main(int argc, char* argv[]) {
-    QApplication app(argc, argv);
+auto main(int argc, char* argv[]) -> int {
+    QApplication const app(argc, argv);
 
     MainMenu mainMenu;
     mainMenu.show();
 
-    return app.exec();
+    return QApplication::exec();
 }

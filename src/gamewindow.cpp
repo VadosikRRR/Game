@@ -1,30 +1,30 @@
 #include "gamewindow.h"
+#include "gamelogic.h"
+#include "gamesaverloader.h"
+#include "item.h"
 #include "mainmenu.h"
-#include <QGraphicsTextItem>
-#include <QKeyEvent>
-#include <QGraphicsView>
-#include <QFile>
-#include <QTextStream>
-#include <QMessageBox>
-#include <QDateTime>
-#include <QDir>
-
-//TODO: Релизовать логику подбора предмета [добавлять в  Player::inventory_] [использовать метод Inventory::Add(Item *), получать предмет по координате 
-// из Map::items_], когда стоишь на нём. Если предмет является наследником CollectiblesItem, то либо добавить его инвентарь, если объекта этого типа в инвентаре не было,
-// либо увеличить у объекта этого типа поле count_ [с помощью метода Add()]
-// сделать отрисовку инвентаря в окошке, или хотя бы вывод предмета, на который сейчас указывает Inventory::currItem [итератор по списку]
-// сделать так чтобы стрелки двигали Inventory::currItem [использовать методы Inventory::Next(), Inventory::Previous()]
-// реализовать логику выкидывания предмета, на который указывает Inventory::currItem [Inventory::Drop() удаляет как раз этот предмет из инвентаря]
-// после подбора предмет должен пропасть из Map::items_, а при выкидывании наоборот [ну и соответственно надо поменять на карте тайлы].
+#include <cstddef>
+#include <memory>
+#include <qaction.h>
+#include <qboxlayout.h>
+#include <qevent.h>
+#include <qgraphicsitem.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsview.h>
+#include <qlistwidget.h>
+#include <qmainwindow.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include <qnamespace.h>
+#include <qobject.h>
+#include <qwidget.h>
 
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, QWidget* parent)
-    : QMainWindow(parent), scene(new QGraphicsScene(this)), gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName) {
+    : QMainWindow(parent), scene(new QGraphicsScene(this)), gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName), gameSaverLoader(new GameSaverLoader(playerName)), menuBar(new QMenuBar(this)), inventoryWidget(new QListWidget(this)) {
     setFixedSize(1280, 720);
 
-    gameSaverLoader = new GameSaverLoader(playerName); // Инициализация GameSaverLoader
-
-    menuBar = new QMenuBar(this);
     setMenuBar(menuBar);
 
     QMenu* fileMenu = menuBar->addMenu("Файл");
@@ -37,11 +37,25 @@ GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, Q
     connect(returnToMenuAction, &QAction::triggered, this, &GameWindow::onReturnToMenuClicked);
     fileMenu->addAction(returnToMenuAction);
 
-    QGraphicsView* view = new QGraphicsView(scene, this);
-    view->setGeometry(0, menuBar->height(), 1280, 720 - menuBar->height());
-    render();
-}
+    
+    inventoryWidget->setFixedWidth(200);
+    inventoryWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
 
+    auto* mainWidget = new QWidget(this);
+    auto* layout = new QHBoxLayout(mainWidget);
+
+    auto* view = new QGraphicsView(scene, this);
+    view->setFixedSize(1080, 720 - menuBar->height());
+
+    layout->addWidget(view);
+    layout->addWidget(inventoryWidget);
+
+    mainWidget->setLayout(layout);
+    setCentralWidget(mainWidget);
+
+    render();
+    updateInventoryDisplay();
+}
 void GameWindow::onSaveClicked() {
     if (gameSaverLoader->saveGame(*gameLogic)) {
         QMessageBox::information(this, "Game Saved", "Game saved successfully!");
@@ -50,19 +64,18 @@ void GameWindow::onSaveClicked() {
     }
 }
 
-bool GameWindow::loadGameState() {
+bool GameWindow::loadGameState()
+{
     if (gameSaverLoader->loadGame(*gameLogic)) {
         render();
         return true;
-    } else {
-        QMessageBox::warning(this, "Error", "Failed to load the game.");
+    }         QMessageBox::warning(this, "Error", "Failed to load the game.");
         return false;
-    }
 }
 
 void GameWindow::onReturnToMenuClicked() {
     this->close();
-    MainMenu* mainMenu = new MainMenu();
+    auto* mainMenu = new MainMenu();
     mainMenu->show();
 }
 GameWindow::~GameWindow() {
@@ -71,41 +84,59 @@ GameWindow::~GameWindow() {
 }
 
 void GameWindow::keyPressEvent(QKeyEvent *event) {
-    int dx = 0, dy = 0;
+    int dx = 0;
+    int dy = 0;
 
     if (event->key() == Qt::Key_W) {
-        gameLogic->movePlayer(dx, -1);
+        gameLogic->MovePlayer(dx, -1);
         render();
     } else if (event->key() == Qt::Key_S) {
-        gameLogic->movePlayer(dx, 1);
+        gameLogic->MovePlayer(dx, 1);
         render();
     } else if (event->key() == Qt::Key_A) {
-        gameLogic->movePlayer(-1, dy);
+        gameLogic->MovePlayer(-1, dy);
         render();
     } else if (event->key() == Qt::Key_D) {
-        gameLogic->movePlayer(1, dy);
+        gameLogic->MovePlayer(1, dy);
         render();
     } else if (event->key() == Qt::Key_Less || event->key() == Qt::Key_Greater){
         gameLogic->interactWithStairs();
         render();
+    } else if (event->key() == Qt::Key_E) {
+        gameLogic->PickUpItem();
+        updateInventoryDisplay();
+        render();
+    } else if (event->key() == Qt::Key_Q) {
+        gameLogic->DropItem();
+        updateInventoryDisplay();
+        render();
+    } else if (event->key() == Qt::Key_U) {
+        gameLogic->UseItem();
+        updateInventoryDisplay();
+        render();
+    }   else if (event->key() == Qt::Key_2) {
+        gameLogic->SelectNextItem();
+        updateInventoryDisplay();
+    } else if (event->key() == Qt::Key_1) {
+        gameLogic->SelectPreviousItem();
+        updateInventoryDisplay();
     }
 }
 void GameWindow::updateTile(int x, int y, char tile) {
-    QGraphicsSimpleTextItem* tileItem = new QGraphicsSimpleTextItem();
+    auto* tileItem = new QGraphicsSimpleTextItem();
     tileItem->setText(QString(tile));
     tileItem->setBrush(Qt::darkGray);
 
     tileItem->setFont(QFont("Courier", 10));
     tileItem->setPos(x * 10, y * 10);
 
-
     scene->addItem(tileItem);
 }
 void GameWindow::updateChangedTiles() {
-    for (const auto& tile : gameLogic->getChangedTiles()) {
-        int x = tile.x();
-        int y = tile.y();
-        char updatedTile = gameLogic->getCurrentMap().getTile(x, y);
+    for (const auto& tile : gameLogic->GetChangedTiles()) {
+        int const x = tile.x();
+        int const y = tile.y();
+        char const updatedTile = gameLogic->GetCurrentMap().getTile(x, y);
 
         updateTile(x, y, updatedTile);
     }
@@ -116,7 +147,7 @@ void GameWindow::updateChangedTiles() {
 void GameWindow::render() {
     scene->clear();
 
-    const auto& mapData = gameLogic->getCurrentMap().getData();
+    const auto& mapData = gameLogic->GetCurrentMap().getData();
 
     for (int y = 0; y < mapData.size(); ++y) {
         for (int x = 0; x < mapData[y].size(); ++x) {
@@ -124,8 +155,27 @@ void GameWindow::render() {
         }
     }
 
-    int playerX = gameLogic->getPlayerX();
-    int playerY = gameLogic->getPlayerY();
+    int const playerX = gameLogic->GetPlayerX();
+    int const playerY = gameLogic->GetPlayerY();
     updateTile(playerX, playerY, kPLayerChar);
 }
 
+void GameWindow::updateInventoryDisplay() {
+    inventoryWidget->clear();
+
+    const auto& inventory = gameLogic->GetPlayerItems();
+    int const currentIndex = gameLogic->GetCurrentItemIndex();
+
+    for (size_t i = 0; i < inventory.size(); ++i) {
+        QString itemInfo = inventory[i]->GetName();
+
+        if (auto collectible = std::dynamic_pointer_cast<CollectiblesItem>(inventory[i])) {
+            itemInfo += QString(" (x%1)").arg(collectible->GetCount());
+        }
+
+        if (i == currentIndex) {
+            itemInfo = "> " + itemInfo;         }
+
+        inventoryWidget->addItem(itemInfo);
+    }
+}

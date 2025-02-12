@@ -1,26 +1,34 @@
 #include "gamesaverloader.h"
 
-GameSaverLoader::GameSaverLoader(const QString& playerName)
-    : playerName(playerName) {}
+#include <utility>
+#include "gamelogic.h"
+#include <qfiledevice.h>
+#include <vector>
+#include <qchar.h>
 
-QString GameSaverLoader::getSaveFilePath() const {
+GameSaverLoader::GameSaverLoader(QString  playerName)
+    : playerName(std::move(playerName)) {}
+
+QString GameSaverLoader::getSaveFilePath() const
+{
     return QString("saves/%1_save.txt").arg(playerName);
 }
 
-bool GameSaverLoader::saveGame(const GameLogic& gameLogic) {
+bool GameSaverLoader::saveGame(const GameLogic& gameLogic)
+{
     QDir().mkdir("saves");
 
-    QString filename = getSaveFilePath();
+    QString const filename = getSaveFilePath();
     QFile file(filename);
 
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream out(&file);
 
         out << playerName << "\n";
-        out << gameLogic.getCurrentLevel() << "\n";
-        out << gameLogic.getPlayerX() << " " << gameLogic.getPlayerY() << "\n";
+        out << gameLogic.GetCurrentLevel() << "\n";
+        out << gameLogic.GetPlayerX() << " " << gameLogic.GetPlayerY() << "\n";
 
-        for (const auto& map : gameLogic.getAllMaps()) {
+        for (const auto& map : gameLogic.GetAllMaps()) {
             const auto& mapData = map.getData();
             for (const auto& row : mapData) {
                 out << QString::fromStdString(std::string(row.begin(), row.end())) << "\n";
@@ -30,29 +38,29 @@ bool GameSaverLoader::saveGame(const GameLogic& gameLogic) {
 
         file.close();
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
 }
 
-bool GameSaverLoader::loadGame(GameLogic& gameLogic) {
-    QString filename = getSaveFilePath();
+bool GameSaverLoader::loadGame(GameLogic& gameLogic)
+{
+    QString const filename = getSaveFilePath();
     QFile file(filename);
 
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream in(&file);
 
-        QString savedPlayerName = in.readLine();
+        QString const savedPlayerName = in.readLine();
         if (savedPlayerName != playerName) {
             file.close();
             return false;
         }
 
-        int currentLevel;
+        int currentLevel = 0;
         in >> currentLevel;
         gameLogic.setCurrentLevel(currentLevel);
 
-        int playerX, playerY;
+        int playerX;
+        int playerY;
         in >> playerX >> playerY;
         gameLogic.setPlayerPosition(playerX, playerY);
 
@@ -61,7 +69,7 @@ bool GameSaverLoader::loadGame(GameLogic& gameLogic) {
         std::vector<Map> maps;
         std::vector<std::vector<char>> mapData;
         while (!in.atEnd()) {
-            QString line = in.readLine();
+            QString const line = in.readLine();
             if (line == "---") {
                 Map map(mapData[0].size(), mapData.size());
                 map.setData(mapData);
@@ -69,17 +77,15 @@ bool GameSaverLoader::loadGame(GameLogic& gameLogic) {
                 mapData.clear();
             } else {
                 std::vector<char> row;
-                for (QChar qchar : line) {
+                for (QChar const qchar : line) {
                     row.push_back(qchar.toLatin1());
                 }
                 mapData.push_back(row);
             }
         }
-        gameLogic.setAllMaps(maps);
+        gameLogic.SetAllMaps(maps);
 
         file.close();
         return true;
-    } else {
-        return false;
-    }
+    }         return false;
 }

@@ -1,20 +1,26 @@
-#pragma once
-#include <list>
-#include "item.h"
+#ifndef INVENTORY_H
+#define INVENTORY_H
 
-using Iter = std::list<Item>::iterator;
+#include <vector>
+#include <memory>
+#include "item.h"
 
 class Inventory {
 public:
-    Inventory() = default;
-    void Add(Item * item);
-    void Drop();
+    Inventory();
+    void Add(const std::shared_ptr<Item>& item);
+    std::shared_ptr<Item> Drop();
     void EquipSword();
     void Next();
     void Previous();
-    Item * GetCurrItem();
+    std::shared_ptr<Item> GetCurrItem();
+    std::vector<std::shared_ptr<Item>> GetItems() const;
+    int GetCurrentIndex() const;
+
 private:
-    std::list<Item> container_;
-    Iter currItem_;
-    Sword * sword_ = nullptr;
+    std::vector<std::shared_ptr<Item>> container_;
+    int currentIndex_;
+    std::shared_ptr<Sword> sword_ = nullptr;
 };
+
+#endif // INVENTORY_H

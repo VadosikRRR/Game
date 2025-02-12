@@ -1,9 +1,9 @@
 #include "map.h"
+#include "item.h"
 #include <cstdlib>
+#include <cstddef>
 #include <ctime>
-#include <algorithm>
 #include <stdexcept>
-#include <cmath>
 
 const int DAMAGE = 10;
 
@@ -21,11 +21,11 @@ void Map::generateMap() {
 
 void Map::generateRooms(int roomCount, int minSize, int maxSize) {
     for (int i = 0; i < roomCount; ++i) {
-        int width = minSize + std::rand() % (maxSize - minSize + 1);
-        int height = minSize + std::rand() % (maxSize - minSize + 1);
-        int x = std::rand() % (mapWidth - width - 1) + 1;
-        int y = std::rand() % (mapHeight - height - 1) + 1;
-        Room room = {x, y, width, height};
+        int const width = minSize + std::rand() % (maxSize - minSize + 1);
+        int const height = minSize + std::rand() % (maxSize - minSize + 1);
+        int const x = std::rand() % (mapWidth - width - 1) + 1;
+        int const y = std::rand() % (mapHeight - height - 1) + 1;
+        Room const room = {x, y, width, height};
 
         bool intersects = false;
         for (const auto &existingRoom : rooms) {
@@ -42,7 +42,8 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
         }
     }
 }
-Room Map::getRandomRoom() const {
+Room Map::getRandomRoom() const
+{
     if (rooms.empty()) {
         return {0, 0, 1, 1};
     }
@@ -51,11 +52,11 @@ Room Map::getRandomRoom() const {
 
 void Map::connectRooms() {
     for (size_t i = 1; i < rooms.size(); ++i) {
-        int x1 = rooms[i - 1].x + rooms[i - 1].width / 2;
-        int y1 = rooms[i - 1].y + rooms[i - 1].height / 2;
+        int const x1 = rooms[i - 1].x + rooms[i - 1].width / 2;
+        int const y1 = rooms[i - 1].y + rooms[i - 1].height / 2;
 
-        int x2 = rooms[i].x + rooms[i].width / 2;
-        int y2 = rooms[i].y + rooms[i].height / 2;
+        int const x2 = rooms[i].x + rooms[i].width / 2;
+        int const y2 = rooms[i].y + rooms[i].height / 2;
 
         if (std::rand() % 2 == 0) {
             drawHorizontalCorridor(x1, x2, y1);
@@ -76,24 +77,27 @@ void Map::drawRoom(const Room &room) {
 }
 
 void Map::drawHorizontalCorridor(int x1, int x2, int y) {
-    if (x1 > x2) std::swap(x1, x2);
+    if (x1 > x2) { std::swap(x1, x2);
+}
     for (int x = x1; x <= x2; ++x) {
         setTile(x, y, '.');
     }
 }
 
 void Map::drawVerticalCorridor(int y1, int y2, int x) {
-    if (y1 > y2) std::swap(y1, y2);
+    if (y1 > y2) { std::swap(y1, y2);
+}
     for (int y = y1; y <= y2; ++y) {
         setTile(x, y, '.');
     }
 }
 
-bool Map::isWalkable(int x, int y) const {
+bool Map::isWalkable(int x, int y) const
+{
     if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
         return false;
     }
-    return mapData[y][x] != '#';
+    return mapData[y][x] == '.';
 }
 
 void Map::setTile(int x, int y, char tile) {
@@ -102,14 +106,16 @@ void Map::setTile(int x, int y, char tile) {
     }
 }
 
-char Map::getTile(int x, int y) const {
+char Map::getTile(int x, int y) const
+{
     if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
         return mapData[y][x];
     }
     return '#';
 }
 
-const std::vector<std::vector<char>>& Map::getData() const {
+const std::vector<std::vector<char>>& Map::getData() const
+{
     return mapData;
 }
 
@@ -121,18 +127,22 @@ void Map::setData(const std::vector<std::vector<char>>& newData) {
     }
 }
 
-int getRandomInRange(int min, int max) {
+int getRandomInRange(int min, int max)
+{
     return min + std::rand() % (max - min + 1);
 }
 
-bool canPlaceItem(const Map& map, int x, int y) {
+bool canPlaceItem(const Map& map, int x, int y)
+{
     return map.getTile(x, y) == '.';
 }
 
-bool findNearbyPosition(const Map& map, int& x, int& y) {
+bool findNearbyPosition(const Map& map, int& x, int& y)
+{
     for (int dx = -1; dx <= 1; ++dx) {
         for (int dy = -1; dy <= 1; ++dy) {
-            if (dx == 0 && dy == 0) continue;
+            if (dx == 0 && dy == 0) { continue;
+}
             if (canPlaceItem(map, x + dx, y + dy)) {
                 x += dx;
                 y += dy;
@@ -143,9 +153,8 @@ bool findNearbyPosition(const Map& map, int& x, int& y) {
     return false;
 }
 
-
 void Map::addItemsToMap() {
-    std::srand(std::time(nullptr));
+    std::srand(time(nullptr));
 
     for (const auto& room : rooms) {
 
@@ -156,7 +165,7 @@ void Map::addItemsToMap() {
         if (!canPlaceItem(*this, centerX, centerY)) {
 
             if (!findNearbyPosition(*this, centerX, centerY)) {
-                continue; 
+                continue;
             }
         }
 
@@ -165,9 +174,54 @@ void Map::addItemsToMap() {
             items_[QPoint(centerX, centerY)] = std::make_shared<MedKit>();
         }
         else if (std::rand() % 10 == 0) {
-            int damage = getRandomInRange(DAMAGE / 2, 3 * DAMAGE / 2);
+            int const damage = getRandomInRange(DAMAGE / 2, 3 * DAMAGE / 2);
             setTile(centerX, centerY, kSwordTile);
             items_[QPoint(centerX, centerY)] = std::make_shared<Sword>(damage);
         }
+    }
+}
+
+void Map::placeItemInRoom(const Room& room, std::shared_ptr<Item> item, char tile) {
+    int const x = room.x + 1 + std::rand() % (room.width - 2);
+    int const y = room.y + 1 + std::rand() % (room.height - 2);
+
+    if (mapData[y][x] == '.') {
+        setTile(x, y, tile);
+        items_[QPoint(x, y)] = std::move(item);
+    }
+}
+
+auto Map::generateRandomItem() -> std::shared_ptr<Item> {
+    int const itemType = std::rand() % 2;
+    switch (itemType) {
+    case 0:
+        return std::make_shared<Sword>(DAMAGE + std::rand() % 10);
+    case 1:
+        return std::make_shared<MedKit>();
+    default:
+        return nullptr;
+    }
+}
+
+std::shared_ptr<Item> Map::getItemAt(int x, int y)
+{
+    QPoint const pos(x, y);
+    if (items_.find(pos) != items_.end()) {
+        return items_[pos];
+    }
+    return nullptr;
+}
+
+void Map::removeItemAt(int x, int y) {
+    QPoint const pos(x, y);
+    items_.erase(pos);
+    setTile(x, y, '.');
+}
+
+void Map::AddItem(int x, int y, const std::shared_ptr<Item>& item) {
+    if (this->getTile(x,y) =='.') {
+        items_[QPoint(x, y)] = item;
+        char const tile = (item->GetName() == "Sword") ? kSwordTile : kMedKitTile;
+        setTile(x, y, tile);
     }
 }

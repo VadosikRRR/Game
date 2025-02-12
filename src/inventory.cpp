@@ -1,43 +1,69 @@
 #include "inventory.h"
+#include <memory>
+#include "item.h"
+#include <vector>
 
-void Inventory::Add(Item* item) {
+Inventory::Inventory() : currentIndex_(-1) {
+}
+
+void Inventory::Add(const std::shared_ptr<Item>& item) {
     if (item) {
-        container_.push_back(*item);
-        if (container_.size() == 1) {
-            currItem_ = container_.begin();
+        container_.push_back(item);
+        if (currentIndex_ == -1) {
+            currentIndex_ = 0;
         }
     }
 }
 
-
-void Inventory::Drop() {
-    if (currItem_ != container_.end()) {
-        currItem_ = container_.erase(currItem_); 
-        if (currItem_ == container_.end() && !container_.empty()) {
-            currItem_ = std::prev(container_.end());
+std::shared_ptr<Item> Inventory::Drop()
+{
+    if (currentIndex_ != -1 && !container_.empty()) {
+        std::shared_ptr<Item> droppedItem = container_[currentIndex_];
+        container_.erase(container_.begin() + currentIndex_);
+        if (container_.empty()) {
+            currentIndex_ = -1;
+        } else if (currentIndex_ >= container_.size()) {
+            currentIndex_ = container_.size() - 1;
         }
+        return droppedItem; // Возвращаем выброшенный предмет
     }
+    return nullptr; // Если инвентарь пуст, возвращаем nullptr
 }
 
 void Inventory::Next() {
     if (!container_.empty()) {
-        ++currItem_;
-        if (currItem_ == container_.end()) {
-            currItem_ = container_.begin();
+        if (currentIndex_ == -1) {
+            currentIndex_ = 0; // Если текущий предмет не выбран, выбираем первый
+        } else {
+            currentIndex_ = (currentIndex_ + 1) % container_.size(); // Переход к следующему предмету
         }
     }
 }
 
 void Inventory::Previous() {
     if (!container_.empty()) {
-        if (currItem_ == container_.begin()) {
-            currItem_ = std::prev(container_.end());
+        if (currentIndex_ == -1) {
+            currentIndex_ = container_.size() - 1; // Если текущий предмет не выбран, выбираем последний
         } else {
-            --currItem_;
+            currentIndex_ = (currentIndex_ - 1 + container_.size()) % container_.size(); // Переход к предыдущему предмету
         }
     }
 }
 
-Item * Inventory::GetCurrItem(){
-    return dynamic_cast<Item*>(&(*currItem_));
+std::shared_ptr<Item> Inventory::GetCurrItem()
+{
+    if (currentIndex_ != -1 && currentIndex_ < container_.size()) {
+        return container_[currentIndex_];
+    }
+    return nullptr;
+}
+
+std::vector<std::shared_ptr<Item>> Inventory::GetItems() const
+{
+    return container_;
+}
+
+int Inventory::GetCurrentIndex() const
+{
+    return currentIndex_;
 }

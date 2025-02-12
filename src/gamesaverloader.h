@@ -10,7 +10,7 @@
 
 class GameSaverLoader {
 public:
-    GameSaverLoader(const QString& playerName);
+    GameSaverLoader(QString  playerName);
 
     bool saveGame(const GameLogic& gameLogic);
     bool loadGame(GameLogic& gameLogic);

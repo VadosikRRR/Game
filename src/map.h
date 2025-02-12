@@ -39,18 +39,23 @@ public:
     void setData(const std::vector<std::vector<char>>& newData);
 
     void addItemsToMap();
+    std::shared_ptr<Item> getItemAt(int x, int y);
+    void removeItemAt(int x, int y);
+    void AddItem(int x, int y, const std::shared_ptr<Item>& item);
 
 private:
     int mapWidth, mapHeight;
     std::vector<std::vector<char>> mapData;
     std::vector<Room> rooms;
+    std::unordered_map<QPoint, std::shared_ptr<Item>> items_;
+
     void generateRooms(int roomCount, int minSize, int maxSize);
     void connectRooms();
     void drawRoom(const Room &room);
     void drawHorizontalCorridor(int x1, int x2, int y);
     void drawVerticalCorridor(int y1, int y2, int x);
-
-    std::unordered_map<QPoint, std::shared_ptr<Item>> items_;
+    void placeItemInRoom(const Room& room, std::shared_ptr<Item> item, char tile);
+    static std::shared_ptr<Item> generateRandomItem();
 };
 
 #endif // MAP_H

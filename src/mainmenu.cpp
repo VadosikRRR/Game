@@ -1,19 +1,24 @@
 #include "mainmenu.h"
 #include "gamewindow.h"
 #include "playernamedialog.h"
-#include <QDir>
-#include <QMessageBox>
-#include <QInputDialog>
+#include <qwidget.h>
+#include <qboxlayout.h>
+#include <qpushbutton.h>
+#include <qdialog.h>
+#include <qdir.h>
+#include <qmessagebox.h>
+#include <qlist.h>
+#include <qinputdialog.h>
 
 MainMenu::MainMenu(QWidget* parent) : QWidget(parent) {
     setWindowTitle("Roguelike Game");
     setFixedSize(300, 200);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
 
-    QPushButton* newGameButton = new QPushButton("New Game", this);
-    QPushButton* loadGameButton = new QPushButton("Load Game", this);
-    QPushButton* exitButton = new QPushButton("Exit", this);
+    auto* newGameButton = new QPushButton("New Game", this);
+    auto* loadGameButton = new QPushButton("Load Game", this);
+    auto* exitButton = new QPushButton("Exit", this);
 
     layout->addWidget(newGameButton);
     layout->addWidget(loadGameButton);
@@ -27,35 +32,35 @@ MainMenu::MainMenu(QWidget* parent) : QWidget(parent) {
 void MainMenu::startNewGame() {
     PlayerNameDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
-        QString playerName = dialog.getPlayerName();
+        QString const playerName = dialog.getPlayerName();
         if (!playerName.isEmpty()) {
-            GameWindow* gameWindow = new GameWindow(playerName,kMapWidth,kMapHeight);
+            auto* gameWindow = new GameWindow(playerName,kMapWidth,kMapHeight);
             gameWindow->show();
             close();
         }
     }
 }
 void MainMenu::loadGame() {
-    QDir savesDir("saves");
+    QDir const savesDir("saves");
     if (!savesDir.exists()) {
         QMessageBox::information(this, "No Saves", "No saved games found.");
         return;
     }
 
-    QStringList saveFiles = savesDir.entryList(QStringList() << "*.txt", QDir::Files);
+    QStringList const saveFiles = savesDir.entryList(QStringList() << "*.txt", QDir::Files);
 
     if (saveFiles.isEmpty()) {
         QMessageBox::information(this, "No Saves", "No saved games found.");
         return;
     }
 
-    bool ok;
+    bool ok = false;
     QString selectedSave = QInputDialog::getItem(this, "Load Game", "Select a saved game:", saveFiles, 0, false, &ok);
 
     if (ok && !selectedSave.isEmpty()) {
-        QString playerName = selectedSave.replace("_save.txt", "");
+        QString const playerName = selectedSave.replace("_save.txt", "");
 
-        GameWindow* gameWindow = new GameWindow(playerName, kMapWidth, kMapHeight);
+        auto* gameWindow = new GameWindow(playerName, kMapWidth, kMapHeight);
 
         if (gameWindow->loadGameState()) {
             gameWindow->show();
