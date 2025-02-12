@@ -21,24 +21,22 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
         maps.push_back(map);
     }
     Room startRoom = maps[0].getRandomRoom();
-    playerPoint.setX(startRoom.x + startRoom.width / 2);
-    playerPoint.setY(startRoom.y + startRoom.height / 2);
+    player_.SetPosition(startRoom.x + startRoom.width / 2,startRoom.y + startRoom.height / 2);
 
 }
 
 void GameLogic::movePlayer(int dx, int dy) {
-    int newX = playerPoint.x() + dx;
-    int newY = playerPoint.y() + dy;
+    int newX = player_.GetX() + dx;
+    int newY = player_.GetY() + dy;
 
     const Map& map = maps[currentLevel];
     
     if (map.isWalkable(newX, newY)) {
-        changedTiles.push_back({playerPoint.x(), playerPoint.y()});
+        changedTiles.push_back({player_.GetX(), player_.GetY()});
 
-        playerPoint.setX(newX);
-        playerPoint.setY(newY);
+        player_.SetPosition(newX, newY);
 
-        changedTiles.push_back({playerPoint.x(), playerPoint.y()});
+        changedTiles.push_back({player_.GetX(), player_.GetY()});
     }
 }
 
@@ -52,8 +50,7 @@ void GameLogic::switchLevel(int direction) {
         for (int y = 0; y < newMap.getData().size(); ++y) {
             for (int x = 0; x < newMap.getData()[y].size(); ++x) {
                 if (newMap.getTile(x, y) == ((direction == -1) ? '>' : '<')) {
-                    playerPoint.setX(x);
-                    playerPoint.setY(y);
+                    player_.SetPosition(x, y);
 
                 }
             }
@@ -67,11 +64,11 @@ const Map& GameLogic::getCurrentMap() const {
 }
 
 int GameLogic::getPlayerX() const {
-    return playerPoint.x();
+    return player_.GetX();
 }
 
 int GameLogic::getPlayerY() const {
-    return playerPoint.y();
+    return player_.GetY();
 }
 std::vector<QPoint> GameLogic::getChangedTiles() const {
     return changedTiles;
@@ -81,7 +78,7 @@ void GameLogic::clearChangedTiles() {
     changedTiles.clear();
 }
 bool GameLogic::isPlayerOnStairs() const {
-    char tile = maps[currentLevel].getTile(playerPoint.x(), playerPoint.y());
+    char tile = maps[currentLevel].getTile(player_.GetX(), player_.GetY());
     return (tile == '<' || tile == '>');
 }
 int GameLogic::getCurrentLevel() const{
@@ -89,7 +86,7 @@ int GameLogic::getCurrentLevel() const{
 }
 void GameLogic::interactWithStairs() {
     if (isPlayerOnStairs()) {
-        char stair = maps[currentLevel].getTile(playerPoint.x(), playerPoint.y());
+        char stair = maps[currentLevel].getTile(player_.GetX(), player_.GetY());
         int direction = (stair == '<') ? -1 : 1;
         switchLevel(direction);
     }
@@ -101,8 +98,7 @@ void GameLogic::setCurrentLevel(int level) {
 }
 
 void GameLogic::setPlayerPosition(int x, int y) {
-    playerPoint.setX(x);
-    playerPoint.setY(y);
+    player_.SetPosition(x, y);
 }
 
 void GameLogic::setMapData(const std::vector<std::vector<char>>& data) {

@@ -31,7 +31,6 @@ public:
 private:
     std::vector<Map> maps;
     int currentLevel;
-    QPoint playerPoint;
     std::vector<QPoint> changedTiles;
 
     Player player_;

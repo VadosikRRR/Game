@@ -16,3 +16,15 @@ void Player::EquipSword() {
         }
     }
 }
+int Player::GetX() const {
+    return position_.x();
+}
+
+int Player::GetY() const {
+    return position_.y();
+}
+
+void Player::SetPosition(int x, int y) {
+    position_.setX(x);
+    position_.setY(y);
+}
