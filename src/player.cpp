@@ -3,9 +3,12 @@
 #include <memory>
 #include <vector>
 
-Player::Player()
-    : health(100), basePower(10),  attackPower(basePower) {
-}
+Player::Player(const QString& name)
+    : health(100)
+    , basePower(10)
+    , attackPower(basePower)
+    , name(std::move(name))
+{}
 
 void Player::EquipSword() {
     std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
@@ -75,4 +78,13 @@ void Player::SelectPreviousItem() {
 std::shared_ptr<Item> Player::GetCurrentItem()
 {
     return inventory_.GetCurrItem();
+}
+int Player::GetHealth() const
+{
+    return health;
+}
+
+int Player::GetAttackPower() const
+{
+    return attackPower;
 }

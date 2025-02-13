@@ -29,3 +29,12 @@ QString MedKit::GetName() const
 {
     return "MedKit";
 }
+char Sword::GetTile() const
+{
+    return '!';
+}
+
+char MedKit::GetTile() const
+{
+    return '+';
+}

@@ -3,8 +3,6 @@
 
 #include <QString>
 const int kMedKitHeal = 20;
-const char kSwordTile = '!';
-const char kMedKitTile = '+';
 
 class Item {
 protected:
@@ -12,6 +10,7 @@ protected:
 public:
     virtual ~Item() = default;
     virtual QString GetName() const = 0;
+    virtual char GetTile() const = 0;
 };
 
 class CollectiblesItem : public Item {
@@ -31,6 +30,8 @@ public:
     ~Sword() = default;
     int GetDamage() const;
     QString GetName() const override;
+    char GetTile() const override;
+
 private:
     int damage_;
 };
@@ -40,5 +41,6 @@ public:
     MedKit() = default;
     ~MedKit() = default;
     QString GetName() const override;
+    char GetTile() const override;
 };
 #endif // ITEM_H

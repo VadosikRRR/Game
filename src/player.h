@@ -8,22 +8,28 @@
 
 class Player {
 public:
-    Player();
-    void EquipSword();
+    explicit Player(const QString& name = "Олег");
+
     int GetX() const;
     int GetY() const;
+    int GetHealth() const;
+    int GetAttackPower() const;
+    int GetCurrentItemIndex() const;
+    std::vector<std::shared_ptr<Item>> GetItems() const;
+    std::shared_ptr<Item> GetCurrentItem();
+
     void SetPosition(int x, int y);
+
+    void EquipSword();
     void PickUpItem(const std::shared_ptr<Item>& item);
     std::shared_ptr<Item> DropItem();
     void UseItem();
-    std::vector<std::shared_ptr<Item>> GetItems() const;
-    int GetCurrentItemIndex() const;
     void SelectNextItem();
     void SelectPreviousItem();
-    std::shared_ptr<Item> GetCurrentItem();
+
 private:
     int health;
-    // QString name;
+    QString name;
     QPoint position_;
     int attackPower;
     int basePower;

@@ -1,24 +1,11 @@
 #include "gamewindow.h"
+#include <QGraphicsSimpleTextItem>
+#include <QGraphicsView>
+#include <QKeyEvent>
 #include "gamelogic.h"
 #include "gamesaverloader.h"
 #include "item.h"
 #include "mainmenu.h"
-#include <cstddef>
-#include <memory>
-#include <qaction.h>
-#include <qboxlayout.h>
-#include <qevent.h>
-#include <qgraphicsitem.h>
-#include <qgraphicsscene.h>
-#include <qgraphicsview.h>
-#include <qlistwidget.h>
-#include <qmainwindow.h>
-#include <qmenu.h>
-#include <qmenubar.h>
-#include <qmessagebox.h>
-#include <qnamespace.h>
-#include <qobject.h>
-#include <qwidget.h>
 
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, QWidget* parent)
@@ -45,7 +32,7 @@ GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, Q
     auto* layout = new QHBoxLayout(mainWidget);
 
     auto* view = new QGraphicsView(scene, this);
-    view->setFixedSize(1080, 720 - menuBar->height());
+    view->setFixedSize(1080 - 50, 720 - menuBar->height());
 
     layout->addWidget(view);
     layout->addWidget(inventoryWidget);
@@ -53,8 +40,22 @@ GameWindow::GameWindow(const QString& playerName, int mapWidth, int mapHeight, Q
     mainWidget->setLayout(layout);
     setCentralWidget(mainWidget);
 
+    statusBarWidget = new StatusBarWidget(playerName,
+                                          gameLogic->getPlayerHealth(),
+                                          gameLogic->getPlayerAttackPower(),
+                                          this);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout();
+    mainLayout->addWidget(mainWidget);
+    mainLayout->addWidget(statusBarWidget);
+
+    QWidget* container = new QWidget(this);
+    container->setLayout(mainLayout);
+    setCentralWidget(container);
+
     render();
     updateInventoryDisplay();
+    updateStatusBar();
 }
 void GameWindow::onSaveClicked() {
     if (gameSaverLoader->saveGame(*gameLogic)) {
@@ -121,6 +122,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
         gameLogic->SelectPreviousItem();
         updateInventoryDisplay();
     }
+    updateStatusBar();
 }
 void GameWindow::updateTile(int x, int y, char tile) {
     auto* tileItem = new QGraphicsSimpleTextItem();
@@ -177,5 +179,12 @@ void GameWindow::updateInventoryDisplay() {
             itemInfo = "> " + itemInfo;         }
 
         inventoryWidget->addItem(itemInfo);
+    }
+}
+void GameWindow::updateStatusBar()
+{
+    if (statusBarWidget) {
+        statusBarWidget->setHealth(gameLogic->getPlayerHealth());
+        statusBarWidget->setAttackPower(gameLogic->getPlayerAttackPower());
     }
 }

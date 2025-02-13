@@ -37,11 +37,11 @@ public:
     const std::vector<std::vector<char>>& getData() const;
     Room getRandomRoom() const;
     void setData(const std::vector<std::vector<char>>& newData);
-
     void addItemsToMap();
     std::shared_ptr<Item> getItemAt(int x, int y);
     void removeItemAt(int x, int y);
     void AddItem(int x, int y, const std::shared_ptr<Item>& item);
+    const std::unordered_map<QPoint, std::shared_ptr<Item>>& getItems() const;
 
 private:
     int mapWidth, mapHeight;

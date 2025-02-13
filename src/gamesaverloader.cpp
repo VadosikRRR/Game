@@ -1,13 +1,14 @@
 #include "gamesaverloader.h"
-
-#include <utility>
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
 #include "gamelogic.h"
-#include <qfiledevice.h>
+#include <utility>
 #include <vector>
-#include <qchar.h>
 
-GameSaverLoader::GameSaverLoader(QString  playerName)
-    : playerName(std::move(playerName)) {}
+GameSaverLoader::GameSaverLoader(QString playerName)
+    : playerName(std::move(playerName))
+{}
 
 QString GameSaverLoader::getSaveFilePath() const
 {
@@ -33,12 +34,24 @@ bool GameSaverLoader::saveGame(const GameLogic& gameLogic)
             for (const auto& row : mapData) {
                 out << QString::fromStdString(std::string(row.begin(), row.end())) << "\n";
             }
+
+            const auto& items = map.getItems();
+            for (const auto& [pos, item] : items) {
+                out << "ITEM " << pos.x() << " " << pos.y() << " " << item->GetName() << "\n";
+            }
+
             out << "---\n";
+        }
+
+        const auto& inventory = gameLogic.GetPlayerItems();
+        for (const auto& item : inventory) {
+            out << "INVENTORY " << item->GetName() << "\n";
         }
 
         file.close();
         return true;
-    }         return false;
+    }
+    return false;
 }
 
 bool GameSaverLoader::loadGame(GameLogic& gameLogic)
@@ -75,6 +88,34 @@ bool GameSaverLoader::loadGame(GameLogic& gameLogic)
                 map.setData(mapData);
                 maps.push_back(map);
                 mapData.clear();
+            } else if (line.startsWith("ITEM ")) {
+                QStringList parts = line.split(" ");
+                int x = parts[1].toInt();
+                int y = parts[2].toInt();
+                QString itemName = parts[3];
+
+                std::shared_ptr<Item> item;
+                if (itemName == "Sword") {
+                    item = std::make_shared<Sword>(10);
+                } else if (itemName == "MedKit") {
+                    item = std::make_shared<MedKit>();
+                }
+
+                if (item) {
+                    maps.back().AddItem(x, y, item);
+                }
+            } else if (line.startsWith("INVENTORY ")) {
+                QString itemName = line.section(' ', 1);
+                std::shared_ptr<Item> item;
+                if (itemName == "Sword") {
+                    item = std::make_shared<Sword>(10);
+                } else if (itemName == "MedKit") {
+                    item = std::make_shared<MedKit>();
+                }
+
+                if (item) {
+                    gameLogic.getPlayer().PickUpItem(item);
+                }
             } else {
                 std::vector<char> row;
                 for (QChar const qchar : line) {
@@ -83,9 +124,10 @@ bool GameSaverLoader::loadGame(GameLogic& gameLogic)
                 mapData.push_back(row);
             }
         }
-        gameLogic.SetAllMaps(maps);
 
+        gameLogic.SetAllMaps(maps);
         file.close();
         return true;
-    }         return false;
+    }
+    return false;
 }

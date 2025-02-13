@@ -1,16 +1,16 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
-#include <QMainWindow>
-#include <QGraphicsScene>
-#include "gamelogic.h"
-#include <QListWidget>
-#include <QPushButton>
-
-#include <QMenuBar>
 #include <QAction>
-
+#include <QGraphicsScene>
+#include <QListWidget>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QStatusBar>
+#include "gamelogic.h"
 #include "gamesaverloader.h"
+#include "statusbarwidget.h"
 
 class GameWindow : public QMainWindow {
     Q_OBJECT
@@ -28,6 +28,7 @@ private:
     QListWidget* inventoryWidget;
 
     QMenuBar* menuBar;
+    StatusBarWidget* statusBarWidget;
     QAction* saveAction;
     QAction* returnToMenuAction;
 
@@ -36,6 +37,7 @@ private:
     void updateChangedTiles();
     void keyPressEvent(QKeyEvent* event) override;
     void updateInventoryDisplay();
+    void updateStatusBar();
 
 private slots:
     void onSaveClicked();

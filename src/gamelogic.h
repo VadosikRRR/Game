@@ -31,8 +31,9 @@ public:
     int GetCurrentItemIndex() const;
     void SelectNextItem();
     void SelectPreviousItem();
-
-
+    int getPlayerHealth() const;
+    int getPlayerAttackPower() const;
+    Player& getPlayer();
 
 private:
     std::vector<Map> maps;

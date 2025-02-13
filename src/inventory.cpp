@@ -25,17 +25,17 @@ std::shared_ptr<Item> Inventory::Drop()
         } else if (currentIndex_ >= container_.size()) {
             currentIndex_ = container_.size() - 1;
         }
-        return droppedItem; // Возвращаем выброшенный предмет
+        return droppedItem;
     }
-    return nullptr; // Если инвентарь пуст, возвращаем nullptr
+    return nullptr;
 }
 
 void Inventory::Next() {
     if (!container_.empty()) {
         if (currentIndex_ == -1) {
-            currentIndex_ = 0; // Если текущий предмет не выбран, выбираем первый
+            currentIndex_ = 0;
         } else {
-            currentIndex_ = (currentIndex_ + 1) % container_.size(); // Переход к следующему предмету
+            currentIndex_ = (currentIndex_ + 1) % container_.size();
         }
     }
 }
@@ -43,9 +43,9 @@ void Inventory::Next() {
 void Inventory::Previous() {
     if (!container_.empty()) {
         if (currentIndex_ == -1) {
-            currentIndex_ = container_.size() - 1; // Если текущий предмет не выбран, выбираем последний
+            currentIndex_ = container_.size() - 1;
         } else {
-            currentIndex_ = (currentIndex_ - 1 + container_.size()) % container_.size(); // Переход к предыдущему предмету
+            currentIndex_ = (currentIndex_ - 1 + container_.size()) % container_.size();
         }
     }
 }

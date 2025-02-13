@@ -6,6 +6,9 @@
 #include <stdexcept>
 
 const int DAMAGE = 10;
+const int ROOMCOUNT = 10;
+const int MINSIZE = 5;
+const int MAXSIZE = 10;
 
 Map::Map(int mapWidth, int mapHeight)
     : mapWidth(mapWidth), mapHeight(mapHeight) {
@@ -14,7 +17,7 @@ Map::Map(int mapWidth, int mapHeight)
 }
 
 void Map::generateMap() {
-    generateRooms(10, 5, 10);
+    generateRooms(ROOMCOUNT, MINSIZE, MAXSIZE);
     connectRooms();
     addItemsToMap();
 }
@@ -170,12 +173,12 @@ void Map::addItemsToMap() {
         }
 
         if (std::rand() % 5 == 0) {
-            setTile(centerX, centerY, kMedKitTile);
+            setTile(centerX, centerY, '+');
             items_[QPoint(centerX, centerY)] = std::make_shared<MedKit>();
         }
         else if (std::rand() % 10 == 0) {
             int const damage = getRandomInRange(DAMAGE / 2, 3 * DAMAGE / 2);
-            setTile(centerX, centerY, kSwordTile);
+            setTile(centerX, centerY, '!');
             items_[QPoint(centerX, centerY)] = std::make_shared<Sword>(damage);
         }
     }
@@ -221,7 +224,11 @@ void Map::removeItemAt(int x, int y) {
 void Map::AddItem(int x, int y, const std::shared_ptr<Item>& item) {
     if (this->getTile(x,y) =='.') {
         items_[QPoint(x, y)] = item;
-        char const tile = (item->GetName() == "Sword") ? kSwordTile : kMedKitTile;
-        setTile(x, y, tile);
+        setTile(x, y, item->GetTile());
     }
+}
+
+const std::unordered_map<QPoint, std::shared_ptr<Item>>& Map::getItems() const
+{
+    return items_;
 }

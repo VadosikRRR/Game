@@ -36,8 +36,15 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
         maps.push_back(map);
     }
     Room const startRoom = maps[0].getRandomRoom();
-    player_.SetPosition(startRoom.x + startRoom.width / 2,startRoom.y + startRoom.height / 2);
 
+    int x = startRoom.x + 1 + rand() % (startRoom.width - 2);
+    int y = startRoom.y + 1 + rand() % (startRoom.height - 2);
+
+    while (maps[0].getTile(x, y) != '.') {
+        x = startRoom.x + 1 + rand() % (startRoom.width - 2);
+        y = startRoom.y + 1 + rand() % (startRoom.height - 2);
+    }
+    player_.SetPosition(x, y);
 }
 
 void GameLogic::MovePlayer(int dx, int dy) {
@@ -177,7 +184,16 @@ void GameLogic::SelectNextItem() {
 void GameLogic::SelectPreviousItem() {
     player_.SelectPreviousItem();
 }
+int GameLogic::getPlayerHealth() const
+{
+    return player_.GetHealth();
+}
 
-
-
-
+int GameLogic::getPlayerAttackPower() const
+{
+    return player_.GetAttackPower();
+}
+Player& GameLogic::getPlayer()
+{
+    return player_;
+}
