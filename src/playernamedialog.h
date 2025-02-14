@@ -5,14 +5,14 @@
 #include <QLineEdit>
 
 class PlayerNameDialog : public QDialog {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit PlayerNameDialog(QWidget* parent = nullptr);
-    QString getPlayerName() const;
+  explicit PlayerNameDialog(QWidget *parent = nullptr);
+  QString getPlayerName() const;
 
 private:
-    QLineEdit* nameInput;
+  QLineEdit *nameInput;
 };
 
 #endif // PLAYERNAMEDIALOG_H
