@@ -125,6 +125,8 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
     gameLogic->SelectPreviousItem();
     updateInventoryDisplay();
   }
+
+  gameLogic->UpdateEnemies();
   updateStatusBar();
 }
 void GameWindow::updateTile(int x, int y, char tile) {

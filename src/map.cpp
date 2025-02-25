@@ -22,6 +22,7 @@ void Map::generateMap() {
   generateRooms(ROOMCOUNT, MINSIZE, MAXSIZE);
   connectRooms();
   addItemsToMap();
+  addEnemiesToMap();
 }
 
 void Map::generateRooms(int roomCount, int minSize, int maxSize) {
@@ -135,7 +136,7 @@ int getRandomInRange(int min, int max) {
   return min + std::rand() % (max - min + 1);
 }
 
-bool canPlaceItem(const Map &map, int x, int y) {
+bool IsCellEmpty(const Map &map, int x, int y) {
   return map.getTile(x, y) == '.';
 }
 
@@ -145,7 +146,7 @@ bool findNearbyPosition(const Map &map, int &x, int &y) {
       if (dx == 0 && dy == 0) {
         continue;
       }
-      if (canPlaceItem(map, x + dx, y + dy)) {
+      if (IsCellEmpty(map, x + dx, y + dy)) {
         x += dx;
         y += dy;
         return true;
@@ -161,7 +162,7 @@ void Map::addItemsToMap() {
     int centerX = room.x + room.width / 2;
     int centerY = room.y + room.height / 2;
 
-    if (!canPlaceItem(*this, centerX, centerY)) {
+    if (!IsCellEmpty(*this, centerX, centerY)) {
 
       if (!findNearbyPosition(*this, centerX, centerY)) {
         continue;
@@ -228,6 +229,38 @@ void Map::AddItem(int x, int y, const std::shared_ptr<Item> &item) {
   }
 }
 
+void Map::addEnemiesToMap() {
+    for (const auto &room : rooms) {
+
+        int centerX = room.x + room.width / 2;
+        int centerY = room.y + room.height / 2;
+
+        if (!IsCellEmpty(*this, centerX, centerY)) {
+
+            if (!findNearbyPosition(*this, centerX, centerY)) {
+                continue;
+            }
+        }
+
+        int random = std::rand();
+
+        if (random % 5 == 0) {
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(1, centerX, centerY)));
+            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+        } else if (random % 7 == 0) {
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(2, centerX, centerY)));
+            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+        } else if (random % 9 == 0) {
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(3, centerX, centerY)));
+            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+        }
+    }
+}
+
 const std::unordered_map<QPoint, std::shared_ptr<Item>> &Map::getItems() const {
   return items_;
+}
+
+const std::list<std::shared_ptr<Enemy>> &Map::GetEnemies() const {
+    return enemies_;
 }

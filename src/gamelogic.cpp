@@ -1,7 +1,12 @@
 #include "gamelogic.h"
 #include "item.h"
 #include "map.h"
+#include "enemy.h"
 #include <ctime>
+
+
+const int VISIBLE_DISTANCE = 5;
+
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0) {
   srand(time(nullptr));
@@ -53,7 +58,10 @@ void GameLogic::MovePlayer(int dx, int dy) {
 
   const Map &map = maps[currentLevel];
 
-  if (map.getTile(newX, newY) != '#') {
+  if (map.getTile(newX, newY) != '#' &&
+      map.getTile(newX, newY) != SYMBOL_1 &&
+      map.getTile(newX, newY) != SYMBOL_2 &&
+      map.getTile(newX, newY) != SYMBOL_3) {
     changedTiles.emplace_back(player_.GetX(), player_.GetY());
 
     player_.SetPosition(newX, newY);
@@ -157,3 +165,34 @@ int GameLogic::GetPlayerMaxHealth() const { return player_.GetMaxHealth(); }
 
 int GameLogic::getPlayerAttackPower() const { return player_.GetAttackPower(); }
 Player &GameLogic::getPlayer() { return player_; }
+
+void GameLogic::UpdateEnemies() {
+    const Map &map = maps[currentLevel];
+    for (const auto &p_enemy : map.GetEnemies()) {
+        Enemy& enemy = *p_enemy;
+        if (enemy.StepsNumberToPlayer(player_.GetX(), player_.GetY()) > VISIBLE_DISTANCE) {
+            continue;
+        }
+
+        QPoint new_enemy_position = enemy.NextStep(player_.GetX(), player_.GetY());
+        MoveEnemy(enemy, new_enemy_position);
+    }
+}
+
+void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
+    Map &map = maps[currentLevel];
+    int newX = new_position.x();
+    int newY = new_position.y();
+
+    if (map.getTile(newX, newY) != '#' &&
+        map.getTile(newX, newY) != SYMBOL_1 &&
+        map.getTile(newX, newY) != SYMBOL_2 &&
+        map.getTile(newX, newY) != SYMBOL_3 &&
+        map.getTile(newX, newY) != '@') {
+        map.setTile(enemy.GetX(), enemy.GetY(), '.');
+
+        enemy.SetPosition(newX, newY);
+
+        map.setTile(newX, newY, enemy.GetSymbol());
+    }
+}

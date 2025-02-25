@@ -36,6 +36,9 @@ public:
   int getPlayerAttackPower() const;
   Player &getPlayer();
 
+  void MoveEnemy(Enemy &enemy, QPoint new_position);
+  void UpdateEnemies();
+
 private:
   std::vector<Map> maps;
   int currentLevel;

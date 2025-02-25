@@ -2,11 +2,13 @@
 #define MAP_H
 
 #include "item.h"
+#include "enemy.h"
 #include <QPoint>
 #include <functional>
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <list>
 
 namespace std {
 template <> struct hash<QPoint> {
@@ -36,17 +38,22 @@ public:
   const std::vector<std::vector<char>> &getData() const;
   Room getRandomRoom() const;
   void setData(const std::vector<std::vector<char>> &newData);
+
   void addItemsToMap();
   std::shared_ptr<Item> getItemAt(int x, int y);
   void removeItemAt(int x, int y);
   void AddItem(int x, int y, const std::shared_ptr<Item> &item);
   const std::unordered_map<QPoint, std::shared_ptr<Item>> &getItems() const;
+  const std::list<std::shared_ptr<Enemy>> &GetEnemies() const;
+
+  void addEnemiesToMap();
 
 private:
   int mapWidth, mapHeight;
   std::vector<std::vector<char>> mapData;
   std::vector<Room> rooms;
   std::unordered_map<QPoint, std::shared_ptr<Item>> items_;
+  std::list<std::shared_ptr<Enemy>> enemies_;
 
   void generateRooms(int roomCount, int minSize, int maxSize);
   void connectRooms();
@@ -59,7 +66,7 @@ private:
 
 int getRandomInRange(int min, int max);
 
-bool canPlaceItem(const Map &map, int x, int y);
+bool IsCellEmpty(const Map &map, int x, int y);
 
 bool findNearbyPosition(const Map &map, int &x, int &y);
 
