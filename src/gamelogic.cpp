@@ -171,9 +171,14 @@ void GameLogic::UpdateEnemies() {
     for (const auto &p_enemy : map.GetEnemies()) {
         Enemy& enemy = *p_enemy;
         if (enemy.StepsNumberToPlayer(player_.GetX(), player_.GetY()) > VISIBLE_DISTANCE) {
+            enemy.RestEnemy();
             continue;
         }
 
+        if(enemy.GetEnergy() < ENERGY_FOR_STEP) {
+            enemy.RestEnemy();
+            continue;
+        }
         QPoint new_enemy_position = enemy.NextStep(player_.GetX(), player_.GetY());
         MoveEnemy(enemy, new_enemy_position);
     }
@@ -193,7 +198,10 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
         map.setTile(enemy.GetX(), enemy.GetY(), '.');
 
         enemy.SetPosition(newX, newY);
-
+        enemy.ReduceEnergyForStep();
         map.setTile(newX, newY, 'F');
+        return;
     }
+
+    enemy.RestEnemy();
 }

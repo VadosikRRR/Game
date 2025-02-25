@@ -7,6 +7,8 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackPower_ = ATTACK_POWER_2;
         health_ = MAX_HEALTH_2;
         maxHealth_ = MAX_HEALTH_2;
+        energy_ = MAX_ENERGY_2;
+        max_energy_ = MAX_ENERGY_2;
         attackProbability_ = ATTACK_PROBABILITY_2;
         name_ = QString(NAME_2);
         symbol_ = SYMBOL_2;
@@ -15,6 +17,8 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackPower_ = ATTACK_POWER_3;
         health_ = MAX_HEALTH_3;
         maxHealth_ = MAX_HEALTH_3;
+        energy_ = MAX_ENERGY_3;
+        max_energy_ = MAX_ENERGY_3;
         attackProbability_ = ATTACK_PROBABILITY_3;
         name_ = QString(NAME_3);
         symbol_ = SYMBOL_3;
@@ -23,6 +27,8 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackPower_ = ATTACK_POWER_1;
         health_ = MAX_HEALTH_1;
         maxHealth_ = MAX_HEALTH_1;
+        energy_ = MAX_ENERGY_1;
+        max_energy_ = MAX_ENERGY_1;
         attackProbability_ = ATTACK_PROBABILITY_1;
         name_ = QString(NAME_1);
         symbol_ = SYMBOL_1;
@@ -39,9 +45,26 @@ int Enemy::GetHealth() const { return health_; }
 
 int Enemy::GetMaxHealth() const { return maxHealth_; }
 
+int Enemy::GetEnergy() const { return energy_; }
+
+int Enemy::GetMaxEnergy() const { return max_energy_; }
+
 int Enemy::GetAttackPower() const { return attackPower_; }
 
 int Enemy::GetAttackProbability()  const { return attackProbability_; }
+
+void Enemy::SetEnergy(int new_energy) {
+    if (new_energy > max_energy_) {
+        energy_ = max_energy_;
+        return;
+    }
+    else if (new_energy < 0) {
+        energy_ = 0;
+        return;
+    }
+
+    energy_ = new_energy;
+}
 
 void Enemy::SetPosition(int x, int y) {
     position_.setX(x);
@@ -70,4 +93,12 @@ QPoint Enemy::NextStep(int player_x, int player_y) {
     }
 
     return QPoint(position_.x() + dx, position_.y() + dy);
+}
+
+void Enemy::RestEnemy() {
+    SetEnergy(energy_ + ENERGY_REST);
+}
+
+void Enemy::ReduceEnergyForStep() {
+    SetEnergy(energy_ - ENERGY_FOR_STEP);
 }

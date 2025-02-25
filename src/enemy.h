@@ -12,6 +12,10 @@
 #define MAX_HEALTH_2 60
 #define MAX_HEALTH_3 90
 
+#define MAX_ENERGY_1 50
+#define MAX_ENERGY_2 100
+#define MAX_ENERGY_3 150
+
 #define ATTACK_PROBABILITY_1 25
 #define ATTACK_PROBABILITY_2 50
 #define ATTACK_PROBABILITY_3 75
@@ -24,15 +28,22 @@
 #define SYMBOL_2 'N'
 #define SYMBOL_3 'H'
 
+#define ENERGY_FOR_STEP 10
+#define ENERGY_REST 10
+
 class Enemy {
 private:
     char symbol_;
     int attackPower_;
     int health_;
     int maxHealth_;
+    int energy_;
+    int max_energy_;
     int attackProbability_;
     QString name_;
     QPoint position_;
+
+    void SetEnergy(int new_enegry);
 public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
 
@@ -41,10 +52,14 @@ public:
     int GetY() const;
     int GetHealth() const;
     int GetMaxHealth() const;
+    int GetEnergy() const;
+    int GetMaxEnergy() const;
     int GetAttackPower() const;
     int GetAttackProbability() const;
 
     void SetPosition(int x, int y);
+    void RestEnemy();
+    void ReduceEnergyForStep();
 
     int StepsNumberToPlayer(int player_x, int player_y);
     QPoint NextStep(int player_x, int player_y);
