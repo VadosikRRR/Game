@@ -118,10 +118,17 @@ void Enemy::ReduceEnergyForHit() {
     SetEnergy(energy_ - ENERGY_FOR_HIT);
 }
 
+
 void Enemy::ReduceHealth(int delta_health) {
     if (delta_health < 0) {
         return;
     }
 
     SetHealth(health_ - delta_health);
+}
+
+char Enemy::GetEatenTile() { return eaten_tile_; }
+
+void Enemy::SetEatenTile(char tile) {
+    eaten_tile_ = tile;
 }

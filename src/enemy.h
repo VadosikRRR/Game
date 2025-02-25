@@ -44,6 +44,8 @@ private:
     QString name_;
     QPoint position_;
 
+    char eaten_tile_ = '.';
+
     void SetEnergy(int new_enegry);
     void SetHealth(int new_health);
 public:
@@ -67,6 +69,9 @@ public:
 
     int StepsNumberToPlayer(int player_x, int player_y);
     QPoint NextStep(int player_x, int player_y);
+
+    char GetEatenTile();
+    void SetEatenTile(char tile);
 };
 
 #endif // ENEMY_H

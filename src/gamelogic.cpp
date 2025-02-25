@@ -201,14 +201,13 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
     Map &map = maps[currentLevel];
     int newX = new_position.x();
     int newY = new_position.y();
+    char tile = map.getTile(newX, newY);
 
-    if (map.getTile(newX, newY) != '#' &&
-        map.getTile(newX, newY) != SYMBOL_1 &&
-        map.getTile(newX, newY) != SYMBOL_2 &&
-        map.getTile(newX, newY) != SYMBOL_3 &&
-        map.getTile(newX, newY) != '@' &&
-        map.getTile(newX, newY) != 'F') {
-        map.setTile(enemy.GetX(), enemy.GetY(), '.');
+    if (tile == '.' || 
+    tile == '+' || map.getTile(newX, newY) == 'A' ||
+    tile == '!') {
+        map.setTile(enemy.GetX(), enemy.GetY(), enemy.GetEatenTile());
+        enemy.SetEatenTile(tile);
 
         enemy.SetPosition(newX, newY);
         enemy.ReduceEnergyForStep();
