@@ -29,9 +29,11 @@ public:
   void SelectNextItem();
   void SelectPreviousItem();
 
+  void ReduceHealthForHit(int d_health);
+
 private:
   int baseHealth_;
-  int health;
+  int health_;
   int maxHealth_;
   QString name;
   QPoint position_;
@@ -40,6 +42,8 @@ private:
   Inventory inventory_;
   std::shared_ptr<Sword> sword_ = nullptr;
   std::shared_ptr<Armor> armor_ = nullptr;
+
+  void SetHealth(int new_health);
 };
 
 #endif // PLAYER_H

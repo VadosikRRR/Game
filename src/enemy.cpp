@@ -102,3 +102,7 @@ void Enemy::RestEnemy() {
 void Enemy::ReduceEnergyForStep() {
     SetEnergy(energy_ - ENERGY_FOR_STEP);
 }
+
+void Enemy::ReduceEnergyForHit() {
+    SetEnergy(energy_ - ENERGY_FOR_HIT);
+}

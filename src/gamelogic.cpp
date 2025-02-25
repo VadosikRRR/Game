@@ -6,6 +6,7 @@
 
 
 const int VISIBLE_DISTANCE = 5;
+const int FIGHT_DISTANCE = 1;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0) {
@@ -61,7 +62,8 @@ void GameLogic::MovePlayer(int dx, int dy) {
   if (map.getTile(newX, newY) != '#' &&
       map.getTile(newX, newY) != SYMBOL_1 &&
       map.getTile(newX, newY) != SYMBOL_2 &&
-      map.getTile(newX, newY) != SYMBOL_3) {
+      map.getTile(newX, newY) != SYMBOL_3 &&
+      map.getTile(newX, newY) != 'F') {
     changedTiles.emplace_back(player_.GetX(), player_.GetY());
 
     player_.SetPosition(newX, newY);
@@ -170,8 +172,19 @@ void GameLogic::UpdateEnemies() {
     const Map &map = maps[currentLevel];
     for (const auto &p_enemy : map.GetEnemies()) {
         Enemy& enemy = *p_enemy;
-        if (enemy.StepsNumberToPlayer(player_.GetX(), player_.GetY()) > VISIBLE_DISTANCE) {
+        int distance_to_player = enemy.StepsNumberToPlayer(player_.GetX(), player_.GetY());
+        if (distance_to_player > VISIBLE_DISTANCE) {
             enemy.RestEnemy();
+            continue;
+        }
+
+        int result_probability = getRandomInRange(0, 100);
+
+        if (result_probability >= enemy.GetAttackProbability() &&
+            distance_to_player <= FIGHT_DISTANCE &&
+            enemy.GetEnergy() < ENERGY_FOR_HIT) {
+
+            player_.ReduceHealthForHit(enemy.GetAttackPower());
             continue;
         }
 

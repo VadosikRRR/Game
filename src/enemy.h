@@ -30,6 +30,7 @@
 
 #define ENERGY_FOR_STEP 10
 #define ENERGY_REST 10
+#define ENERGY_FOR_HIT 15
 
 class Enemy {
 private:
@@ -60,6 +61,7 @@ public:
     void SetPosition(int x, int y);
     void RestEnemy();
     void ReduceEnergyForStep();
+    void ReduceEnergyForHit();
 
     int StepsNumberToPlayer(int player_x, int player_y);
     QPoint NextStep(int player_x, int player_y);

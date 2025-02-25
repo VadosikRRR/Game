@@ -4,7 +4,7 @@
 #include <vector>
 
 Player::Player(const QString &name)
-    : health(100), baseHealth_(100), maxHealth_(100), basePower(10),
+    : health_(100), baseHealth_(100), maxHealth_(100), basePower(10),
       attackPower(10), name(std::move(name)) {}
 
 void Player::EquipSword() {
@@ -28,8 +28,8 @@ void Player::EquipArmor() {
     if (armor) {
       armor_ = armor;
       maxHealth_ = baseHealth_ + armor_->GetDefense();
-      if (health - baseHealth_ > armor_->GetDefense()) {
-        health = maxHealth_;
+      if (health_ - baseHealth_ > armor_->GetDefense()) {
+        health_ = maxHealth_;
       }
       inventory_.Drop();
     }
@@ -57,9 +57,9 @@ void Player::UseItem() {
   std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
   if (currItem) {
     if (currItem->GetName() == "MedKit") {
-      health += kMedKitHeal;
-      if (health > maxHealth_) {
-        health = maxHealth_;
+      health_ += kMedKitHeal;
+      if (health_ > maxHealth_) {
+        health_ = maxHealth_;
       }
       inventory_.Drop();
     }
@@ -89,8 +89,25 @@ void Player::SelectPreviousItem() { inventory_.Previous(); }
 std::shared_ptr<Item> Player::GetCurrentItem() {
   return inventory_.GetCurrItem();
 }
-int Player::GetHealth() const { return health; }
+int Player::GetHealth() const { return health_; }
 
 int Player::GetMaxHealth() const { return maxHealth_; }
 
 int Player::GetAttackPower() const { return attackPower; }
+
+void Player::SetHealth(int new_health) {
+    if(new_health > maxHealth_) {
+        health_ = maxHealth_;
+        return;
+    }
+    else if (new_health < 0) {
+        health_ = 0;
+        return;
+    }
+
+    health_ = new_health;
+}
+
+void Player::ReduceHealthForHit(int d_health) {
+    SetHealth(health_ - d_health);
+}
