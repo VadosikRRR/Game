@@ -264,3 +264,18 @@ const std::unordered_map<QPoint, std::shared_ptr<Item>> &Map::getItems() const {
 const std::list<std::shared_ptr<Enemy>> &Map::GetEnemies() const {
     return enemies_;
 }
+
+void Map::DeleteEnemy(Enemy &enemy) {
+    int x_coord = enemy.GetX();
+    int y_coord = enemy.GetY();
+
+    for (auto iter = enemies_.begin(); iter != enemies_.end(); iter++) {
+        Enemy &finder_enemy = *(*iter);
+        if (x_coord != finder_enemy.GetX() || y_coord != finder_enemy.GetY()) {
+            continue;
+        }
+
+        setTile(x_coord, y_coord, '.');
+        enemies_.erase(iter);
+    }
+}

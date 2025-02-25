@@ -39,12 +39,13 @@ private:
     int health_;
     int maxHealth_;
     int energy_;
-    int max_energy_;
+    int maxEnergy_;
     int attackProbability_;
     QString name_;
     QPoint position_;
 
     void SetEnergy(int new_enegry);
+    void SetHealth(int new_health);
 public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
 
@@ -62,6 +63,7 @@ public:
     void RestEnemy();
     void ReduceEnergyForStep();
     void ReduceEnergyForHit();
+    void ReduceHealth(int delta_health);
 
     int StepsNumberToPlayer(int player_x, int player_y);
     QPoint NextStep(int player_x, int player_y);

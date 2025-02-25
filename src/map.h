@@ -47,6 +47,7 @@ public:
   const std::list<std::shared_ptr<Enemy>> &GetEnemies() const;
 
   void addEnemiesToMap();
+  void DeleteEnemy(Enemy &enemy);
 
 private:
   int mapWidth, mapHeight;

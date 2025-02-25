@@ -12,7 +12,7 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
                        QWidget *parent)
     : QMainWindow(parent), scene(new QGraphicsScene(this)),
       gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName),
-      gameSaverLoader(new GameSaverLoader(playerName)),
+    gameSaverLoader(new GameSaverLoader(playerName)), is_space_pressed_(false),
       menuBar(new QMenuBar(this)), inventoryWidget(new QListWidget(this)) {
   setFixedSize(1280, 720);
 
@@ -91,7 +91,22 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
   int dx = 0;
   int dy = 0;
 
-  if (event->key() == Qt::Key_W) {
+  if (is_space_pressed_) {
+    if (event->key() == Qt::Key_W) {
+        gameLogic->MovePlayer(dx, -1);
+        render();
+    } else if (event->key() == Qt::Key_S) {
+        gameLogic->MovePlayer(dx, 1);
+        render();
+    } else if (event->key() == Qt::Key_A) {
+        gameLogic->MovePlayer(-1, dy);
+        render();
+    } else if (event->key() == Qt::Key_D) {
+        gameLogic->MovePlayer(1, dy);
+        render();
+    }
+  }
+  else if (event->key() == Qt::Key_W) {
     gameLogic->MovePlayer(dx, -1);
     render();
   } else if (event->key() == Qt::Key_S) {
@@ -124,8 +139,12 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
   } else if (event->key() == Qt::Key_1) {
     gameLogic->SelectPreviousItem();
     updateInventoryDisplay();
+  } else if (event->key() == Qt::Key_Space){
+      is_space_pressed_ = true;
+      return;
   }
 
+  is_space_pressed_ = false;
   gameLogic->UpdateEnemies();
   updateStatusBar();
 }

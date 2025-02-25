@@ -33,6 +33,8 @@ private:
   QAction *saveAction;
   QAction *returnToMenuAction;
 
+  bool is_space_pressed_;
+
   void render();
   void updateTile(int x, int y, char tile);
   void updateChangedTiles();

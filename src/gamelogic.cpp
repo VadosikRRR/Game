@@ -218,3 +218,28 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
 
     enemy.RestEnemy();
 }
+
+void GameLogic::HitEnemy(int x_enemy, int y_enemy) {
+    Map &map = maps[currentLevel];
+    if (map.getTile(x_enemy, y_enemy) != 'F') {
+        return;
+    }
+
+    for (const auto & p_enemy : map.GetEnemies()) {
+        Enemy& enemy = *p_enemy;
+        if (enemy.GetX() != x_enemy || enemy.GetY() != y_enemy) {
+            continue;
+        }
+
+        // int result_probability = getRandomInRange(0, 100);
+
+        // if (result_probability >= )
+        enemy.ReduceHealth(player_.GetAttackPower());
+
+        if (enemy.GetHealth() == 0) {
+            map.DeleteEnemy(enemy);
+        }
+
+        return;
+    }
+}
