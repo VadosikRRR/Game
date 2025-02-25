@@ -44,6 +44,8 @@ private:
     QString name_;
     QPoint position_;
 
+    char eaten_tile_ = '.';
+
     void SetEnergy(int new_enegry);
 public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
@@ -65,6 +67,9 @@ public:
 
     int StepsNumberToPlayer(int player_x, int player_y);
     QPoint NextStep(int player_x, int player_y);
+
+    char GetEatenTile();
+    void SetEatenTile(char tile);
 };
 
 #endif // ENEMY_H

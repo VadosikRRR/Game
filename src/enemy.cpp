@@ -106,3 +106,9 @@ void Enemy::ReduceEnergyForStep() {
 void Enemy::ReduceEnergyForHit() {
     SetEnergy(energy_ - ENERGY_FOR_HIT);
 }
+
+char Enemy::GetEatenTile() { return eaten_tile_; }
+
+void Enemy::SetEatenTile(char tile) {
+    eaten_tile_ = tile;
+}
