@@ -93,17 +93,16 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
 
   if (is_space_pressed_) {
     if (event->key() == Qt::Key_W) {
-        gameLogic->MovePlayer(dx, -1);
-        render();
+        gameLogic->HitEnemy(dx, -1);
+        return;
     } else if (event->key() == Qt::Key_S) {
-        gameLogic->MovePlayer(dx, 1);
-        render();
+        gameLogic->HitEnemy(dx, 1);
+        return;
     } else if (event->key() == Qt::Key_A) {
-        gameLogic->MovePlayer(-1, dy);
-        render();
+        gameLogic->HitEnemy(-1, dy);
+        return;
     } else if (event->key() == Qt::Key_D) {
-        gameLogic->MovePlayer(1, dy);
-        render();
+        gameLogic->HitEnemy(1, dy);
     }
   }
   else if (event->key() == Qt::Key_W) {

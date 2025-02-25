@@ -36,7 +36,7 @@ public:
   int getPlayerAttackPower() const;
   Player &getPlayer();
 
-  void HitEnemy(int x_enemy, int y_enemy);
+  void HitEnemy(int dx_enemy, int dy_enemy);
   void MoveEnemy(Enemy &enemy, QPoint new_position);
   void UpdateEnemies();
 

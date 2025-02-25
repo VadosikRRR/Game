@@ -219,9 +219,12 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
     enemy.RestEnemy();
 }
 
-void GameLogic::HitEnemy(int x_enemy, int y_enemy) {
+void GameLogic::HitEnemy(int dx, int dy) {
+    int x_enemy = player_.GetX() + dx;
+    int y_enemy = player_.GetY() + dy;
     Map &map = maps[currentLevel];
-    if (map.getTile(x_enemy, y_enemy) != 'F') {
+    char symbol = map.getTile(x_enemy, y_enemy);
+    if (symbol != 'F') {
         return;
     }
 
