@@ -188,11 +188,12 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
         map.getTile(newX, newY) != SYMBOL_1 &&
         map.getTile(newX, newY) != SYMBOL_2 &&
         map.getTile(newX, newY) != SYMBOL_3 &&
-        map.getTile(newX, newY) != '@') {
+        map.getTile(newX, newY) != '@' &&
+        map.getTile(newX, newY) != 'F') {
         map.setTile(enemy.GetX(), enemy.GetY(), '.');
 
         enemy.SetPosition(newX, newY);
 
-        map.setTile(newX, newY, enemy.GetSymbol());
+        map.setTile(newX, newY, 'F');
     }
 }
