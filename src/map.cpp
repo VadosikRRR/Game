@@ -136,17 +136,13 @@ int getRandomInRange(int min, int max) {
   return min + std::rand() % (max - min + 1);
 }
 
-bool IsCellEmpty(const Map &map, int x, int y) {
-  return map.getTile(x, y) == '.';
-}
-
 bool findNearbyPosition(const Map &map, int &x, int &y) {
   for (int dx = -1; dx <= 1; ++dx) {
     for (int dy = -1; dy <= 1; ++dy) {
       if (dx == 0 && dy == 0) {
         continue;
       }
-      if (IsCellEmpty(map, x + dx, y + dy)) {
+      if (map.getTile(x + dx, y + dy) == '.') {
         x += dx;
         y += dy;
         return true;
@@ -162,7 +158,7 @@ void Map::addItemsToMap() {
     int centerX = room.x + room.width / 2;
     int centerY = room.y + room.height / 2;
 
-    if (!IsCellEmpty(*this, centerX, centerY)) {
+    if (getTile(centerX, centerY) != '.') {
 
       if (!findNearbyPosition(*this, centerX, centerY)) {
         continue;
@@ -186,16 +182,16 @@ void Map::addItemsToMap() {
   }
 }
 
-void Map::placeItemInRoom(const Room &room, std::shared_ptr<Item> item,
-                          char tile) {
-  int const x = room.x + 1 + std::rand() % (room.width - 2);
-  int const y = room.y + 1 + std::rand() % (room.height - 2);
+// void Map::placeItemInRoom(const Room &room, std::shared_ptr<Item> item,
+//                           char tile) {
+//   int const x = room.x + 1 + std::rand() % (room.width - 2);
+//   int const y = room.y + 1 + std::rand() % (room.height - 2);
 
-  if (mapData[y][x] == '.') {
-    setTile(x, y, tile);
-    items_[QPoint(x, y)] = std::move(item);
-  }
-}
+//   if (mapData[y][x] == '.') {
+//     setTile(x, y, tile);
+//     items_[QPoint(x, y)] = std::move(item);
+//   }
+// }
 
 // std::shared_ptr<Item> Map::generateRandomItem(){
 //     int randomValue = std::rand();
@@ -235,7 +231,7 @@ void Map::addEnemiesToMap() {
         int centerX = room.x + room.width / 2;
         int centerY = room.y + room.height / 2;
 
-        if (!IsCellEmpty(*this, centerX, centerY)) {
+        if (getTile(centerX, centerY) != '.') {
 
             if (!findNearbyPosition(*this, centerX, centerY)) {
                 continue;
@@ -269,13 +265,13 @@ void Map::DeleteEnemy(Enemy &enemy) {
     int x_coord = enemy.GetX();
     int y_coord = enemy.GetY();
 
-    for (auto iter = enemies_.begin(); iter != enemies_.end(); iter++) {
-        Enemy &finder_enemy = *(*iter);
-        if (x_coord != finder_enemy.GetX() || y_coord != finder_enemy.GetY()) {
-            continue;
-        }
-
-        setTile(x_coord, y_coord, '.');
-        enemies_.erase(iter);
-    }
+    for (auto iter = enemies_.begin(); iter != enemies_.end(); ) {
+    Enemy &finder_enemy = *(*iter);
+      if (x_coord == finder_enemy.GetX() && y_coord == finder_enemy.GetY()) {
+          setTile(x_coord, y_coord, '.');
+          iter = enemies_.erase(iter);
+      } else {
+          ++iter;
+      }
+  }
 }

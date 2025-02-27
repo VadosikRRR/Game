@@ -61,13 +61,11 @@ private:
   void drawRoom(const Room &room);
   void drawHorizontalCorridor(int x1, int x2, int y);
   void drawVerticalCorridor(int y1, int y2, int x);
-  void placeItemInRoom(const Room &room, std::shared_ptr<Item> item, char tile);
+  // void placeItemInRoom(const Room &room, std::shared_ptr<Item> item, char tile);
   static std::shared_ptr<Item> generateRandomItem();
 };
 
 int getRandomInRange(int min, int max);
-
-bool IsCellEmpty(const Map &map, int x, int y);
 
 bool findNearbyPosition(const Map &map, int &x, int &y);
 

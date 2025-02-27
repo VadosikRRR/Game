@@ -180,7 +180,7 @@ void GameLogic::UpdateEnemies() {
 
         int result_probability = getRandomInRange(0, 100);
 
-        if (result_probability >= enemy.GetAttackProbability() &&
+        if (result_probability <= enemy.GetAttackProbability() &&
             distance_to_player <= FIGHT_DISTANCE &&
             enemy.GetEnergy() < ENERGY_FOR_HIT) {
 
@@ -204,7 +204,7 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
     char tile = map.getTile(newX, newY);
 
     if (tile == '.' || 
-    tile == '+' || map.getTile(newX, newY) == 'A' ||
+    tile == '+' || tile == 'A' ||
     tile == '!') {
         map.setTile(enemy.GetX(), enemy.GetY(), enemy.GetEatenTile());
         enemy.SetEatenTile(tile);
@@ -228,18 +228,18 @@ void GameLogic::HitEnemy(int dx, int dy) {
     }
 
     for (const auto & p_enemy : map.GetEnemies()) {
-        Enemy& enemy = *p_enemy;
-        if (enemy.GetX() != x_enemy || enemy.GetY() != y_enemy) {
+        // Enemy& enemy = *p_enemy;
+        if (p_enemy->GetX() != x_enemy || p_enemy->GetY() != y_enemy) {
             continue;
         }
 
         // int result_probability = getRandomInRange(0, 100);
 
         // if (result_probability >= )
-        enemy.ReduceHealth(player_.GetAttackPower());
+        p_enemy->ReduceHealth(player_.GetAttackPower());
 
-        if (enemy.GetHealth() == 0) {
-            map.DeleteEnemy(enemy);
+        if (p_enemy->GetHealth() <= 0) {
+            map.DeleteEnemy(*p_enemy);
         }
 
         return;
