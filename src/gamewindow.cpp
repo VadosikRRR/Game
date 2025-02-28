@@ -14,7 +14,7 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
       gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName),
     gameSaverLoader(new GameSaverLoader(playerName)), is_space_pressed_(false),
       menuBar(new QMenuBar(this)), inventoryWidget(new QListWidget(this)),
-    statusAttackedEnemyBar(NULL) {
+    attackedEnemyWidget(std::make_shared<QListWidget>(this)) {
   setFixedSize(1280, 720);
 
   setMenuBar(menuBar);
@@ -49,15 +49,20 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
       new StatusBarWidget(playerName, gameLogic->getPlayerHealth(),
                           gameLogic->getPlayerAttackPower(), this);
 
+  attackedEnemyWidget->setFixedWidth(100);
+  attackedEnemyWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
+
   QVBoxLayout *mainLayout = new QVBoxLayout();
   mainLayout->addWidget(mainWidget);
   mainLayout->addWidget(statusBarWidget);
+  mainLayout->addWidget(attackedEnemyWidget.get());
 
   QWidget *container = new QWidget(this);
   container->setLayout(mainLayout);
   setCentralWidget(container);
 
   render();
+  updateAttackedEnemies();
   updateInventoryDisplay();
   updateStatusBar();
 }
@@ -95,18 +100,22 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
   if (is_space_pressed_) {
     if (event->key() == Qt::Key_W) {
         gameLogic->HitEnemy(dx, -1);
+        updateAttackedEnemies();
         //return;
         // render();
     } else if (event->key() == Qt::Key_S) {
         gameLogic->HitEnemy(dx, 1);
+        updateAttackedEnemies();
         //return;
         // render();
     } else if (event->key() == Qt::Key_A) {
         gameLogic->HitEnemy(-1, dy);
+        updateAttackedEnemies();
         //return;
         // render();
     } else if (event->key() == Qt::Key_D) {
         gameLogic->HitEnemy(1, dy);
+        updateAttackedEnemies();
         //return;
         // render();
     }
@@ -220,22 +229,21 @@ void GameWindow::updateStatusBar() {
                                gameLogic->GetPlayerMaxHealth());
     statusBarWidget->setAttackPower(gameLogic->getPlayerAttackPower());
   }
+}
 
-  std::shared_ptr<Enemy> p_enemy = gameLogic->GetAttackedEnemy();
-  if (p_enemy) {
-      if (statusAttackedEnemyBar) {
-          statusAttackedEnemyBar->setEnemyName(p_enemy->GetName());
-          statusAttackedEnemyBar->setHealth(p_enemy->GetHealth(),
-                                            p_enemy->GetMaxHealth());
-          statusAttackedEnemyBar->setAttackPower(p_enemy->GetAttackPower());
-      }
-      else {
-          statusAttackedEnemyBar = std::make_shared<StatusAttackedEnemyBar>(p_enemy->GetName(),
-                                                                            p_enemy->GetHealth(),
-                                                                            p_enemy->GetMaxHealth(),
-                                                                            p_enemy->GetAttackPower());
-          std::shared_ptr<QVBoxLayout> mainLayout = std::make_shared<QVBoxLayout>(this);
-          mainLayout->addWidget(statusAttackedEnemyBar.get());
-      }
-  }
+void GameWindow::updateAttackedEnemies() {
+    attackedEnemyWidget->clear();
+    std::shared_ptr<Enemy> p_enemy = gameLogic->GetAttackedEnemy();
+
+    if(!p_enemy) {
+        return;
+    }
+
+    QString text = "";
+    text += QString::number(p_enemy->GetSymbol());
+    text += ": ";
+    text += QString::number(p_enemy->GetHealth());
+    text += "/";
+    text += QString::number(p_enemy->GetMaxHealth());
+    attackedEnemyWidget->addItem(text);
 }

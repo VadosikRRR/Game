@@ -4,7 +4,6 @@
 #include "gamelogic.h"
 #include "gamesaverloader.h"
 #include "statusbarwidget.h"
-#include "statusattackedenemybar.h"
 #include <QAction>
 #include <QGraphicsScene>
 #include <QListWidget>
@@ -32,7 +31,7 @@ private:
 
   QMenuBar *menuBar;
   StatusBarWidget *statusBarWidget;
-  std::shared_ptr<StatusAttackedEnemyBar> statusAttackedEnemyBar;
+  std::shared_ptr<QListWidget> attackedEnemyWidget;
   QAction *saveAction;
   QAction *returnToMenuAction;
 
@@ -43,6 +42,7 @@ private:
   void updateChangedTiles();
   void keyPressEvent(QKeyEvent *event) override;
   void updateInventoryDisplay();
+  void updateAttackedEnemies();
   void updateStatusBar();
 
 private slots:
