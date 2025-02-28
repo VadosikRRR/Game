@@ -27,6 +27,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         src/enemy.h
         src/enemy.cpp
+        src/statusattackedenemybar.h
+        src/statusattackedenemybar.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET RogueLike APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

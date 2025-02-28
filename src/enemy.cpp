@@ -53,6 +53,8 @@ int Enemy::GetAttackPower() const { return attackPower_; }
 
 int Enemy::GetAttackProbability()  const { return attackProbability_; }
 
+QString Enemy::GetName() const { return name_; }
+
 void Enemy::SetEnergy(int new_energy) {
     if (new_energy > maxEnergy_) {
         energy_ = maxEnergy_;

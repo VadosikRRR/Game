@@ -4,6 +4,7 @@
 #include "gamelogic.h"
 #include "gamesaverloader.h"
 #include "statusbarwidget.h"
+#include "statusattackedenemybar.h"
 #include <QAction>
 #include <QGraphicsScene>
 #include <QListWidget>
@@ -11,6 +12,7 @@
 #include <QMenuBar>
 #include <QPushButton>
 #include <QStatusBar>
+#include <memory>
 
 class GameWindow : public QMainWindow {
   Q_OBJECT
@@ -30,6 +32,7 @@ private:
 
   QMenuBar *menuBar;
   StatusBarWidget *statusBarWidget;
+  std::shared_ptr<StatusAttackedEnemyBar> statusAttackedEnemyBar;
   QAction *saveAction;
   QAction *returnToMenuAction;
 

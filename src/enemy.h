@@ -60,6 +60,7 @@ public:
     int GetMaxEnergy() const;
     int GetAttackPower() const;
     int GetAttackProbability() const;
+    QString GetName() const;
 
     void SetPosition(int x, int y);
     void RestEnemy();

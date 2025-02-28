@@ -9,7 +9,7 @@ const int VISIBLE_DISTANCE = 5;
 const int FIGHT_DISTANCE = 1;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
-    : currentLevel(0) {
+    : currentLevel(0), attactedEnemy_(NULL) {
   srand(time(nullptr));
 
   for (int i = 0; i < levels; ++i) {
@@ -69,14 +69,6 @@ void GameLogic::MovePlayer(int dx, int dy) {
 
       changedTiles.emplace_back(player_.GetX(), player_.GetY());
   }
-
-  // if (map.getTile(newX, newY) != '#' &&
-  //     map.getTile(newX, newY) != SYMBOL_1 &&
-  //     map.getTile(newX, newY) != SYMBOL_2 &&
-  //     map.getTile(newX, newY) != SYMBOL_3 &&
-  //     map.getTile(newX, newY) != 'F') {
-
-  // }
 }
 
 void GameLogic::SwitchLevel(int direction) {
@@ -230,7 +222,9 @@ void GameLogic::HitEnemy(int dx, int dy) {
     int y_enemy = player_.GetY() + dy;
     Map &map = maps[currentLevel];
     char symbol = map.getTile(x_enemy, y_enemy);
-    if (symbol != 'F') {
+    if (symbol != SYMBOL_1 &&
+        symbol != SYMBOL_2 &&
+        symbol != SYMBOL_3) {
         return;
     }
 
@@ -239,6 +233,8 @@ void GameLogic::HitEnemy(int dx, int dy) {
         if (enemy.GetX() != x_enemy || enemy.GetY() != y_enemy) {
             continue;
         }
+
+        attactedEnemy_ = p_enemy;
 
         // int result_probability = getRandomInRange(0, 100);
 
@@ -251,4 +247,8 @@ void GameLogic::HitEnemy(int dx, int dy) {
 
         return;
     }
+}
+
+std::shared_ptr<Enemy> GameLogic::GetAttackedEnemy() {
+    return attactedEnemy_;
 }

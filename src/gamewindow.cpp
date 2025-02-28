@@ -13,7 +13,8 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
     : QMainWindow(parent), scene(new QGraphicsScene(this)),
       gameLogic(new GameLogic(mapWidth, mapHeight, 10)), playerName(playerName),
     gameSaverLoader(new GameSaverLoader(playerName)), is_space_pressed_(false),
-      menuBar(new QMenuBar(this)), inventoryWidget(new QListWidget(this)) {
+      menuBar(new QMenuBar(this)), inventoryWidget(new QListWidget(this)),
+    statusAttackedEnemyBar(NULL) {
   setFixedSize(1280, 720);
 
   setMenuBar(menuBar);
@@ -95,53 +96,55 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_W) {
         gameLogic->HitEnemy(dx, -1);
         //return;
-        render();
+        // render();
     } else if (event->key() == Qt::Key_S) {
         gameLogic->HitEnemy(dx, 1);
         //return;
-        render();
+        // render();
     } else if (event->key() == Qt::Key_A) {
         gameLogic->HitEnemy(-1, dy);
         //return;
-        render();
+        // render();
     } else if (event->key() == Qt::Key_D) {
         gameLogic->HitEnemy(1, dy);
         //return;
-        render();
+        // render();
     }
   } else if (event->key() == Qt::Key_W) {
     gameLogic->MovePlayer(dx, -1);
-    render();
+    // render();
   } else if (event->key() == Qt::Key_S) {
     gameLogic->MovePlayer(dx, 1);
-    render();
+    // render();
   } else if (event->key() == Qt::Key_A) {
     gameLogic->MovePlayer(-1, dy);
-    render();
+    // render();
   } else if (event->key() == Qt::Key_D) {
     gameLogic->MovePlayer(1, dy);
-    render();
+    // render();
   } else if (event->key() == Qt::Key_Less || event->key() == Qt::Key_Greater) {
     gameLogic->interactWithStairs();
-    render();
+    // render();
   } else if (event->key() == Qt::Key_E) {
     gameLogic->PickUpItem();
     updateInventoryDisplay();
-    render();
+    // render();
   } else if (event->key() == Qt::Key_Q) {
     gameLogic->DropItem();
     updateInventoryDisplay();
-    render();
+    // render();
   } else if (event->key() == Qt::Key_U) {
     gameLogic->UseItem();
     updateInventoryDisplay();
-    render();
+    // render();
   } else if (event->key() == Qt::Key_2) {
     gameLogic->SelectNextItem();
     updateInventoryDisplay();
+    return;
   } else if (event->key() == Qt::Key_1) {
     gameLogic->SelectPreviousItem();
     updateInventoryDisplay();
+    return;
   } else if (event->key() == Qt::Key_Space){
       is_space_pressed_ = true;
       return;
@@ -150,6 +153,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
   is_space_pressed_ = false;
   gameLogic->UpdateEnemies();
   updateStatusBar();
+  render();
 }
 void GameWindow::updateTile(int x, int y, char tile) {
   auto *tileItem = new QGraphicsSimpleTextItem();
@@ -215,5 +219,23 @@ void GameWindow::updateStatusBar() {
     statusBarWidget->setHealth(gameLogic->getPlayerHealth(),
                                gameLogic->GetPlayerMaxHealth());
     statusBarWidget->setAttackPower(gameLogic->getPlayerAttackPower());
+  }
+
+  std::shared_ptr<Enemy> p_enemy = gameLogic->GetAttackedEnemy();
+  if (p_enemy) {
+      if (statusAttackedEnemyBar) {
+          statusAttackedEnemyBar->setEnemyName(p_enemy->GetName());
+          statusAttackedEnemyBar->setHealth(p_enemy->GetHealth(),
+                                            p_enemy->GetMaxHealth());
+          statusAttackedEnemyBar->setAttackPower(p_enemy->GetAttackPower());
+      }
+      else {
+          statusAttackedEnemyBar = std::make_shared<StatusAttackedEnemyBar>(p_enemy->GetName(),
+                                                                            p_enemy->GetHealth(),
+                                                                            p_enemy->GetMaxHealth(),
+                                                                            p_enemy->GetAttackPower());
+          std::shared_ptr<QVBoxLayout> mainLayout = std::make_shared<QVBoxLayout>(this);
+          mainLayout->addWidget(statusAttackedEnemyBar.get());
+      }
   }
 }

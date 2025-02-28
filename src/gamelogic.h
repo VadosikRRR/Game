@@ -5,6 +5,8 @@
 #include "player.h"
 #include <QPoint>
 #include <vector>
+#include <memory>
+
 class GameLogic {
 public:
   GameLogic(int mapWidth, int mapHeight, int levels);
@@ -36,6 +38,8 @@ public:
   int getPlayerAttackPower() const;
   Player &getPlayer();
 
+  std::shared_ptr<Enemy> GetAttackedEnemy();
+
   void HitEnemy(int dx_enemy, int dy_enemy);
   void MoveEnemy(Enemy &enemy, QPoint new_position);
   void UpdateEnemies();
@@ -46,6 +50,7 @@ private:
   std::vector<QPoint> changedTiles;
 
   Player player_;
+  std::shared_ptr<Enemy> attactedEnemy_;
 };
 
 #endif // GAMELOGIC_H
