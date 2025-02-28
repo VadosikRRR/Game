@@ -277,5 +277,6 @@ void Map::DeleteEnemy(Enemy &enemy) {
 
         setTile(x_coord, y_coord, '.');
         enemies_.erase(iter);
+        return;
     }
 }

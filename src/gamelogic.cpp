@@ -62,7 +62,8 @@ void GameLogic::MovePlayer(int dx, int dy) {
   if (map.getTile(newX, newY) == '.' ||
       map.getTile(newX, newY) == '+' ||
       map.getTile(newX, newY) == 'A' ||
-      map.getTile(newX, newY) == '!') {
+      map.getTile(newX, newY) == '!' ||
+      map.getTile(newX, newY) == '>') {
       changedTiles.emplace_back(player_.GetX(), player_.GetY());
 
       player_.SetPosition(newX, newY);
@@ -241,7 +242,7 @@ void GameLogic::HitEnemy(int dx, int dy) {
         // if (result_probability >= )
         enemy.ReduceHealth(player_.GetAttackPower());
 
-        if (enemy.GetHealth() == 0) {
+        if (enemy.GetHealth() <= 0) {
             map.DeleteEnemy(enemy);
         }
 
