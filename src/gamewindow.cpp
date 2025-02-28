@@ -94,18 +94,22 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
   if (is_space_pressed_) {
     if (event->key() == Qt::Key_W) {
         gameLogic->HitEnemy(dx, -1);
-        return;
+        //return;
+        render();
     } else if (event->key() == Qt::Key_S) {
         gameLogic->HitEnemy(dx, 1);
-        return;
+        //return;
+        render();
     } else if (event->key() == Qt::Key_A) {
         gameLogic->HitEnemy(-1, dy);
-        return;
+        //return;
+        render();
     } else if (event->key() == Qt::Key_D) {
         gameLogic->HitEnemy(1, dy);
+        //return;
+        render();
     }
-  }
-  else if (event->key() == Qt::Key_W) {
+  } else if (event->key() == Qt::Key_W) {
     gameLogic->MovePlayer(dx, -1);
     render();
   } else if (event->key() == Qt::Key_S) {

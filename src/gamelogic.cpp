@@ -59,17 +59,24 @@ void GameLogic::MovePlayer(int dx, int dy) {
 
   const Map &map = maps[currentLevel];
 
-  if (map.getTile(newX, newY) != '#' &&
-      map.getTile(newX, newY) != SYMBOL_1 &&
-      map.getTile(newX, newY) != SYMBOL_2 &&
-      map.getTile(newX, newY) != SYMBOL_3 &&
-      map.getTile(newX, newY) != 'F') {
-    changedTiles.emplace_back(player_.GetX(), player_.GetY());
+  if (map.getTile(newX, newY) == '.' ||
+      map.getTile(newX, newY) == '+' ||
+      map.getTile(newX, newY) == 'A' ||
+      map.getTile(newX, newY) == '!') {
+      changedTiles.emplace_back(player_.GetX(), player_.GetY());
 
-    player_.SetPosition(newX, newY);
+      player_.SetPosition(newX, newY);
 
-    changedTiles.emplace_back(player_.GetX(), player_.GetY());
+      changedTiles.emplace_back(player_.GetX(), player_.GetY());
   }
+
+  // if (map.getTile(newX, newY) != '#' &&
+  //     map.getTile(newX, newY) != SYMBOL_1 &&
+  //     map.getTile(newX, newY) != SYMBOL_2 &&
+  //     map.getTile(newX, newY) != SYMBOL_3 &&
+  //     map.getTile(newX, newY) != 'F') {
+
+  // }
 }
 
 void GameLogic::SwitchLevel(int direction) {
@@ -211,7 +218,7 @@ void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position) {
 
         enemy.SetPosition(newX, newY);
         enemy.ReduceEnergyForStep();
-        map.setTile(newX, newY, 'F');
+        map.setTile(newX, newY, enemy.GetSymbol());
         return;
     }
 
