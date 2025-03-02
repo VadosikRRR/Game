@@ -101,51 +101,35 @@ void GameWindow::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_W) {
         gameLogic->HitEnemy(dx, -1);
         updateAttackedEnemies();
-        //return;
-        // render();
     } else if (event->key() == Qt::Key_S) {
         gameLogic->HitEnemy(dx, 1);
         updateAttackedEnemies();
-        //return;
-        // render();
     } else if (event->key() == Qt::Key_A) {
         gameLogic->HitEnemy(-1, dy);
         updateAttackedEnemies();
-        //return;
-        // render();
     } else if (event->key() == Qt::Key_D) {
         gameLogic->HitEnemy(1, dy);
         updateAttackedEnemies();
-        //return;
-        // render();
     }
   } else if (event->key() == Qt::Key_W) {
     gameLogic->MovePlayer(dx, -1);
-    // render();
   } else if (event->key() == Qt::Key_S) {
     gameLogic->MovePlayer(dx, 1);
-    // render();
   } else if (event->key() == Qt::Key_A) {
     gameLogic->MovePlayer(-1, dy);
-    // render();
   } else if (event->key() == Qt::Key_D) {
     gameLogic->MovePlayer(1, dy);
-    // render();
   } else if (event->key() == Qt::Key_Less || event->key() == Qt::Key_Greater) {
     gameLogic->interactWithStairs();
-    // render();
   } else if (event->key() == Qt::Key_E) {
     gameLogic->PickUpItem();
     updateInventoryDisplay();
-    // render();
   } else if (event->key() == Qt::Key_Q) {
     gameLogic->DropItem();
     updateInventoryDisplay();
-    // render();
   } else if (event->key() == Qt::Key_U) {
     gameLogic->UseItem();
     updateInventoryDisplay();
-    // render();
   } else if (event->key() == Qt::Key_2) {
     gameLogic->SelectNextItem();
     updateInventoryDisplay();
