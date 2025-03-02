@@ -237,9 +237,12 @@ void GameLogic::HitEnemy(int dx, int dy) {
 
         attactedEnemy_ = p_enemy;
 
-        // int result_probability = getRandomInRange(0, 100);
+        int result_probability = getRandomInRange(0, 100);
 
-        // if (result_probability >= )
+        if (result_probability > player_.GetAttackProbability()) {
+            return;
+        }
+
         enemy.ReduceHealth(player_.GetAttackPower());
 
         if (enemy.GetHealth() <= 0) {

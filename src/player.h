@@ -6,6 +6,8 @@
 #include <QString>
 #include <memory>
 
+#define PLAYER_ATTACK_PROBABILITY 75
+
 class Player {
 public:
   explicit Player(const QString &name = "Олег");
@@ -15,6 +17,7 @@ public:
   int GetHealth() const;
   int GetMaxHealth() const;
   int GetAttackPower() const;
+  int GetAttackProbability() const;
   int GetCurrentItemIndex() const;
   std::vector<std::shared_ptr<Item>> GetItems() const;
   std::shared_ptr<Item> GetCurrentItem();
@@ -39,6 +42,7 @@ private:
   QPoint position_;
   int attackPower;
   int basePower;
+  int attackProbability_;
   Inventory inventory_;
   std::shared_ptr<Sword> sword_ = nullptr;
   std::shared_ptr<Armor> armor_ = nullptr;

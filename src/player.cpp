@@ -5,7 +5,7 @@
 
 Player::Player(const QString &name)
     : health_(100), baseHealth_(100), maxHealth_(100), basePower(10),
-      attackPower(10), name(std::move(name)) {}
+    attackPower(10), attackProbability_(PLAYER_ATTACK_PROBABILITY), name(std::move(name)) {}
 
 void Player::EquipSword() {
   std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
@@ -94,6 +94,8 @@ int Player::GetHealth() const { return health_; }
 int Player::GetMaxHealth() const { return maxHealth_; }
 
 int Player::GetAttackPower() const { return attackPower; }
+
+int Player::GetAttackProbability() const { return attackProbability_; }
 
 void Player::SetHealth(int new_health) {
     if(new_health > maxHealth_) {
