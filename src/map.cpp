@@ -136,17 +136,17 @@ int getRandomInRange(int min, int max) {
   return min + std::rand() % (max - min + 1);
 }
 
-bool IsCellEmpty(const Map &map, int x, int y) {
-  return map.getTile(x, y) == '.';
+bool Map::IsCellEmpty(int x, int y) {
+  return getTile(x, y) == '.';
 }
 
-bool findNearbyPosition(const Map &map, int &x, int &y) {
+bool Map::findNearbyPosition(int &x, int &y) {
   for (int dx = -1; dx <= 1; ++dx) {
     for (int dy = -1; dy <= 1; ++dy) {
       if (dx == 0 && dy == 0) {
         continue;
       }
-      if (IsCellEmpty(map, x + dx, y + dy)) {
+      if (IsCellEmpty(x + dx, y + dy)) {
         x += dx;
         y += dy;
         return true;
@@ -162,9 +162,9 @@ void Map::addItemsToMap() {
     int centerX = room.x + room.width / 2;
     int centerY = room.y + room.height / 2;
 
-    if (!IsCellEmpty(*this, centerX, centerY)) {
+    if (!IsCellEmpty(centerX, centerY)) {
 
-      if (!findNearbyPosition(*this, centerX, centerY)) {
+      if (!findNearbyPosition(centerX, centerY)) {
         continue;
       }
     }
@@ -185,28 +185,6 @@ void Map::addItemsToMap() {
     }
   }
 }
-
-void Map::placeItemInRoom(const Room &room, std::shared_ptr<Item> item,
-                          char tile) {
-  int const x = room.x + 1 + std::rand() % (room.width - 2);
-  int const y = room.y + 1 + std::rand() % (room.height - 2);
-
-  if (mapData[y][x] == '.') {
-    setTile(x, y, tile);
-    items_[QPoint(x, y)] = std::move(item);
-  }
-}
-
-// std::shared_ptr<Item> Map::generateRandomItem(){
-//     int randomValue = std::rand();
-//     if(randomValue % 5 == 0){
-//         return std::make_shared<MedKit>();
-//     }
-//     if(randomValue % 7 == 0){
-//         return std::make_shared<Sword>(DAMAGE + std::rand() % 10);
-//     }
-//     return nullptr;
-// }
 
 std::shared_ptr<Item> Map::getItemAt(int x, int y) {
   QPoint const pos(x, y);
@@ -235,9 +213,9 @@ void Map::addEnemiesToMap() {
         int centerX = room.x + room.width / 2;
         int centerY = room.y + room.height / 2;
 
-        if (!IsCellEmpty(*this, centerX, centerY)) {
+        if (!IsCellEmpty(centerX, centerY)) {
 
-            if (!findNearbyPosition(*this, centerX, centerY)) {
+            if (!findNearbyPosition(centerX, centerY)) {
                 continue;
             }
         }
