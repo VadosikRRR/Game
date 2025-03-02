@@ -6,6 +6,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QChar>
 
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
@@ -49,7 +50,7 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight,
       new StatusBarWidget(playerName, gameLogic->getPlayerHealth(),
                           gameLogic->getPlayerAttackPower(), this);
 
-  attackedEnemyWidget->setFixedWidth(100);
+  attackedEnemyWidget->setFixedWidth(200);
   attackedEnemyWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
 
   QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -224,8 +225,10 @@ void GameWindow::updateAttackedEnemies() {
     }
 
     QString text = "";
-    text += QString::number(p_enemy->GetSymbol());
-    text += ": ";
+    text += p_enemy->GetName();
+    text += " (";
+    text += QChar(p_enemy->GetSymbol());
+    text += "): ";
     text += QString::number(p_enemy->GetHealth());
     text += "/";
     text += QString::number(p_enemy->GetMaxHealth());

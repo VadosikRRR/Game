@@ -20,9 +20,9 @@
 #define ATTACK_PROBABILITY_2 50
 #define ATTACK_PROBABILITY_3 75
 
-#define NAME_1 "Level 1"
-#define NAME_2 "Level 2"
-#define NAME_3 "Level 3"
+#define NAME_1 "Barbarian"
+#define NAME_2 "Pekka"
+#define NAME_3 "GODZILA"
 
 #define SYMBOL_1 'E'
 #define SYMBOL_2 'N'
