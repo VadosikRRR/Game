@@ -59,5 +59,6 @@ private:
 private slots:
     void onSaveClicked();
     void onReturnToMenuClicked();
+    void drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData);
 };
 #endif // GAMEWINDOW_H

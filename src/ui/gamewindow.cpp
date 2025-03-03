@@ -217,35 +217,30 @@ void GameWindow::render()
         for (int var2 = 0; var2 <= var; ++var2) {
             int x = playerX + var - var2;
             int y = playerY + var2;
-            if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
-                y >= 0 && y < static_cast<int>(mapData.size())) {
-                updateTile(x, y, mapData[y][x]);
-            }
+            drowVisibleTile(x, y, mapData);
 
             x = playerX - (var - var2);
             y = playerY - var2;
-            if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
-                y >= 0 && y < static_cast<int>(mapData.size())) {
-                updateTile(x, y, mapData[y][x]);
-            }
+            drowVisibleTile(x, y, mapData);
 
             x = playerX + var - var2;
             y = playerY - var2;
-            if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
-                y >= 0 && y < static_cast<int>(mapData.size())) {
-                updateTile(x, y, mapData[y][x]);
-            }
+            drowVisibleTile(x, y, mapData);
 
             x = playerX - (var - var2);
             y = playerY + var2;
-            if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
-                y >= 0 && y < static_cast<int>(mapData.size())) {
-                updateTile(x, y, mapData[y][x]);
-            }
+            drowVisibleTile(x, y, mapData);
         }
     }
 
     updateTile(playerX, playerY, kPLayerChar);
+}
+
+void GameWindow::drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData) {
+    if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
+        y >= 0 && y < static_cast<int>(mapData.size())) {
+        updateTile(x, y, mapData[y][x]);
+    }
 }
 
 void GameWindow::updateInventoryDisplay()
