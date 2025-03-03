@@ -18,9 +18,9 @@ MainMenu::MainMenu(QWidget *parent)
     continue_button_ = new QPushButton("Продолжить", this);
     exit_button_ = new QPushButton("Выход", this);
 
+    layout->addWidget(continue_button_);
     layout->addWidget(new_game_button_);
     layout->addWidget(load_game_button_);
-    layout->addWidget(continue_button_);
     layout->addWidget(exit_button_);
 
     continue_button_->setVisible(false);
