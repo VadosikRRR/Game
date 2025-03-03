@@ -3,6 +3,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include "../gamelogic.h"
 #include "../gamesaverloader.h"
 
@@ -85,6 +86,9 @@ void GameWindow::showEvent(QShowEvent *event)
     if (view) {
         view->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
     }
+    updateAttackedEnemies();
+    updateInventoryDisplay();
+    updateStatusBar();
 }
 void GameWindow::resizeEvent(QResizeEvent *event)
 {
@@ -93,7 +97,7 @@ void GameWindow::resizeEvent(QResizeEvent *event)
 }
 void GameWindow::onSaveClicked()
 {
-    if (gameSaverLoader->saveGame(*game_logic_)) {
+    if (gameSaverLoader->SaveGame(*game_logic_)) {
         QMessageBox::information(this, "Сохранение игры", "Игра сохранена успешно!");
     } else {
         QMessageBox::warning(this, "Ошибка", "Ошибка при загрузке игры.");
@@ -102,7 +106,7 @@ void GameWindow::onSaveClicked()
 
 bool GameWindow::loadGameState()
 {
-    if (gameSaverLoader->loadGame(*game_logic_)) {
+    if (gameSaverLoader->LoadGame(*game_logic_)) {
         render();
         return true;
     }

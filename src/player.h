@@ -31,6 +31,7 @@ public:
   void UseItem();
   void SelectNextItem();
   void SelectPreviousItem();
+  void SetHealth(int new_health);
 
   void ReduceHealthForHit(int d_health);
 
@@ -46,8 +47,6 @@ private:
   Inventory inventory_;
   std::shared_ptr<Sword> sword_ = nullptr;
   std::shared_ptr<Armor> armor_ = nullptr;
-
-  void SetHealth(int new_health);
 };
 
 #endif // PLAYER_H
