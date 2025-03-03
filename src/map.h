@@ -45,10 +45,13 @@ public:
   std::shared_ptr<Item> getItemAt(int x, int y);
   void removeItemAt(int x, int y);
   void AddItem(int x, int y, const std::shared_ptr<Item> &item);
+  void LoadItem(int x, int y, const std::shared_ptr<Item> &item);
   const std::unordered_map<QPoint, std::shared_ptr<Item>> &getItems() const;
   const std::list<std::shared_ptr<Enemy>> &GetEnemies() const;
 
-  void addEnemiesToMap();
+  void AddEnemy(std::shared_ptr<Enemy> p_enemy);
+  void LoadEnemy(std::shared_ptr<Enemy> p_enemy);
+  void AddEnemiesToMap();
   void DeleteEnemy(Enemy &enemy);
 
 private:

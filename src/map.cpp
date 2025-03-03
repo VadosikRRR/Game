@@ -22,7 +22,7 @@ void Map::generateMap() {
   generateRooms(ROOMCOUNT, MINSIZE, MAXSIZE);
   connectRooms();
   addItemsToMap();
-  addEnemiesToMap();
+  AddEnemiesToMap();
 }
 
 void Map::generateRooms(int roomCount, int minSize, int maxSize) {
@@ -200,14 +200,29 @@ void Map::removeItemAt(int x, int y) {
   setTile(x, y, '.');
 }
 
+void Map::LoadItem(int x, int y, const std::shared_ptr<Item> &item) {
+    items_[QPoint(x, y)] = item;
+}
+
+void Map::LoadEnemy(std::shared_ptr<Enemy> p_enemy) {
+    enemies_.push_front(p_enemy);
+}
+
 void Map::AddItem(int x, int y, const std::shared_ptr<Item> &item) {
-  if (this->getTile(x, y) == '.') {
+  if (getTile(x, y) == '.') {
     items_[QPoint(x, y)] = item;
     setTile(x, y, item->GetTile());
   }
 }
 
-void Map::addEnemiesToMap() {
+void Map::AddEnemy(std::shared_ptr<Enemy> p_enemy) {
+    if (IsCellEmpty(p_enemy->GetX(), p_enemy->GetY())) {
+        setTile(p_enemy->GetX(), p_enemy->GetY(), p_enemy->GetSymbol());
+        enemies_.push_front(p_enemy);
+    }
+}
+
+void Map::AddEnemiesToMap() {
     for (const auto &room : rooms) {
 
         int centerX = room.x + room.width / 2;

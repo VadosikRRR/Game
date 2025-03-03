@@ -33,13 +33,21 @@ bool GameSaverLoader::saveGame(const GameLogic &gameLogic) {
             << "\n";
       }
 
+      out << "---\n";
+
       const auto &items = map.getItems();
       for (const auto &[pos, item] : items) {
         out << "ITEM " << pos.x() << " " << pos.y() << " " << item->GetName()
             << "\n";
       }
 
-      out << "---\n";
+      for (const auto &p_enemy : map.GetEnemies()) {
+          out << "ENEMY " << p_enemy->GetLevel() << " "
+              << p_enemy->GetX() << " " << p_enemy->GetY()
+              << "\n";
+      }
+
+      out << "END\n";
     }
 
     const auto &inventory = gameLogic.GetPlayerItems();
@@ -85,7 +93,16 @@ bool GameSaverLoader::loadGame(GameLogic &gameLogic) {
         Map map(mapData[0].size(), mapData.size());
         map.setData(mapData);
         maps.push_back(map);
+      } else if (line == "END") {
         mapData.clear();
+      } else if (line.startsWith("ENEMY ")) {
+          QStringList parts = line.split(" ");
+          int enemyLevel = parts[1].toInt();
+          int x = parts[2].toInt();
+          int y = parts[3].toInt();
+
+          std::shared_ptr<Enemy> p_enemy = std::make_shared<Enemy>(enemyLevel, x, y);
+          maps.back().LoadEnemy(p_enemy);
       } else if (line.startsWith("ITEM ")) {
         QStringList parts = line.split(" ");
         int x = parts[1].toInt();
@@ -100,7 +117,7 @@ bool GameSaverLoader::loadGame(GameLogic &gameLogic) {
         }
 
         if (item) {
-          maps.back().AddItem(x, y, item);
+          maps.back().LoadItem(x, y, item);
         }
       } else if (line.startsWith("INVENTORY ")) {
         QString itemName = line.section(' ', 1);

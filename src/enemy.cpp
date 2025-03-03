@@ -12,6 +12,7 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackProbability_ = ATTACK_PROBABILITY_2;
         name_ = QString(NAME_2);
         symbol_ = SYMBOL_2;
+        level_ = 2;
     }
     else if (level_enemy == 3) {
         attackPower_ = ATTACK_POWER_3;
@@ -22,6 +23,7 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackProbability_ = ATTACK_PROBABILITY_3;
         name_ = QString(NAME_3);
         symbol_ = SYMBOL_3;
+        level_ = 3;
     }
     else {
         attackPower_ = ATTACK_POWER_1;
@@ -32,10 +34,13 @@ Enemy::Enemy(int level_enemy, int x_coordinate, int y_coordinate) : position_(QP
         attackProbability_ = ATTACK_PROBABILITY_1;
         name_ = QString(NAME_1);
         symbol_ = SYMBOL_1;
+        level_ = 1;
     }
 }
 
 char Enemy::GetSymbol() const { return symbol_; }
+
+int Enemy::GetLevel() const { return level_; }
 
 int Enemy::GetX() const { return position_.x(); }
 

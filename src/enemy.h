@@ -35,6 +35,7 @@
 class Enemy {
 private:
     char symbol_;
+    int level_;
     int attackPower_;
     int health_;
     int maxHealth_;
@@ -52,6 +53,7 @@ public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
 
     char GetSymbol() const;
+    int GetLevel() const;
     int GetX() const;
     int GetY() const;
     int GetHealth() const;
