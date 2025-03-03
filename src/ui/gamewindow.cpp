@@ -14,10 +14,10 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
     , game_logic_(new GameLogic(mapWidth, mapHeight, 10))
     , player_name_(playerName)
     , gameSaverLoader(new GameSaverLoader(playerName))
-    , is_space_pressed_(false)
-    , menuBar(new QMenuBar(this))
     , inventoryWidget(new QListWidget(this))
+    , menuBar(new QMenuBar(this))
     , attackedEnemyWidget(new QListWidget(this))
+    , is_space_pressed_(false)
 {
     setMenuBar(menuBar);
     QMenu *fileMenu = menuBar->addMenu("Файл");
@@ -202,8 +202,8 @@ void GameWindow::render()
 
     const auto &mapData = game_logic_->GetCurrentMap().getData();
 
-    for (int y = 0; y < mapData.size(); ++y) {
-        for (int x = 0; x < mapData[y].size(); ++x) {
+    for (int y = 0; y < static_cast<int>(mapData.size()); ++y) {
+        for (int x = 0; x < static_cast<int>(mapData[y].size()); ++x) {
             updateTile(x, y, mapData[y][x]);
         }
     }

@@ -88,7 +88,7 @@ void GameLogic::SwitchLevel(int direction) {
 
   int const newLevel = currentLevel + direction;
 
-  if (newLevel >= 0 && newLevel < maps.size()) {
+    if (newLevel >= 0 && newLevel < static_cast<int>(maps.size())) {
     currentLevel = newLevel;
     const Map &newMap = maps[currentLevel];
     // for (int y = 0; y < newMap.getData().size(); ++y) {
@@ -127,7 +127,7 @@ void GameLogic::interactWithStairs() {
   }
 }
 void GameLogic::setCurrentLevel(int level) {
-  if (level >= 0 && level < maps.size()) {
+    if (level >= 0 && level < static_cast<int>(maps.size())) {
     currentLevel = level;
   }
 }
@@ -135,7 +135,7 @@ void GameLogic::setCurrentLevel(int level) {
 void GameLogic::setPlayerPosition(int x, int y) { player_.SetPosition(x, y); }
 
 void GameLogic::setMapData(const std::vector<std::vector<char>> &data) {
-  if (currentLevel >= 0 && currentLevel < maps.size()) {
+    if (currentLevel >= 0 && currentLevel < static_cast<int>(maps.size())) {
     maps[currentLevel].setData(data);
   }
 }
