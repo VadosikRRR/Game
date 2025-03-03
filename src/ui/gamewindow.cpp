@@ -169,6 +169,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
     is_space_pressed_ = false;
     game_logic_->UpdateEnemies();
     updateStatusBar();
+    checkSurvivalStatus();
     render();
 }
 void GameWindow::updateTile(int x, int y, char tile)
@@ -260,4 +261,10 @@ void GameWindow::updateAttackedEnemies()
                             .arg(p_enemy->GetMaxHealth());
 
     attackedEnemyWidget->addItem(enemyInfo);
+}
+
+void GameWindow::checkSurvivalStatus() {
+    if(game_logic_->getPlayerHealth() == 0){
+        emit killCharacter();
+    }
 }
