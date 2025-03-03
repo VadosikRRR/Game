@@ -94,6 +94,10 @@ int Enemy::StepsNumberToPlayer(int player_x, int player_y) {
 }
 
 QPoint Enemy::NextStep(int player_x, int player_y) {
+    if (player_x + 1 >= position_.x() && player_x <= position_.x() + 1 &&
+    player_y + 1 >= position_.y() && player_y <= position_.y() + 1){
+        return QPoint(position_.x(), position_.y());
+    }
     int dx = 0;
     int dy = 0;
     if (player_x > position_.x()) {

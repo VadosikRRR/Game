@@ -6,7 +6,7 @@
 
 
 const int VISIBLE_DISTANCE = 5;
-const int FIGHT_DISTANCE = 1;
+const int FIGHT_DISTANCE = 2;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0), attactedEnemy_(NULL) {
@@ -182,7 +182,7 @@ void GameLogic::UpdateEnemies() {
 
         if (result_probability <= enemy.GetAttackProbability() &&
             distance_to_player <= FIGHT_DISTANCE &&
-            enemy.GetEnergy() < ENERGY_FOR_HIT) {
+            enemy.GetEnergy() >= ENERGY_FOR_HIT) {
 
             player_.ReduceHealthForHit(enemy.GetAttackPower());
             continue;
