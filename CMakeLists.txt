@@ -6,8 +6,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*;")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -24,6 +25,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(RogueLike
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/enemy.h
+        src/enemy.cpp
+
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET RogueLike APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -47,6 +52,19 @@ else()
             src/gamelogic.cpp
             src/mainmenu.h
             src/mainmenu.cpp
+            src/playernamedialog.h
+            src/playernamedialog.cpp
+            src/gamesaverloader.h
+            src/gamesaverloader.cpp
+            src/item.h
+            src/item.cpp
+            src/inventory.h
+            src/inventory.cpp
+
+
+
+
+
 
         )
     endif()
@@ -78,3 +96,7 @@ install(TARGETS RogueLike
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(RogueLike)
 endif()
+
+set(CMAKE_BUILD_TYPE Debug)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
