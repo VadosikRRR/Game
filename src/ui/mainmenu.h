@@ -18,6 +18,8 @@ private slots:
     void LoadGame();
     void ContinueGame();
 
+     void handleKillCharacter();
+
 private:
     QPushButton *new_game_button_;
     QPushButton *load_game_button_;

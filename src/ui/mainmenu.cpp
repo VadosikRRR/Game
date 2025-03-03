@@ -48,12 +48,17 @@ void MainMenu::StartNewGame()
     current_game_window_ = std::make_unique<GameWindow>(playerName,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
+                                                        
     current_game_window_->setAttribute(Qt::WA_DeleteOnClose);
+
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
         this->show();
     });
+
+    connect(current_game_window_.get(), &GameWindow::killCharacter, this, &MainMenu::handleKillCharacter);
+
     current_game_window_->show();
     continue_button_->setVisible(true);
     this->hide();
@@ -115,4 +120,11 @@ void MainMenu::ContinueGame()
         current_game_window_->show();
         this->hide();
     }
+}
+
+void MainMenu::handleKillCharacter(){
+    current_game_window_->hide();
+
+    continue_button_->setVisible(false);
+    this->show();
 }
