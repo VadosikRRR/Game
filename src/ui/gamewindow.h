@@ -20,8 +20,6 @@ signals:
     void returnToMenu();
     void killCharacter();
 
-    void killCharacter();
-
 public:
     explicit GameWindow(const QString &playerName,
                         int mapWidth,
