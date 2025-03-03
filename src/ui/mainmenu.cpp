@@ -48,9 +48,6 @@ void MainMenu::StartNewGame()
     current_game_window_ = std::make_unique<GameWindow>(playerName,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
-                                                        
-    current_game_window_->setAttribute(Qt::WA_DeleteOnClose);
-
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
@@ -72,7 +69,7 @@ void MainMenu::LoadGame()
         return;
     }
 
-    QStringList const saveFiles = savesDir.entryList(QStringList() << "*.txt", QDir::Files);
+    QStringList const saveFiles = savesDir.entryList(QStringList() << "*.json", QDir::Files);
 
     if (saveFiles.isEmpty()) {
         QMessageBox::information(this, "Нет сохранений", "Сохраненные игры не найдены.");
@@ -91,7 +88,7 @@ void MainMenu::LoadGame()
     if (!ok || selectedSave.isEmpty()) {
         return;
     }
-    QString const playerName = selectedSave.replace("_save.txt", "");
+    QString const playerName = selectedSave.replace("_save.json", "");
 
     if (current_game_window_) {
         current_game_window_->close();
@@ -99,10 +96,10 @@ void MainMenu::LoadGame()
     current_game_window_ = std::make_unique<GameWindow>(playerName,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
-    current_game_window_->setAttribute(Qt::WA_DeleteOnClose);
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
+        this->show();
     });
 
     if (current_game_window_->loadGameState()) {

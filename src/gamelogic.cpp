@@ -66,26 +66,26 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
   player_.SetPosition(x, y);
 }
 
-void GameLogic::MovePlayer(int dx, int dy) {
-  int const newX = player_.GetX() + dx;
-  int const newY = player_.GetY() + dy;
+void GameLogic::MovePlayer(int dx, int dy)
+{
+    int const newX = player_.GetX() + dx;
+    int const newY = player_.GetY() + dy;
 
-  const Map &map = maps[currentLevel];
+    const Map &map = maps[currentLevel];
 
-  if (map.getTile(newX, newY) == '.' ||
-      map.getTile(newX, newY) == '+' ||
-      map.getTile(newX, newY) == 'A' ||
-      map.getTile(newX, newY) == '!' ||
-      map.getTile(newX, newY) == '>') {
-      changedTiles.emplace_back(player_.GetX(), player_.GetY());
+    if (map.getTile(newX, newY) == '.' || map.getTile(newX, newY) == '+'
+        || map.getTile(newX, newY) == 'A' || map.getTile(newX, newY) == '!'
+        || map.getTile(newX, newY) == '>') {
+        changedTiles.emplace_back(player_.GetX(), player_.GetY());
 
-      player_.SetPosition(newX, newY);
+        player_.SetPosition(newX, newY);
 
-      changedTiles.emplace_back(player_.GetX(), player_.GetY());
-  }
+        changedTiles.emplace_back(player_.GetX(), player_.GetY());
+    }
 }
 
 void GameLogic::SwitchLevel(int direction) {
+
   int const newLevel = currentLevel + direction;
 
   if (newLevel >= 0 && newLevel < maps.size()) {
@@ -117,6 +117,7 @@ bool GameLogic::isPlayerOnStairs() const {
   return (tile == '<' || tile == '>');
 }
 int GameLogic::GetCurrentLevel() const { return currentLevel; }
+
 void GameLogic::interactWithStairs() {
   if (isPlayerOnStairs()) {
     char const stair =
