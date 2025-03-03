@@ -6,7 +6,7 @@
 
 
 const int VISIBLE_DISTANCE = 5;
-const int FIGHT_DISTANCE = 2;
+const int FIGHT_DISTANCE = 1;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0), attactedEnemy_(NULL) {
