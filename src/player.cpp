@@ -4,7 +4,7 @@
 #include <vector>
 
 Player::Player(const QString &name)
-    : health_(100), baseHealth_(100), maxHealth_(100), basePower(10),
+    : baseHealth_(100), health_(100), maxHealth_(100), basePower(10),
     attackPower(10), attackProbability_(PLAYER_ATTACK_PROBABILITY), name(std::move(name)) {}
 
 void Player::EquipSword() {

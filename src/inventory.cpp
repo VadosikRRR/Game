@@ -20,8 +20,8 @@ std::shared_ptr<Item> Inventory::Drop() {
     container_.erase(container_.begin() + currentIndex_);
     if (container_.empty()) {
       currentIndex_ = -1;
-    } else if (currentIndex_ >= container_.size()) {
-      currentIndex_ = container_.size() - 1;
+    } else if (currentIndex_ >= static_cast<int>(container_.size())) {
+        currentIndex_ = static_cast<int>(container_.size()) - 1;
     }
     return droppedItem;
   }
@@ -33,7 +33,7 @@ void Inventory::Next() {
     if (currentIndex_ == -1) {
       currentIndex_ = 0;
     } else {
-      currentIndex_ = (currentIndex_ + 1) % container_.size();
+        currentIndex_ = (currentIndex_ + 1) % static_cast<int>(container_.size());
     }
   }
 }
@@ -41,16 +41,16 @@ void Inventory::Next() {
 void Inventory::Previous() {
   if (!container_.empty()) {
     if (currentIndex_ == -1) {
-      currentIndex_ = container_.size() - 1;
+          currentIndex_ = static_cast<int>(container_.size()) - 1;
     } else {
       currentIndex_ =
-          (currentIndex_ - 1 + container_.size()) % container_.size();
+            (currentIndex_ - 1 + static_cast<int>(container_.size())) % static_cast<int>(container_.size());
     }
   }
 }
 
 std::shared_ptr<Item> Inventory::GetCurrItem() {
-  if (currentIndex_ != -1 && currentIndex_ < container_.size()) {
+    if (currentIndex_ != -1 && currentIndex_ < static_cast<int>(container_.size())) {
     return container_[currentIndex_];
   }
   return nullptr;

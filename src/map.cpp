@@ -54,7 +54,7 @@ Room Map::getRandomRoom() const {
   if (rooms.empty()) {
     return {0, 0, 1, 1};
   }
-  return rooms[std::rand() % rooms.size()];
+  return rooms[std::rand() % static_cast<int>(rooms.size())];
 }
 
 void Map::connectRooms() {
@@ -124,8 +124,8 @@ char Map::getTile(int x, int y) const {
 const std::vector<std::vector<char>> &Map::getData() const { return mapData; }
 
 void Map::setData(const std::vector<std::vector<char>> &newData) {
-  if (newData.size() == mapHeight && !newData.empty() &&
-      newData[0].size() == mapWidth) {
+    if (static_cast<int>(newData.size()) == mapHeight && !newData.empty() &&
+        static_cast<int>(newData[0].size()) == mapWidth) {
     mapData = newData;
   } else {
     throw std::invalid_argument("Invalid map data size");

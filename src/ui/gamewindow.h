@@ -20,6 +20,8 @@ signals:
     void returnToMenu();
     void killCharacter();
 
+    void killCharacter();
+
 public:
     explicit GameWindow(const QString &playerName,
                         int mapWidth,
@@ -59,5 +61,6 @@ private:
 private slots:
     void onSaveClicked();
     void onReturnToMenuClicked();
+    void drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData);
 };
 #endif // GAMEWINDOW_H

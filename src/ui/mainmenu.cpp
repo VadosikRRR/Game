@@ -59,6 +59,8 @@ void MainMenu::StartNewGame()
             &GameWindow::killCharacter,
             this,
             &MainMenu::handleKillCharacter);
+    connect(current_game_window_.get(), &GameWindow::killCharacter, this, &MainMenu::handleKillCharacter);
+
 
     current_game_window_->show();
     continue_button_->setVisible(true);
@@ -126,6 +128,7 @@ void MainMenu::ContinueGame()
         this->hide();
     }
 }
+
 
 void MainMenu::handleKillCharacter()
 {
