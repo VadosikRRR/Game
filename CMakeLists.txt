@@ -25,9 +25,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(RogueLike
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        src/enemy.h
-        src/enemy.cpp
-
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -44,22 +41,8 @@ else()
     else()
         add_executable(RogueLike
             ${PROJECT_SOURCES}
-            src/player.h
-            src/player.cpp
-            src/map.cpp
-            src/map.h
-            src/gamelogic.h
-            src/gamelogic.cpp
-            src/mainmenu.h
-            src/mainmenu.cpp
-            src/playernamedialog.h
-            src/playernamedialog.cpp
-            src/gamesaverloader.h
-            src/gamesaverloader.cpp
-            src/item.h
-            src/item.cpp
-            src/inventory.h
-            src/inventory.cpp
+            src/config.h
+
 
 
 

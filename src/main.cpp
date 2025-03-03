@@ -1,4 +1,4 @@
-#include "mainmenu.h"
+#include "ui/mainmenu.h"
 #include <qapplication.h>
 
 auto main(int argc, char *argv[]) -> int {
