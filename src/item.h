@@ -2,7 +2,7 @@
 #define ITEM_H
 
 #include <QString>
-const int kMedKitHeal = 20;
+const int kMedKitHeal = 50;
 
 class Item {
 protected:

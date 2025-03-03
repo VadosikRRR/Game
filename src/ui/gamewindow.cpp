@@ -14,10 +14,10 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
     , game_logic_(new GameLogic(mapWidth, mapHeight, 10))
     , player_name_(playerName)
     , gameSaverLoader(new GameSaverLoader(playerName))
-    , is_space_pressed_(false)
-    , menuBar(new QMenuBar(this))
     , inventoryWidget(new QListWidget(this))
+    , menuBar(new QMenuBar(this))
     , attackedEnemyWidget(new QListWidget(this))
+    , is_space_pressed_(false)
 {
     setMenuBar(menuBar);
     QMenu *fileMenu = menuBar->addMenu("Файл");
@@ -56,6 +56,7 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
                                           game_logic_->getPlayerHealth(),
                                           game_logic_->getPlayerAttackPower(),
                                           this);
+    connect(game_logic_.get(), &GameLogic::statsUpdated, this, &GameWindow::updateStatusBar);
 
     auto *container = new QWidget(this);
     auto *containerLayout = new QVBoxLayout(container);
@@ -169,6 +170,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
     is_space_pressed_ = false;
     game_logic_->UpdateEnemies();
     updateStatusBar();
+    checkSurvivalStatus();
     render();
 }
 void GameWindow::updateTile(int x, int y, char tile)
@@ -238,9 +240,13 @@ void GameWindow::updateInventoryDisplay()
 void GameWindow::updateStatusBar()
 {
     if (statusBarWidget) {
+        const GameStatistics &stats = game_logic_->getGameStatistics();
         statusBarWidget->setHealth(game_logic_->getPlayerHealth(),
                                    game_logic_->GetPlayerMaxHealth());
+        statusBarWidget->setLevel(game_logic_->GetCurrentLevel());
         statusBarWidget->setAttackPower(game_logic_->getPlayerAttackPower());
+        statusBarWidget->setStepsTaken(stats.getTotalStepsTaken());
+        statusBarWidget->setEnemiesKilled(stats.getTotalEnemiesKilled());
     }
 }
 
@@ -260,4 +266,15 @@ void GameWindow::updateAttackedEnemies()
                             .arg(p_enemy->GetMaxHealth());
 
     attackedEnemyWidget->addItem(enemyInfo);
+}
+
+void GameWindow::checkSurvivalStatus()
+{
+    if (game_logic_->getPlayerHealth() == 0) {
+        emit killCharacter();
+    }
+}
+GameStatistics &GameWindow::getGameStatistics()
+{
+    return game_logic_->getGameStatistics();
 }

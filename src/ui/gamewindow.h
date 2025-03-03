@@ -18,6 +18,7 @@ class GameWindow : public QMainWindow
     Q_OBJECT
 signals:
     void returnToMenu();
+    void killCharacter();
 
 public:
     explicit GameWindow(const QString &playerName,
@@ -25,6 +26,7 @@ public:
                         int mapHeight,
                         QWidget *parent = nullptr);
     bool loadGameState();
+    GameStatistics &getGameStatistics();
 
 private:
     QGraphicsScene *scene_;
@@ -41,6 +43,7 @@ private:
 
     bool is_space_pressed_;
 
+
     void render();
     void scaleScene();
     void updateTile(int x, int y, char tile);
@@ -51,6 +54,7 @@ private:
     void updateInventoryDisplay();
     void updateAttackedEnemies();
     void updateStatusBar();
+    void checkSurvivalStatus();
 
 private slots:
     void onSaveClicked();

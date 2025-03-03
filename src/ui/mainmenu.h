@@ -17,6 +17,7 @@ private slots:
     void StartNewGame();
     void LoadGame();
     void ContinueGame();
+    void handleKillCharacter();
 
 private:
     QPushButton *new_game_button_;

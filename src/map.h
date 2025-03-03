@@ -54,12 +54,20 @@ public:
   void AddEnemiesToMap();
   void DeleteEnemy(Enemy &enemy);
 
+  void setGreaterSign(QPoint point);
+  QPoint getGreaterSign() const;
+  void setLessSign(QPoint point);
+  QPoint getLessSign() const;
+
 private:
   int mapWidth, mapHeight;
   std::vector<std::vector<char>> mapData;
   std::vector<Room> rooms;
   std::unordered_map<QPoint, std::shared_ptr<Item>> items_;
   std::list<std::shared_ptr<Enemy>> enemies_;
+
+  QPoint greater_sign_;
+  QPoint less_sign_;
 
   void generateRooms(int roomCount, int minSize, int maxSize);
   void connectRooms();

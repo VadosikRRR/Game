@@ -74,6 +74,10 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &gameLog
     player_object["health"] = gameLogic.getPlayerHealth();
     player_object["currentLevel"] = gameLogic.GetCurrentLevel();
 
+    const GameStatistics &stats = gameLogic.getGameStatistics();
+    player_object["totalStepsTaken"] = stats.getTotalStepsTaken();
+    player_object["totalEnemiesKilled"] = stats.getTotalEnemiesKilled();
+
     QJsonObject position_object;
     position_object["x"] = gameLogic.GetPlayerX();
     position_object["y"] = gameLogic.GetPlayerY();
@@ -155,11 +159,16 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
     if (saved_player_name != player_name_) {
         return false;
     }
-
     int current_level = player_object["currentLevel"].toInt();
     gameLogic.setCurrentLevel(current_level);
+
     int health = player_object["health"].toInt();
     gameLogic.getPlayer().SetHealth(health);
+
+    GameStatistics &stats = gameLogic.getGameStatistics();
+    stats.setCurrentLevel(current_level);
+    stats.setStepsTaken(player_object["totalStepsTaken"].toInt());
+    stats.setEnemiesKilled(player_object["totalEnemiesKilled"].toInt());
 
     QJsonObject position_object = player_object["position"].toObject();
     int player_x = position_object["x"].toInt();

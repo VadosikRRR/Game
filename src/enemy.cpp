@@ -76,9 +76,11 @@ void Enemy::SetEnergy(int new_energy) {
 void Enemy::SetHealth(int new_health) {
     if (new_health > maxHealth_) {
         health_ = maxHealth_;
+        return;
     }
     else if (new_health < 0) {
         health_ = 0;
+        return;
     }
 
     health_ = new_health;

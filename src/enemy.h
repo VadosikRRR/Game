@@ -5,12 +5,12 @@
 
 
 #define ATTACK_POWER_1 5
-#define ATTACK_POWER_2 15
-#define ATTACK_POWER_3 25
+#define ATTACK_POWER_2 10
+#define ATTACK_POWER_3 15
 
 #define MAX_HEALTH_1 30
-#define MAX_HEALTH_2 60
-#define MAX_HEALTH_3 90
+#define MAX_HEALTH_2 45
+#define MAX_HEALTH_3 60
 
 #define MAX_ENERGY_1 50
 #define MAX_ENERGY_2 100
@@ -18,11 +18,11 @@
 
 #define ATTACK_PROBABILITY_1 25
 #define ATTACK_PROBABILITY_2 50
-#define ATTACK_PROBABILITY_3 75
+#define ATTACK_PROBABILITY_3 50
 
 #define NAME_1 "Barbarian"
 #define NAME_2 "Pekka"
-#define NAME_3 "GODZILA"
+#define NAME_3 "GODZILLA"
 
 #define SYMBOL_1 'E'
 #define SYMBOL_2 'N'
