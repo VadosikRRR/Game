@@ -39,11 +39,11 @@ private:
   int baseHealth_;
   int health_;
   int maxHealth_;
+  int basePower;
+  int attackPower;
+  int attackProbability_;
   QString name;
   QPoint position_;
-  int attackPower;
-  int basePower;
-  int attackProbability_;
   Inventory inventory_;
   std::shared_ptr<Sword> sword_ = nullptr;
   std::shared_ptr<Armor> armor_ = nullptr;
