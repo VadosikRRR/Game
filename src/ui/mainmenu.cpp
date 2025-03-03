@@ -48,7 +48,6 @@ void MainMenu::StartNewGame()
     current_game_window_ = std::make_unique<GameWindow>(playerName,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
-    current_game_window_->setAttribute(Qt::WA_DeleteOnClose);
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
