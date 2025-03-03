@@ -58,6 +58,7 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
                                           game_logic_->getPlayerHealth(),
                                           game_logic_->getPlayerAttackPower(),
                                           this);
+    connect(game_logic_.get(), &GameLogic::statsUpdated, this, &GameWindow::updateStatusBar);
 
     auto *container = new QWidget(this);
     auto *containerLayout = new QVBoxLayout(container);
@@ -269,9 +270,13 @@ void GameWindow::updateInventoryDisplay()
 void GameWindow::updateStatusBar()
 {
     if (statusBarWidget) {
+        const GameStatistics &stats = game_logic_->getGameStatistics();
         statusBarWidget->setHealth(game_logic_->getPlayerHealth(),
                                    game_logic_->GetPlayerMaxHealth());
+        statusBarWidget->setLevel(game_logic_->GetCurrentLevel());
         statusBarWidget->setAttackPower(game_logic_->getPlayerAttackPower());
+        statusBarWidget->setStepsTaken(stats.getTotalStepsTaken());
+        statusBarWidget->setEnemiesKilled(stats.getTotalEnemiesKilled());
     }
 }
 
@@ -293,8 +298,15 @@ void GameWindow::updateAttackedEnemies()
     attackedEnemyWidget->addItem(enemyInfo);
 }
 
-void GameWindow::checkSurvivalStatus() {
-    if(game_logic_->getPlayerHealth() == 0){
+
+void GameWindow::checkSurvivalStatus()
+{
+    if (game_logic_->getPlayerHealth() == 0) {
         emit killCharacter();
     }
 }
+GameStatistics &GameWindow::getGameStatistics()
+{
+    return game_logic_->getGameStatistics();
+}
+

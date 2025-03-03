@@ -18,6 +18,7 @@ class GameWindow : public QMainWindow
     Q_OBJECT
 signals:
     void returnToMenu();
+    void killCharacter();
 
     void killCharacter();
 
@@ -27,6 +28,7 @@ public:
                         int mapHeight,
                         QWidget *parent = nullptr);
     bool loadGameState();
+    GameStatistics &getGameStatistics();
 
 private:
     QGraphicsScene *scene_;

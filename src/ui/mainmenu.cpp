@@ -48,13 +48,19 @@ void MainMenu::StartNewGame()
     current_game_window_ = std::make_unique<GameWindow>(playerName,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
+
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
         this->show();
     });
 
+    connect(current_game_window_.get(),
+            &GameWindow::killCharacter,
+            this,
+            &MainMenu::handleKillCharacter);
     connect(current_game_window_.get(), &GameWindow::killCharacter, this, &MainMenu::handleKillCharacter);
+
 
     current_game_window_->show();
     continue_button_->setVisible(true);
@@ -101,6 +107,10 @@ void MainMenu::LoadGame()
         continue_button_->setVisible(true);
         this->show();
     });
+    connect(current_game_window_.get(),
+            &GameWindow::killCharacter,
+            this,
+            &MainMenu::handleKillCharacter);
 
     if (current_game_window_->loadGameState()) {
         current_game_window_->show();
@@ -119,8 +129,24 @@ void MainMenu::ContinueGame()
     }
 }
 
-void MainMenu::handleKillCharacter(){
+
+void MainMenu::handleKillCharacter()
+{
     current_game_window_->hide();
+
+    const GameStatistics &stats = current_game_window_->getGameStatistics();
+
+    QString message = QString("Игрок %1 погиб!\n\n"
+                              "Статистика игры:\n"
+                              "Уровень: %2\n"
+                              "Убито врагов: %3\n"
+                              "Шагов сделано: %4\n")
+                          .arg(stats.getPlayerName())
+                          .arg(stats.getCurrentLevel())
+                          .arg(stats.getTotalEnemiesKilled())
+                          .arg(stats.getTotalStepsTaken());
+
+    QMessageBox::information(this, "Смерть", message);
 
     continue_button_->setVisible(false);
     this->show();
