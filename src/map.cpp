@@ -273,3 +273,12 @@ void Map::DeleteEnemy(Enemy &enemy) {
         return;
     }
 }
+
+void Map::setGreaterSign(QPoint point) { greater_sign_ = point; }
+
+QPoint Map::getGreaterSign() const { return greater_sign_; }
+
+void Map::setLessSign(QPoint point) { less_sign_ = point; }
+
+QPoint Map::getLessSign() const { return less_sign_; }
+
