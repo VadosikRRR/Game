@@ -6,7 +6,7 @@
 
 
 const int VISIBLE_DISTANCE = 5;
-const int FIGHT_DISTANCE = 2;
+const int FIGHT_DISTANCE = 1;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
     : currentLevel(0), attactedEnemy_(NULL) {
@@ -25,7 +25,14 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
         x = room.x + 1 + rand() % (room.width - 2);
         y = room.y + 1 + rand() % (room.height - 2);
       }
-      map.setTile(room.x + room.width / 2, room.y + room.height / 2, '<');
+      int less_x = room.x + room.width / 2;
+      int less_y = room.y + room.height / 2;
+      if (map.getTile(less_x, less_y) != '.'){
+        map.findNearbyPosition(less_x, less_y);
+      }
+      map.setTile(less_x, less_y, '<');
+      map.setLessSign(QPoint(less_x, less_y));
+
     }
     if (i < levels - 1) {
       Room const room = map.getRandomRoom();
@@ -36,7 +43,13 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels)
         x = room.x + 1 + rand() % (room.width - 2);
         y = room.y + 1 + rand() % (room.height - 2);
       }
-      map.setTile(room.x + room.width / 2, room.y + room.height / 2, '>');
+      int greater_x = room.x + room.width / 2;
+      int greater_y = room.y + room.height / 2;
+      if (map.getTile(greater_x, greater_y) != '.'){
+        map.findNearbyPosition(greater_x, greater_y);
+      }
+      map.setTile(greater_x, greater_y, '>');
+      map.setGreaterSign(QPoint(greater_x, greater_y));
     }
 
     maps.push_back(map);
@@ -72,20 +85,23 @@ void GameLogic::MovePlayer(int dx, int dy)
 }
 
 void GameLogic::SwitchLevel(int direction) {
-    int newLevel = currentLevel + direction;
 
-    if (newLevel >= 0 && newLevel < maps.size()) {
-        currentLevel = newLevel;
-        const Map &newMap = maps[currentLevel];
-        for (int y = 0; y < newMap.getData().size(); ++y) {
-            for (int x = 0; x < newMap.getData()[y].size(); ++x) {
-                if (newMap.getTile(x, y) == ((direction == -1) ? '>' : '<')) {
-                    player_.SetPosition(x, y);
-                    break;
-                }
-            }
-        }
-    }
+  int const newLevel = currentLevel + direction;
+
+  if (newLevel >= 0 && newLevel < maps.size()) {
+    currentLevel = newLevel;
+    const Map &newMap = maps[currentLevel];
+    // for (int y = 0; y < newMap.getData().size(); ++y) {
+    //   for (int x = 0; x < newMap.getData()[y].size(); ++x) {
+    //     if (newMap.getTile(x, y) == ((direction == -1) ? '>' : '<')) {
+    //       player_.SetPosition(x, y);
+    //       break;
+    //     }
+    //   }
+    // }
+    QPoint point = (direction == 1) ? newMap.getLessSign() : newMap.getGreaterSign();
+    player_.SetPosition(point.x(), point.y());
+  }
 }
 
 const Map &GameLogic::GetCurrentMap() const { return maps[currentLevel]; }
