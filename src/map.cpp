@@ -69,17 +69,13 @@ void Map::connectRooms() {
     int const y2 = rooms_[i].y + rooms_[i].height / 2;
 
     if (std::rand() % 2 == 0) {
-      // addHorizontalCorridor(x1, x2, y1);
-      //   drawRoom(corridors_.back());
-      // addVerticalCorridor(y1, y2, x2);
-      //   drawRoom(corridors_.back());
+      addHorizontalCorridor(x1, x2, y1);
+      addVerticalCorridor(y1, y2, x2);
       drawHorizontalCorridor(x1, x2, y1);
       drawVerticalCorridor(y1, y2, x2);
     } else {
-      // addVerticalCorridor(y1, y2, x1);
-      //   drawRoom(rooms_.back());
-      // addHorizontalCorridor(x1, x2, y2);
-      //   drawRoom(rooms_.back());
+      addVerticalCorridor(y1, y2, x1);
+      addHorizontalCorridor(x1, x2, y2);
       drawVerticalCorridor(y1, y2, x1);
       drawHorizontalCorridor(x1, x2, y2);
     }
@@ -87,15 +83,20 @@ void Map::connectRooms() {
 }
 
 void Map::addHorizontalCorridor(int x1, int x2, int y) {
-    int max_x = std::max(x1, x2);
-    int min_x = std::min(x1, x2);
-    corridors_.push_back({min_x, y, max_x - min_x - 1, 1});
+    if (x1 > x2) {
+        std::swap(x1, x2);
+    }
+    Room room = {x1, y, x2 - x1 + 1, 1};
+    corridors_.push_back(room);
 }
 
 void Map::addVerticalCorridor(int y1, int y2, int x) {
-    int max_y = std::max(y1, y2);
-    int min_y = std::min(y1, y2);
-    corridors_.push_back({x, min_y, 1, max_y - min_y - 1});
+    if (y1 > y2) {
+        std::swap(y1, y2);
+    }
+
+    Room room = {x, y1, 1, y2 - y1 + 1};
+    corridors_.push_back(room);
 }
 
 void Map::drawRoom(const Room &room) {
@@ -110,8 +111,6 @@ void Map::drawHorizontalCorridor(int x1, int x2, int y) {
   if (x1 > x2) {
     std::swap(x1, x2);
   }
-  Room room = {x1, y, x2 - x1 + 1, 1};
-  corridors_.push_back(room);
 
   for (int x = x1; x <= x2; ++x) {
     SetTile(x, y, '.');
@@ -119,12 +118,6 @@ void Map::drawHorizontalCorridor(int x1, int x2, int y) {
 }
 
 void Map::drawVerticalCorridor(int y1, int y2, int x) {
-  if (y1 > y2) {
-    std::swap(y1, y2);
-  }
-
-  Room room = {x, y1, 1, y2 - y1 + 1};
-  corridors_.push_back(room);
   for (int y = y1; y <= y2; ++y) {
     SetTile(x, y, '.');
   }
