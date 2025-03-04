@@ -1,78 +1,78 @@
 #include "statusbarwidget.h"
 
-StatusBarWidget::StatusBarWidget(const QString &playerName,
+StatusBarWidget::StatusBarWidget(const QString &player_name,
                                  int health,
-                                 int attackPower,
+                                 int attack_power,
                                  QWidget *parent)
     : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
 
-    playerNameLabel = new QLabel(this);
-    playerNameLabel->setStyleSheet("QLabel { font-weight: bold; font-size: 15px; }");
-    playerNameLabel->setText("Имя: " + playerName);
-    layout->addWidget(playerNameLabel);
+    player_name_label_ = new QLabel(this);
+    player_name_label_->setStyleSheet("QLabel { font-weight: bold; font-size: 15px; }");
+    player_name_label_->setText("Имя: " + player_name);
+    layout->addWidget(player_name_label_);
 
-    levelLabel = new QLabel(this);
-    levelLabel->setStyleSheet("QLabel { color: green; font-size: 15px; }");
-    levelLabel->setText("Текущий уровень: 0");
-    layout->addWidget(levelLabel);
+    level_label_ = new QLabel(this);
+    level_label_->setStyleSheet("QLabel { color: green; font-size: 15px; }");
+    level_label_->setText("Текущий уровень: 0");
+    layout->addWidget(level_label_);
 
-    healthBar = new QProgressBar(this);
-    healthBar->setRange(0, health);
-    healthBar->setValue(health);
-    healthBar->setTextVisible(true);
-    healthBar->setFormat(QString("Здоровье: %1").arg(health));
-    healthBar->setFixedWidth(150);
-    healthBar->setFixedHeight(20);
-    layout->addWidget(healthBar);
+    health_bar_ = new QProgressBar(this);
+    health_bar_->setRange(0, health);
+    health_bar_->setValue(health);
+    health_bar_->setTextVisible(true);
+    health_bar_->setFormat(QString("Здоровье: %1").arg(health));
+    health_bar_->setFixedWidth(150);
+    health_bar_->setFixedHeight(20);
+    layout->addWidget(health_bar_);
 
-    attackPowerLabel = new QLabel(this);
-    attackPowerLabel->setStyleSheet("QLabel { color: red; font-size: 15px; }");
-    attackPowerLabel->setText("Урон: " + QString::number(attackPower));
-    layout->addWidget(attackPowerLabel);
+    attack_power_label_ = new QLabel(this);
+    attack_power_label_->setStyleSheet("QLabel { color: red; font-size: 15px; }");
+    attack_power_label_->setText("Урон: " + QString::number(attack_power));
+    layout->addWidget(attack_power_label_);
 
-    stepsLabel = new QLabel(this);
-    stepsLabel->setStyleSheet("QLabel { color: blue; font-size: 15px; }");
-    stepsLabel->setText("Шаги: 0");
-    layout->addWidget(stepsLabel);
+    steps_label_ = new QLabel(this);
+    steps_label_->setStyleSheet("QLabel { color: blue; font-size: 15px; }");
+    steps_label_->setText("Шаги: 0");
+    layout->addWidget(steps_label_);
 
-    enemiesKilledLabel = new QLabel(this);
-    enemiesKilledLabel->setStyleSheet("QLabel { color: green; font-size: 15px; }");
-    enemiesKilledLabel->setText("Враги: 0");
-    layout->addWidget(enemiesKilledLabel);
+    enemies_killed_label_ = new QLabel(this);
+    enemies_killed_label_->setStyleSheet("QLabel { color: green; font-size: 15px; }");
+    enemies_killed_label_->setText("Враги: 0");
+    layout->addWidget(enemies_killed_label_);
 
     setFixedHeight(50);
     setLayout(layout);
 }
 
-void StatusBarWidget::setPlayerName(const QString &name)
+void StatusBarWidget::SetPlayerName(const QString &name)
 {
-    playerNameLabel->setText("Имя: " + name);
+    player_name_label_->setText("Имя: " + name);
 }
 
-void StatusBarWidget::setHealth(int health, int maxHealth)
+void StatusBarWidget::SetHealth(int health, int max_health)
 {
-    healthBar->setRange(0, maxHealth);
-    healthBar->setValue(health);
-    healthBar->setFormat(QString("Здоровье: %1").arg(health));
+    health_bar_->setRange(0, max_health);
+    health_bar_->setValue(health);
+    health_bar_->setFormat(QString("Здоровье: %1").arg(health));
 }
 
-void StatusBarWidget::setAttackPower(int attackPower)
+void StatusBarWidget::SetAttackPower(int attack_power)
 {
-    attackPowerLabel->setText("Урон: " + QString::number(attackPower));
+    attack_power_label_->setText("Урон: " + QString::number(attack_power));
 }
 
-void StatusBarWidget::setStepsTaken(int steps)
+void StatusBarWidget::SetStepsTaken(int steps)
 {
-    stepsLabel->setText("Шаги: " + QString::number(steps));
+    steps_label_->setText("Шаги: " + QString::number(steps));
 }
 
-void StatusBarWidget::setEnemiesKilled(int enemiesKilled)
+void StatusBarWidget::SetEnemiesKilled(int enemies_killed)
 {
-    enemiesKilledLabel->setText("Враги: " + QString::number(enemiesKilled));
+    enemies_killed_label_->setText("Враги: " + QString::number(enemies_killed));
 }
-void StatusBarWidget::setLevel(int level)
+void StatusBarWidget::SetLevel(int level)
 {
-    levelLabel->setText("Текущий уровень: " + QString::number(level));
+    level_label_->setText("Текущий уровень: " + QString::number(level));
 }

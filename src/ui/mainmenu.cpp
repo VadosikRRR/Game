@@ -49,14 +49,14 @@ void MainMenu::StartNewGame()
                                                         config::kMapWidth,
                                                         config::kMapHeight);
 
-    connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
+    connect(current_game_window_.get(), &GameWindow::ReturnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
         this->show();
     });
 
     connect(current_game_window_.get(),
-            &GameWindow::killCharacter,
+            &GameWindow::KillCharacter,
             this,
             &MainMenu::HandleKillCharacter);
 
@@ -100,20 +100,19 @@ void MainMenu::LoadGame()
     current_game_window_ = std::make_unique<GameWindow>(player_name,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
-    connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
+    connect(current_game_window_.get(), &GameWindow::ReturnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);
         this->show();
     });
     connect(current_game_window_.get(),
-            &GameWindow::killCharacter,
+            &GameWindow::KillCharacter,
             this,
             &MainMenu::HandleKillCharacter);
 
-    if (current_game_window_->loadGameState()) {
+    if (current_game_window_->LoadGameState()) {
         current_game_window_->show();
         continue_button_->setVisible(true);
-        this->hide();
     } else {
         QMessageBox::warning(this, "Ошибка", "Не удалось загрузить игру.");
     }
@@ -132,17 +131,17 @@ void MainMenu::HandleKillCharacter()
 {
     current_game_window_->hide();
 
-    const GameStatistics &stats = current_game_window_->getGameStatistics();
+    const GameStatistics &stats = current_game_window_->GetGameStatistics();
 
     QString message = QString("Игрок %1 погиб!\n\n"
                               "Статистика игры:\n"
                               "Уровень: %2\n"
                               "Убито врагов: %3\n"
                               "Шагов сделано: %4\n")
-                          .arg(stats.getPlayerName())
-                          .arg(stats.getCurrentLevel())
-                          .arg(stats.getTotalEnemiesKilled())
-                          .arg(stats.getTotalStepsTaken());
+                          .arg(stats.GetPlayerName())
+                          .arg(stats.GetCurrentLevel())
+                          .arg(stats.GetTotalEnemiesKilled())
+                          .arg(stats.GetTotalStepsTaken());
 
     QMessageBox::information(this, "Смерть", message);
 

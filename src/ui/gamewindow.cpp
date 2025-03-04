@@ -10,71 +10,71 @@
 const int kPlayerVisibleDistance = 6;
 
 const char kPLayerChar = '@';
-GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, QWidget *parent)
+GameWindow::GameWindow(const QString &player_name, int map_width, int map_height, QWidget *parent)
     : QMainWindow(parent)
     , scene_(new QGraphicsScene(this))
-    , game_logic_(new GameLogic(mapWidth, mapHeight, 10))
-    , player_name_(playerName)
-    , gameSaverLoader(new GameSaverLoader(playerName))
-    , inventoryWidget(new QListWidget(this))
-    , menuBar(new QMenuBar(this))
-    , attackedEnemyWidget(new QListWidget(this))
+    , game_logic_(new GameLogic(map_width, map_height, 10))
+    , player_name_(player_name)
+    , game_saver_loader_(new GameSaverLoader(player_name))
+    , inventory_widget_(new QListWidget(this))
+    , menu_bar_(new QMenuBar(this))
+    , attacked_enemy_widget_(new QListWidget(this))
     , is_space_pressed_(false)
 {
-    setMenuBar(menuBar);
-    QMenu *file_menu = menuBar->addMenu("Файл");
+    setMenuBar(menu_bar_);
+    QMenu *file_menu = menu_bar_->addMenu("Файл");
 
-    saveAction = new QAction("Сохранить игру", this);
-    connect(saveAction, &QAction::triggered, this, &GameWindow::onSaveClicked);
-    file_menu->addAction(saveAction);
+    save_action_ = new QAction("Сохранить игру", this);
+    connect(save_action_, &QAction::triggered, this, &GameWindow::OnSaveClicked);
+    file_menu->addAction(save_action_);
 
-    returnToMenuAction = new QAction("Вернуться в меню", this);
-    connect(returnToMenuAction, &QAction::triggered, this, &GameWindow::onReturnToMenuClicked);
-    file_menu->addAction(returnToMenuAction);
+    return_to_menu_action_ = new QAction("Вернуться в меню", this);
+    connect(return_to_menu_action_, &QAction::triggered, this, &GameWindow::OnReturnToMenuClicked);
+    file_menu->addAction(return_to_menu_action_);
 
-    inventoryWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
-    inventoryWidget->setMinimumSize(200, 300);
-    attackedEnemyWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
-    attackedEnemyWidget->setMinimumSize(200, 300);
+    inventory_widget_->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
+    inventory_widget_->setMinimumSize(200, 300);
+    attacked_enemy_widget_->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
+    attacked_enemy_widget_->setMinimumSize(200, 300);
 
     auto *view = new QGraphicsView(scene_, this);
 
-    int scene_width = mapWidth * 10;
-    int scene_height = mapHeight * 10;
+    int scene_width = map_width * 10;
+    int scene_height = map_height * 10;
 
     view->setFixedSize(scene_width, scene_height);
 
     auto *right_panel = new QWidget(this);
     auto *right_layout = new QVBoxLayout(right_panel);
-    right_layout->addWidget(inventoryWidget);
-    right_layout->addWidget(attackedEnemyWidget);
+    right_layout->addWidget(inventory_widget_);
+    right_layout->addWidget(attacked_enemy_widget_);
 
     auto *main_widget = new QWidget(this);
     auto *main_layout = new QHBoxLayout(main_widget);
     main_layout->addWidget(view, 3);
     main_layout->addWidget(right_panel, 2);
 
-    statusBarWidget = new StatusBarWidget(playerName,
+    status_bar_widget_ = new StatusBarWidget(player_name,
                                           game_logic_->GetPlayerHealth(),
                                           game_logic_->GetPlayerAttackPower(),
                                           this);
-    connect(game_logic_.get(), &GameLogic::StatsUpdated, this, &GameWindow::updateStatusBar);
+    connect(game_logic_.get(), &GameLogic::StatsUpdated, this, &GameWindow::UpdateStatusBar);
 
     auto *container = new QWidget(this);
     auto *container_layout = new QVBoxLayout(container);
     container_layout->addWidget(main_widget);
-    container_layout->addWidget(statusBarWidget);
+    container_layout->addWidget(status_bar_widget_);
 
     setCentralWidget(container);
 
-    render();
-    updateAttackedEnemies();
-    updateInventoryDisplay();
-    updateStatusBar();
-    scaleScene();
+    Render();
+    UpdateAttackedEnemies();
+    UpdateInventoryDisplay();
+    UpdateStatusBar();
+    ScaleScene();
 }
 
-void GameWindow::scaleScene()
+void GameWindow::ScaleScene()
 {
     auto *view = findChild<QGraphicsView *>();
     if (view) {
@@ -89,36 +89,36 @@ void GameWindow::showEvent(QShowEvent *event)
     if (view) {
         view->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
     }
-    updateAttackedEnemies();
-    updateInventoryDisplay();
-    updateStatusBar();
+    UpdateAttackedEnemies();
+    UpdateInventoryDisplay();
+    UpdateStatusBar();
 }
 void GameWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
-    scaleScene();
+    ScaleScene();
 }
-void GameWindow::onSaveClicked()
+void GameWindow::OnSaveClicked()
 {
-    if (gameSaverLoader->SaveGame(*game_logic_)) {
+    if (game_saver_loader_->SaveGame(*game_logic_)) {
         QMessageBox::information(this, "Сохранение игры", "Игра сохранена успешно!");
     } else {
         QMessageBox::warning(this, "Ошибка", "Ошибка при загрузке игры.");
     }
 }
 
-bool GameWindow::loadGameState()
+bool GameWindow::LoadGameState()
 {
-    if (gameSaverLoader->LoadGame(*game_logic_)) {
-        render();
+    if (game_saver_loader_->LoadGame(*game_logic_)) {
+        Render();
         return true;
     }
     QMessageBox::warning(this, "Ошибка", "Ошибка при сохранении игры.");
     return false;
 }
-void GameWindow::onReturnToMenuClicked()
+void GameWindow::OnReturnToMenuClicked()
 {
-    emit returnToMenu();
+    emit ReturnToMenu();
 }
 
 void GameWindow::keyPressEvent(QKeyEvent *event)
@@ -136,7 +136,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         } else if (event->key() == Qt::Key_D) {
             game_logic_->HitEnemy(1, dy);
         }
-        updateAttackedEnemies();
+        UpdateAttackedEnemies();
     } else if (event->key() == Qt::Key_W) {
         game_logic_->MovePlayer(dx, -1);
     } else if (event->key() == Qt::Key_S) {
@@ -149,20 +149,20 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         game_logic_->InteractWithStairs();
     } else if (event->key() == Qt::Key_E) {
         game_logic_->PickUpItem();
-        updateInventoryDisplay();
+        UpdateInventoryDisplay();
     } else if (event->key() == Qt::Key_Q) {
         game_logic_->DropItem();
-        updateInventoryDisplay();
+        UpdateInventoryDisplay();
     } else if (event->key() == Qt::Key_U) {
         game_logic_->UseItem();
-        updateInventoryDisplay();
+        UpdateInventoryDisplay();
     } else if (event->key() == Qt::Key_2) {
         game_logic_->SelectNextItem();
-        updateInventoryDisplay();
+        UpdateInventoryDisplay();
         return;
     } else if (event->key() == Qt::Key_1) {
         game_logic_->SelectPreviousItem();
-        updateInventoryDisplay();
+        UpdateInventoryDisplay();
         return;
     } else if (event->key() == Qt::Key_Space) {
         is_space_pressed_ = true;
@@ -171,11 +171,11 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
 
     is_space_pressed_ = false;
     game_logic_->UpdateEnemies();
-    updateStatusBar();
-    checkSurvivalStatus();
-    render();
+    UpdateStatusBar();
+    CheckSurvivalStatus();
+    Render();
 }
-void GameWindow::updateTile(int x, int y, char tile)
+void GameWindow::UpdateTile(int x, int y, char tile)
 {
     auto *tile_item = new QGraphicsSimpleTextItem();
     tile_item->setText(QString(tile));
@@ -186,20 +186,20 @@ void GameWindow::updateTile(int x, int y, char tile)
 
     scene_->addItem(tile_item);
 }
-void GameWindow::updateChangedTiles()
+void GameWindow::UpdateChangedTiles()
 {
     for (const auto &tile : game_logic_->GetChangedTiles()) {
         int const x = tile.x();
         int const y = tile.y();
         char const updated_tile = game_logic_->GetCurrentMap().GetTile(x, y);
 
-        updateTile(x, y, updated_tile);
+        UpdateTile(x, y, updated_tile);
     }
 
     game_logic_->ClearChangedTiles();
 }
 
-void GameWindow::render()
+void GameWindow::Render()
 {
     scene_->clear();
 
@@ -210,7 +210,7 @@ void GameWindow::render()
 
     for (int y = 0; y < static_cast<int>(map_data.size()); ++y) {
         for (int x = 0; x < static_cast<int>(map_data[y].size()); ++x) {
-            updateTile(x, y, ' ');
+            UpdateTile(x, y, ' ');
         }
     }
 
@@ -218,35 +218,35 @@ void GameWindow::render()
         for (int var2 = 0; var2 <= var; ++var2) {
             int x = player_x + var - var2;
             int y = player_y + var2;
-            drowVisibleTile(x, y, map_data);
+            DrawVisibleTile(x, y, map_data);
 
             x = player_x - (var - var2);
             y = player_y - var2;
-            drowVisibleTile(x, y, map_data);
+            DrawVisibleTile(x, y, map_data);
 
             x = player_x + var - var2;
             y = player_y - var2;
-            drowVisibleTile(x, y, map_data);
+            DrawVisibleTile(x, y, map_data);
 
             x = player_x - (var - var2);
             y = player_y + var2;
-            drowVisibleTile(x, y, map_data);
+            DrawVisibleTile(x, y, map_data);
         }
     }
 
-    updateTile(player_x, player_y, kPLayerChar);
+    UpdateTile(player_x, player_y, kPLayerChar);
 }
 
-void GameWindow::drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData) {
-    if (x >= 0 && x < static_cast<int>(mapData[0].size()) &&
-        y >= 0 && y < static_cast<int>(mapData.size())) {
-        updateTile(x, y, mapData[y][x]);
+void GameWindow::DrawVisibleTile(int x, int y, const std::vector<std::vector<char>> &map_data) {
+    if (x >= 0 && x < static_cast<int>(map_data[0].size()) &&
+        y >= 0 && y < static_cast<int>(map_data.size())) {
+        UpdateTile(x, y, map_data[y][x]);
     }
 }
 
-void GameWindow::updateInventoryDisplay()
+void GameWindow::UpdateInventoryDisplay()
 {
-    inventoryWidget->clear();
+    inventory_widget_->clear();
 
     const auto &inventory = game_logic_->GetPlayerItems();
     int const current_index = game_logic_->GetCurrentItemIndex();
@@ -254,35 +254,30 @@ void GameWindow::updateInventoryDisplay()
     for (int i = 0; i < static_cast<int>(inventory.size()); ++i) {
         QString item_info = inventory[i]->GetName();
 
-        // if (auto collectible =
-        // std::dynamic_pointer_cast<CollectiblesItem>(inventory[i])) {
-        //     itemInfo += QString(" (x%1)").arg(collectible->GetCount());
-        // }
-
         if (i == current_index) {
             item_info = "> " + item_info;
         }
 
-        inventoryWidget->addItem(item_info);
+        inventory_widget_->addItem(item_info);
     }
 }
 
-void GameWindow::updateStatusBar()
+void GameWindow::UpdateStatusBar()
 {
-    if (statusBarWidget) {
+    if (status_bar_widget_) {
         const GameStatistics &stats = game_logic_->GetGameStatistics();
-        statusBarWidget->setHealth(game_logic_->GetPlayerHealth(),
+        status_bar_widget_->SetHealth(game_logic_->GetPlayerHealth(),
                                    game_logic_->GetPlayerMaxHealth());
-        statusBarWidget->setLevel(game_logic_->GetCurrentLevel());
-        statusBarWidget->setAttackPower(game_logic_->GetPlayerAttackPower());
-        statusBarWidget->setStepsTaken(stats.getTotalStepsTaken());
-        statusBarWidget->setEnemiesKilled(stats.getTotalEnemiesKilled());
+        status_bar_widget_->SetLevel(game_logic_->GetCurrentLevel());
+        status_bar_widget_->SetAttackPower(game_logic_->GetPlayerAttackPower());
+        status_bar_widget_->SetStepsTaken(stats.GetTotalStepsTaken());
+        status_bar_widget_->SetEnemiesKilled(stats.GetTotalEnemiesKilled());
     }
 }
 
-void GameWindow::updateAttackedEnemies()
+void GameWindow::UpdateAttackedEnemies()
 {
-    attackedEnemyWidget->clear();
+    attacked_enemy_widget_->clear();
     std::shared_ptr<Enemy> p_enemy = game_logic_->GetAttackedEnemy();
 
     if (!p_enemy || p_enemy->GetHealth() <= 0) {
@@ -295,18 +290,17 @@ void GameWindow::updateAttackedEnemies()
                             .arg(p_enemy->GetHealth())
                             .arg(p_enemy->GetMaxHealth());
 
-    attackedEnemyWidget->addItem(enemy_info);
+    attacked_enemy_widget_->addItem(enemy_info);
 }
 
 
-void GameWindow::checkSurvivalStatus()
+void GameWindow::CheckSurvivalStatus()
 {
     if (game_logic_->GetPlayerHealth() == 0) {
-        emit killCharacter();
+        emit KillCharacter();
     }
 }
-GameStatistics &GameWindow::getGameStatistics()
+GameStatistics &GameWindow::GetGameStatistics()
 {
     return game_logic_->GetGameStatistics();
 }
-

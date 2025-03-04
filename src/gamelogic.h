@@ -16,7 +16,7 @@ signals:
     void StatsUpdated();
 
 public:
-    GameLogic(int mapWidth, int mapHeight, int levels, QObject *parent = nullptr);
+    GameLogic(int map_width, int map_height, int levels, QObject *parent = nullptr);
 
     void MovePlayer(int dx, int dy);
     int GetPlayerX() const;
@@ -62,7 +62,7 @@ private:
     GameStatistics game_statistics_;
 
     Player player_;
-    std::shared_ptr<Enemy> attactedEnemy_;
+    std::shared_ptr<Enemy> attacked_enemy_;
 };
 
 #endif // GAMELOGIC_H

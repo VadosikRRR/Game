@@ -11,24 +11,24 @@ class StatusBarWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit StatusBarWidget(const QString &playerName,
+    explicit StatusBarWidget(const QString &player_name,
                              int health,
-                             int attackPower,
+                             int attack_power,
                              QWidget *parent = nullptr);
-    void setPlayerName(const QString &name);
-    void setHealth(int health, int maxHealth);
-    void setAttackPower(int attackPower);
-    void setStepsTaken(int steps);
-    void setEnemiesKilled(int enemiesKilled);
-    void setLevel(int level);
+    void SetPlayerName(const QString &name);
+    void SetHealth(int health, int max_health);
+    void SetAttackPower(int attack_power);
+    void SetStepsTaken(int steps);
+    void SetEnemiesKilled(int enemies_killed);
+    void SetLevel(int level);
 
 private:
-    QLabel *playerNameLabel;
-    QLabel *levelLabel;
-    QProgressBar *healthBar;
-    QLabel *attackPowerLabel;
-    QLabel *stepsLabel;
-    QLabel *enemiesKilledLabel;
+    QLabel *player_name_label_;
+    QLabel *level_label_;
+    QProgressBar *health_bar_;
+    QLabel *attack_power_label_;
+    QLabel *steps_label_;
+    QLabel *enemies_killed_label_;
 };
 
 #endif // STATUSBARWIDGET_H

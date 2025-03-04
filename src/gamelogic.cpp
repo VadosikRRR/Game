@@ -7,15 +7,15 @@
 const int kVisibleDistance = 5;
 const int kFightDistance = 1;
 
-GameLogic::GameLogic(int mapWidth, int mapHeight, int levels, QObject *parent)
+GameLogic::GameLogic(int map_width, int map_height, int levels, QObject *parent)
     : QObject(parent)
     , current_level_(0)
-    , attactedEnemy_(nullptr)
+    , attacked_enemy_(nullptr)
 {
     srand(time(nullptr));
 
     for (int i = 0; i < levels; ++i) {
-        Map map(mapWidth, mapHeight);
+        Map map(map_width, map_height);
         map.GenerateMap();
 
         if (i > 0) {
@@ -83,7 +83,7 @@ void GameLogic::MovePlayer(int dx, int dy)
         player_.SetPosition(new_x, new_y);
 
         changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
-        game_statistics_.incrementStepsTaken();
+        game_statistics_.IncrementStepsTaken();
         emit StatsUpdated();
     }
 }
@@ -97,7 +97,7 @@ void GameLogic::SwitchLevel(int direction)
         const Map &new_map = maps_[current_level_];
         QPoint point = (direction == 1) ? new_map.getLessSign() : new_map.getGreaterSign();
         player_.SetPosition(point.x(), point.y());
-        game_statistics_.setCurrentLevel(current_level_);
+        game_statistics_.SetCurrentLevel(current_level_);
     }
 }
 
@@ -313,12 +313,12 @@ void GameLogic::HitEnemy(int dx, int dy)
         return;
     }
 
-    for (const auto &p_enemy : map.GetEnemies()) {
+    for (const auto & p_enemy : map.GetEnemies()) {
         if (p_enemy->GetX() != x_enemy || p_enemy->GetY() != y_enemy) {
             continue;
         }
 
-        attactedEnemy_ = p_enemy;
+        attacked_enemy_ = p_enemy;
 
         int result_probability = getRandomInRange(0, 100);
 
@@ -330,7 +330,7 @@ void GameLogic::HitEnemy(int dx, int dy)
 
         if (p_enemy->GetHealth() <= 0) {
             map.DeleteEnemy(*p_enemy);
-            game_statistics_.incrementEnemiesKilled();
+            game_statistics_.IncrementEnemiesKilled();
         }
 
         return;
@@ -339,10 +339,10 @@ void GameLogic::HitEnemy(int dx, int dy)
 
 std::shared_ptr<Enemy> GameLogic::GetAttackedEnemy()
 {
-    return attactedEnemy_;
+    return attacked_enemy_;
 }
 
 void GameLogic::IncrementEnemiesKilled()
 {
-    game_statistics_.incrementEnemiesKilled();
+    game_statistics_.IncrementEnemiesKilled();
 }
