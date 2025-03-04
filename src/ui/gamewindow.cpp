@@ -7,7 +7,7 @@
 #include "../gamelogic.h"
 #include "../gamesaverloader.h"
 
-const unsigned PlayerVisibleDistance = 6;
+const int PlayerVisibleDistance = 6;
 
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, QWidget *parent)
@@ -251,7 +251,7 @@ void GameWindow::updateInventoryDisplay()
     const auto &inventory = game_logic_->GetPlayerItems();
     int const currentIndex = game_logic_->GetCurrentItemIndex();
 
-    for (size_t i = 0; i < inventory.size(); ++i) {
+    for (int i = 0; i < static_cast<int>(inventory.size()); ++i) {
         QString itemInfo = inventory[i]->GetName();
 
         // if (auto collectible =
@@ -285,7 +285,7 @@ void GameWindow::updateAttackedEnemies()
     attackedEnemyWidget->clear();
     std::shared_ptr<Enemy> p_enemy = game_logic_->GetAttackedEnemy();
 
-    if (!p_enemy) {
+    if (!p_enemy || p_enemy->GetHealth() <= 0) {
         return;
     }
 

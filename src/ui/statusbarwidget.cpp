@@ -9,12 +9,12 @@ StatusBarWidget::StatusBarWidget(const QString &playerName,
     QHBoxLayout *layout = new QHBoxLayout(this);
 
     playerNameLabel = new QLabel(this);
-    playerNameLabel->setStyleSheet("QLabel { font-weight: bold; font-size: 12px; }");
+    playerNameLabel->setStyleSheet("QLabel { font-weight: bold; font-size: 15px; }");
     playerNameLabel->setText("Имя: " + playerName);
     layout->addWidget(playerNameLabel);
 
     levelLabel = new QLabel(this);
-    levelLabel->setStyleSheet("QLabel { color: green; font-size: 12px; }");
+    levelLabel->setStyleSheet("QLabel { color: green; font-size: 15px; }");
     levelLabel->setText("Текущий уровень: " + QString::number(attackPower));
     layout->addWidget(levelLabel);
 
@@ -28,17 +28,17 @@ StatusBarWidget::StatusBarWidget(const QString &playerName,
     layout->addWidget(healthBar);
 
     attackPowerLabel = new QLabel(this);
-    attackPowerLabel->setStyleSheet("QLabel { color: red; font-size: 12px; }");
+    attackPowerLabel->setStyleSheet("QLabel { color: red; font-size: 15px; }");
     attackPowerLabel->setText("Урон: " + QString::number(attackPower));
     layout->addWidget(attackPowerLabel);
 
     stepsLabel = new QLabel(this);
-    stepsLabel->setStyleSheet("QLabel { color: blue; font-size: 12px; }");
+    stepsLabel->setStyleSheet("QLabel { color: blue; font-size: 15px; }");
     stepsLabel->setText("Шаги: 0");
     layout->addWidget(stepsLabel);
 
     enemiesKilledLabel = new QLabel(this);
-    enemiesKilledLabel->setStyleSheet("QLabel { color: green; font-size: 12px; }");
+    enemiesKilledLabel->setStyleSheet("QLabel { color: green; font-size: 15px; }");
     enemiesKilledLabel->setText("Враги: 0");
     layout->addWidget(enemiesKilledLabel);
 
