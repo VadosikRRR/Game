@@ -217,29 +217,8 @@ void GameWindow::Render()
             } else {
                 UpdateTile(x, y, ' ');
             }
-            // UpdateTile(x, y, map_data[y][x]);
         }
     }
-
-    // for (int var = 1; var <= kPlayerVisibleDistance; ++var) {
-    //     for (int var2 = 0; var2 <= var; ++var2) {
-    //         int x = player_x + var - var2;
-    //         int y = player_y + var2;
-    //         DrawVisibleTile(x, y, map_data);
-
-    //         x = player_x - (var - var2);
-    //         y = player_y - var2;
-    //         DrawVisibleTile(x, y, map_data);
-
-    //         x = player_x + var - var2;
-    //         y = player_y - var2;
-    //         DrawVisibleTile(x, y, map_data);
-
-    //         x = player_x - (var - var2);
-    //         y = player_y + var2;
-    //         DrawVisibleTile(x, y, map_data);
-    //     }
-    // }
 
     UpdateTile(player_x, player_y, kPLayerChar);
 }
