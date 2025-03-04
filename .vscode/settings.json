@@ -63,6 +63,9 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "text_encoding": "cpp"
     }
 }

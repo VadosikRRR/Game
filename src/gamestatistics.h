@@ -8,27 +8,27 @@ class GameStatistics
 public:
     GameStatistics();
 
-    void setPlayerName(const QString &name);
-    QString getPlayerName() const;
+    void SetPlayerName(const QString &name);
+    QString GetPlayerName() const;
 
-    void setCurrentLevel(int level);
-    int getCurrentLevel() const;
+    void SetCurrentLevel(int level);
+    int GetCurrentLevel() const;
 
-    void incrementEnemiesKilled();
-    void setEnemiesKilled(int count);
-    int getTotalEnemiesKilled() const;
+    void IncrementEnemiesKilled();
+    void SetEnemiesKilled(int count);
+    int GetTotalEnemiesKilled() const;
 
-    void incrementStepsTaken();
-    void setStepsTaken(int count);
-    int getTotalStepsTaken() const;
+    void IncrementStepsTaken();
+    void SetStepsTaken(int count);
+    int GetTotalStepsTaken() const;
 
-    void reset();
+    void Reset();
 
 private:
-    QString playerName_;
-    int currentLevel_;
-    int totalEnemiesKilled_;
-    int totalStepsTaken_;
+    QString player_name_;
+    int current_level_;
+    int total_enemies_killed_;
+    int total_steps_taken_;
 };
 
 #endif // GAMESTATISTICS_H

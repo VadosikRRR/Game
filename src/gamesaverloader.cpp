@@ -10,8 +10,8 @@
 #include "item.h"
 #include "map.h"
 
-GameSaverLoader::GameSaverLoader(const QString &playerName)
-    : player_name_(playerName)
+GameSaverLoader::GameSaverLoader(const QString &player_name)
+    : player_name_(player_name)
 {}
 
 QString GameSaverLoader::GetSaveFilePath() const
@@ -19,15 +19,15 @@ QString GameSaverLoader::GetSaveFilePath() const
     return QString("saves/%1_save.json").arg(player_name_);
 }
 
-bool GameSaverLoader::SaveGame(const GameLogic &gameLogic)
+bool GameSaverLoader::SaveGame(const GameLogic &game_logic)
 {
     QDir().mkdir("saves");
 
     QJsonObject json;
-    SavePlayerData(json, gameLogic);
+    SavePlayerData(json, game_logic);
 
     QJsonArray maps_array;
-    SaveMapData(maps_array, gameLogic);
+    SaveMapData(maps_array, game_logic);
     json["maps"] = maps_array;
 
     QFile file(GetSaveFilePath());
@@ -40,7 +40,7 @@ bool GameSaverLoader::SaveGame(const GameLogic &gameLogic)
     return true;
 }
 
-bool GameSaverLoader::LoadGame(GameLogic &gameLogic)
+bool GameSaverLoader::LoadGame(GameLogic &game_logic)
 {
     QFile file(GetSaveFilePath());
     if (!file.open(QIODevice::ReadOnly)) {
@@ -57,34 +57,34 @@ bool GameSaverLoader::LoadGame(GameLogic &gameLogic)
 
     QJsonObject json = json_document.object();
 
-    if (!LoadPlayerData(json, gameLogic)) {
+    if (!LoadPlayerData(json, game_logic)) {
         return false;
     }
-    if (!LoadMapData(json["maps"].toArray(), gameLogic)) {
+    if (!LoadMapData(json["maps"].toArray(), game_logic)) {
         return false;
     }
 
     return true;
 }
 
-void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &gameLogic)
+void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &game_logic)
 {
     QJsonObject player_object;
     player_object["name"] = player_name_;
-    player_object["health"] = gameLogic.GetPlayerHealth();
-    player_object["currentLevel"] = gameLogic.GetCurrentLevel();
+    player_object["health"] = game_logic.GetPlayerHealth();
+    player_object["currentLevel"] = game_logic.GetCurrentLevel();
 
-    const GameStatistics &stats = gameLogic.GetGameStatistics();
-    player_object["totalStepsTaken"] = stats.getTotalStepsTaken();
-    player_object["totalEnemiesKilled"] = stats.getTotalEnemiesKilled();
+    const GameStatistics &stats = game_logic.GetGameStatistics();
+    player_object["totalStepsTaken"] = stats.GetTotalStepsTaken();
+    player_object["totalEnemiesKilled"] = stats.GetTotalEnemiesKilled();
 
     QJsonObject position_object;
-    position_object["x"] = gameLogic.GetPlayerX();
-    position_object["y"] = gameLogic.GetPlayerY();
+    position_object["x"] = game_logic.GetPlayerX();
+    position_object["y"] = game_logic.GetPlayerY();
     player_object["position"] = position_object;
 
     QJsonArray inventory_array;
-    for (const auto &item : gameLogic.GetPlayerItems()) {
+    for (const auto &item : game_logic.GetPlayerItems()) {
         QJsonObject item_object;
         item_object["type"] = item->GetName();
         if (auto sword = std::dynamic_pointer_cast<Sword>(item)) {
@@ -99,9 +99,9 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &gameLog
     json["player"] = player_object;
 }
 
-void GameSaverLoader::SaveMapData(QJsonArray &mapsArray, const GameLogic &gameLogic)
+void GameSaverLoader::SaveMapData(QJsonArray &maps_array, const GameLogic &game_logic)
 {
-    for (const auto &map : gameLogic.GetAllMaps()) {
+    for (const auto &map : game_logic.GetAllMaps()) {
         QJsonObject map_object;
 
         QJsonArray data_array;
@@ -113,11 +113,11 @@ void GameSaverLoader::SaveMapData(QJsonArray &mapsArray, const GameLogic &gameLo
         SaveItems(map_object, map);
         SaveEnemies(map_object, map);
 
-        mapsArray.append(map_object);
+        maps_array.append(map_object);
     }
 }
 
-void GameSaverLoader::SaveItems(QJsonObject &mapObject, const Map &map)
+void GameSaverLoader::SaveItems(QJsonObject &map_object, const Map &map)
 {
     QJsonArray items_array;
     for (const auto &[pos, item] : map.getItems()) {
@@ -129,10 +129,10 @@ void GameSaverLoader::SaveItems(QJsonObject &mapObject, const Map &map)
         item_object["position"] = position_object;
         items_array.append(item_object);
     }
-    mapObject["items"] = items_array;
+    map_object["items"] = items_array;
 }
 
-void GameSaverLoader::SaveEnemies(QJsonObject &mapObject, const Map &map)
+void GameSaverLoader::SaveEnemies(QJsonObject &map_object, const Map &map)
 {
     QJsonArray enemies_array;
     for (const auto &enemy : map.GetEnemies()) {
@@ -145,10 +145,10 @@ void GameSaverLoader::SaveEnemies(QJsonObject &mapObject, const Map &map)
         enemy_object["position"] = position_object;
         enemies_array.append(enemy_object);
     }
-    mapObject["enemies"] = enemies_array;
+    map_object["enemies"] = enemies_array;
 }
 
-bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLogic)
+bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &game_logic)
 {
     if (!json.contains("player")) {
         return false;
@@ -160,20 +160,20 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
         return false;
     }
     int current_level = player_object["currentLevel"].toInt();
-    gameLogic.SetCurrentLevel(current_level);
+    game_logic.SetCurrentLevel(current_level);
 
     int health = player_object["health"].toInt();
-    gameLogic.GetPlayer().SetHealth(health);
+    game_logic.GetPlayer().SetHealth(health);
 
-    GameStatistics &stats = gameLogic.GetGameStatistics();
-    stats.setCurrentLevel(current_level);
-    stats.setStepsTaken(player_object["totalStepsTaken"].toInt());
-    stats.setEnemiesKilled(player_object["totalEnemiesKilled"].toInt());
+    GameStatistics &stats = game_logic.GetGameStatistics();
+    stats.SetCurrentLevel(current_level);
+    stats.SetStepsTaken(player_object["totalStepsTaken"].toInt());
+    stats.SetEnemiesKilled(player_object["totalEnemiesKilled"].toInt());
 
     QJsonObject position_object = player_object["position"].toObject();
     int player_x = position_object["x"].toInt();
     int player_y = position_object["y"].toInt();
-    gameLogic.SetPlayerPosition(player_x, player_y);
+    game_logic.SetPlayerPosition(player_x, player_y);
 
     QJsonArray inventory_array = player_object["inventory"].toArray();
     for (const auto &item_value : inventory_array) {
@@ -196,17 +196,17 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
         }
 
         if (item) {
-            gameLogic.GetPlayer().PickUpItem(item);
+            game_logic.GetPlayer().PickUpItem(item);
         }
     }
 
     return true;
 }
 
-bool GameSaverLoader::LoadMapData(const QJsonArray &mapsArray, GameLogic &gameLogic)
+bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_logic)
 {
     std::vector<Map> maps;
-    for (const auto &map_value : mapsArray) {
+    for (const auto &map_value : maps_array) {
         QJsonObject map_object = map_value.toObject();
 
         QJsonArray data_array = map_object["data"].toArray();
@@ -215,7 +215,7 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &mapsArray, GameLogic &gameLo
             QString row = row_value.toString();
             std::vector<char> row_data;
             for (QChar qchar : row) {
-                row_data.push_back(qchar.toLatin1());
+ row_data.push_back(qchar.toLatin1());
             }
             map_data.push_back(row_data);
         }
@@ -229,13 +229,13 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &mapsArray, GameLogic &gameLo
         maps.push_back(map);
     }
 
-    gameLogic.SetAllMaps(maps);
+    game_logic.SetAllMaps(maps);
     return true;
 }
 
-bool GameSaverLoader::LoadItems(const QJsonArray &itemsArray, Map &map)
+bool GameSaverLoader::LoadItems(const QJsonArray &items_array, Map &map)
 {
-    for (const auto &item_value : itemsArray) {
+    for (const auto &item_value : items_array) {
         QJsonObject item_object = item_value.toObject();
         QString item_type = item_object["type"].toString();
         QJsonObject position_object = item_object["position"].toObject();
@@ -264,9 +264,9 @@ bool GameSaverLoader::LoadItems(const QJsonArray &itemsArray, Map &map)
     return true;
 }
 
-bool GameSaverLoader::LoadEnemies(const QJsonArray &enemiesArray, Map &map)
+bool GameSaverLoader::LoadEnemies(const QJsonArray &enemies_array, Map &map)
 {
-    for (const auto &enemy_value : enemiesArray) {
+    for (const auto &enemy_value : enemies_array) {
         QJsonObject enemy_object = enemy_value.toObject();
         QString enemy_type = enemy_object["type"].toString();
         int level = enemy_object["level"].toInt();

@@ -12,7 +12,7 @@ public:
   QString getPlayerName() const;
 
 private:
-  QLineEdit *nameInput;
+  QLineEdit *name_input_;
 };
 
 #endif // PLAYERNAMEDIALOG_H

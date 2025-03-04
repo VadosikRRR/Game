@@ -6,7 +6,7 @@
 #include <qpushbutton.h>
 #include <qwidget.h>
 PlayerNameDialog::PlayerNameDialog(QWidget *parent)
-    : QDialog(parent), nameInput(new QLineEdit(this)) {
+    : QDialog(parent), name_input_(new QLineEdit(this)) {
   setWindowTitle("Enter Player Name");
   setFixedSize(300, 150);
 
@@ -15,7 +15,7 @@ PlayerNameDialog::PlayerNameDialog(QWidget *parent)
   auto *label = new QLabel("Enter your character's name:", this);
   layout->addWidget(label);
 
-  layout->addWidget(nameInput);
+  layout->addWidget(name_input_);
 
   auto *confirm_button = new QPushButton("Confirm", this);
   connect(confirm_button, &QPushButton::clicked, this,
@@ -23,4 +23,4 @@ PlayerNameDialog::PlayerNameDialog(QWidget *parent)
   layout->addWidget(confirm_button);
 }
 
-QString PlayerNameDialog::getPlayerName() const { return nameInput->text(); }
+QString PlayerNameDialog::getPlayerName() const { return name_input_->text(); }

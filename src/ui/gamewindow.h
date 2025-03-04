@@ -17,48 +17,48 @@ class GameWindow : public QMainWindow
 {
     Q_OBJECT
 signals:
-    void returnToMenu();
-    void killCharacter();
+    void ReturnToMenu();
+    void KillCharacter();
 
 public:
-    explicit GameWindow(const QString &playerName,
-                        int mapWidth,
-                        int mapHeight,
+    explicit GameWindow(const QString &player_name,
+                        int map_width,
+                        int map_height,
                         QWidget *parent = nullptr);
-    bool loadGameState();
-    GameStatistics &getGameStatistics();
+    bool LoadGameState();
+    GameStatistics &GetGameStatistics();
 
 private:
     QGraphicsScene *scene_;
     std::unique_ptr<GameLogic> game_logic_;
     QString player_name_;
-    GameSaverLoader *gameSaverLoader;
-    QListWidget *inventoryWidget;
+    GameSaverLoader *game_saver_loader_;
+    QListWidget *inventory_widget_;
 
-    QMenuBar *menuBar;
-    StatusBarWidget *statusBarWidget;
-    QListWidget *attackedEnemyWidget;
-    QAction *saveAction;
-    QAction *returnToMenuAction;
+    QMenuBar *menu_bar_;
+    StatusBarWidget *status_bar_widget_;
+    QListWidget *attacked_enemy_widget_;
+    QAction *save_action_;
+    QAction *return_to_menu_action_;
 
     bool is_space_pressed_;
 
 
-    void render();
-    void scaleScene();
-    void updateTile(int x, int y, char tile);
-    void updateChangedTiles();
+    void Render();
+    void ScaleScene();
+    void UpdateTile(int x, int y, char tile);
+    void UpdateChangedTiles();
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void showEvent(QShowEvent *event) override;
-    void updateInventoryDisplay();
-    void updateAttackedEnemies();
-    void updateStatusBar();
-    void checkSurvivalStatus();
+    void UpdateInventoryDisplay();
+    void UpdateAttackedEnemies();
+    void UpdateStatusBar();
+    void CheckSurvivalStatus();
 
 private slots:
-    void onSaveClicked();
-    void onReturnToMenuClicked();
-    void drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData);
+    void OnSaveClicked();
+    void OnReturnToMenuClicked();
+    void DrawVisibleTile(int x, int y, const std::vector<std::vector<char>> &map_data);
 };
 #endif // GAMEWINDOW_H

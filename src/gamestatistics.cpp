@@ -1,62 +1,65 @@
 #include "gamestatistics.h"
 
 GameStatistics::GameStatistics()
-    : currentLevel_(0)
-    , totalEnemiesKilled_(0)
-    , totalStepsTaken_(0)
+    : current_level_(0)
+    , total_enemies_killed_(0)
+    , total_steps_taken_(0)
 {}
 
-void GameStatistics::setPlayerName(const QString &name)
+void GameStatistics::SetPlayerName(const QString &name)
 {
-    playerName_ = name;
+    player_name_ = name;
 }
 
-QString GameStatistics::getPlayerName() const
+QString GameStatistics::GetPlayerName() const
 {
-    return playerName_;
+    return player_name_;
 }
 
-void GameStatistics::setCurrentLevel(int level)
+void GameStatistics::SetCurrentLevel(int level)
 {
-    currentLevel_ = level;
+    current_level_ = level;
 }
 
-int GameStatistics::getCurrentLevel() const
+int GameStatistics::GetCurrentLevel() const
 {
-    return currentLevel_;
+    return current_level_;
 }
 
-void GameStatistics::incrementEnemiesKilled()
+void GameStatistics::IncrementEnemiesKilled()
 {
-    totalEnemiesKilled_++;
+    total_enemies_killed_++;
 }
 
-int GameStatistics::getTotalEnemiesKilled() const
+int GameStatistics::GetTotalEnemiesKilled() const
 {
-    return totalEnemiesKilled_;
+    return total_enemies_killed_;
 }
 
-void GameStatistics::incrementStepsTaken()
+void GameStatistics::IncrementStepsTaken()
 {
-    totalStepsTaken_++;
+    total_steps_taken_++;
 }
 
-int GameStatistics::getTotalStepsTaken() const
+int GameStatistics::GetTotalStepsTaken() const
 {
-    return totalStepsTaken_;
+    return total_steps_taken_;
 }
-void GameStatistics::setEnemiesKilled(int count)
+
+void GameStatistics::SetEnemiesKilled(int count)
 {
-    totalEnemiesKilled_ = count;
+    total_enemies_killed_ = count;
 }
-void GameStatistics::setStepsTaken(int count)
+
+void GameStatistics::SetStepsTaken(int count)
 {
-    totalStepsTaken_ = count;
+    total_steps_taken_ = count;
 }
-void GameStatistics::reset()
+
+void GameStatistics::Reset()
 {
-    playerName_.clear();
-    currentLevel_ = 0;
-    totalEnemiesKilled_ = 0;
-    totalStepsTaken_ = 0;
+    player_name_.clear();
+    current_level_ = 0;
+    total_enemies_killed_ = 0;
+    total_steps_taken_ = 0;
 }
