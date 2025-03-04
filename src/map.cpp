@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <stdexcept>
+#include <algorithm>
 
 const int kDamage = 10;
 const int kRoomcount = 10;
@@ -16,6 +17,8 @@ Map::Map(int mapWidth, int mapHeight)
 
   map_data_ = std::vector<std::vector<char>>(map_height_,
                                            std::vector<char>(map_width_, '#'));
+  visible_zone_ = std::vector<std::vector<bool>>(map_height_,
+                                                 std::vector<bool>(map_width_, false));
 }
 
 void Map::GenerateMap() {
@@ -66,13 +69,33 @@ void Map::connectRooms() {
     int const y2 = rooms_[i].y + rooms_[i].height / 2;
 
     if (std::rand() % 2 == 0) {
+      // addHorizontalCorridor(x1, x2, y1);
+      //   drawRoom(corridors_.back());
+      // addVerticalCorridor(y1, y2, x2);
+      //   drawRoom(corridors_.back());
       drawHorizontalCorridor(x1, x2, y1);
       drawVerticalCorridor(y1, y2, x2);
     } else {
+      // addVerticalCorridor(y1, y2, x1);
+      //   drawRoom(rooms_.back());
+      // addHorizontalCorridor(x1, x2, y2);
+      //   drawRoom(rooms_.back());
       drawVerticalCorridor(y1, y2, x1);
       drawHorizontalCorridor(x1, x2, y2);
     }
   }
+}
+
+void Map::addHorizontalCorridor(int x1, int x2, int y) {
+    int max_x = std::max(x1, x2);
+    int min_x = std::min(x1, x2);
+    corridors_.push_back({min_x, y, max_x - min_x - 1, 1});
+}
+
+void Map::addVerticalCorridor(int y1, int y2, int x) {
+    int max_y = std::max(y1, y2);
+    int min_y = std::min(y1, y2);
+    corridors_.push_back({x, min_y, 1, max_y - min_y - 1});
 }
 
 void Map::drawRoom(const Room &room) {
@@ -87,6 +110,9 @@ void Map::drawHorizontalCorridor(int x1, int x2, int y) {
   if (x1 > x2) {
     std::swap(x1, x2);
   }
+  Room room = {x1, y, x2 - x1 + 1, 1};
+  corridors_.push_back(room);
+
   for (int x = x1; x <= x2; ++x) {
     SetTile(x, y, '.');
   }
@@ -96,6 +122,9 @@ void Map::drawVerticalCorridor(int y1, int y2, int x) {
   if (y1 > y2) {
     std::swap(y1, y2);
   }
+
+  Room room = {x, y1, 1, y2 - y1 + 1};
+  corridors_.push_back(room);
   for (int y = y1; y <= y2; ++y) {
     SetTile(x, y, '.');
   }
@@ -282,3 +311,35 @@ void Map::setLessSign(QPoint point) { less_sign_ = point; }
 
 QPoint Map::getLessSign() const { return less_sign_; }
 
+bool Map::IsExplored(int x, int y) const {
+    return visible_zone_[y][x];
+}
+
+std::shared_ptr<Room> Map::GetRoom(int x, int y) const{
+    for (size_t ind = 0; ind < rooms_.size(); ++ind) {
+        if (rooms_[ind].x <= x && rooms_[ind].x + rooms_[ind].width + 1 > x &&
+            rooms_[ind].y <= y && rooms_[ind].y + rooms_[ind].height + 1 > y) {
+            return std::make_shared<Room>(rooms_[ind].x, rooms_[ind].y, rooms_[ind].width, rooms_[ind].height);
+        }
+    }
+
+    for (size_t ind = 0; ind < corridors_.size(); ++ind) {
+        if (corridors_[ind].x <= x && corridors_[ind].x + corridors_[ind].width + 1 > x &&
+            corridors_[ind].y <= y && corridors_[ind].y + corridors_[ind].height + 1 > y) {
+            return std::make_shared<Room>(corridors_[ind].x, corridors_[ind].y, corridors_[ind].width, corridors_[ind].height);
+        }
+    }
+
+    // for (const auto &room : rooms_) {
+    //     if (room.x <= x && room.x + room.width - 1 > x &&
+    //         room.y <= y && room.y + room.height - 1 > y) {
+    //         return std::make_shared<Room>(room);
+    //     }
+    // }
+
+    return nullptr;
+}
+
+void Map::TileExplored(int x, int y) {
+    visible_zone_[y][x] = true;
+}

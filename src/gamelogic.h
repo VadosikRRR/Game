@@ -63,6 +63,9 @@ private:
 
     Player player_;
     std::shared_ptr<Enemy> attacked_enemy_;
+
+    void UpdateVisibleZone();
+    void RoomExplored(Room &room);
 };
 
 #endif // GAMELOGIC_H
