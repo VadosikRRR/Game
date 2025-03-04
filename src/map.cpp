@@ -319,23 +319,16 @@ std::shared_ptr<Room> Map::GetRoom(int x, int y) const{
     for (size_t ind = 0; ind < rooms_.size(); ++ind) {
         if (rooms_[ind].x <= x && rooms_[ind].x + rooms_[ind].width + 1 > x &&
             rooms_[ind].y <= y && rooms_[ind].y + rooms_[ind].height + 1 > y) {
-            return std::make_shared<Room>(rooms_[ind].x, rooms_[ind].y, rooms_[ind].width, rooms_[ind].height);
+            return std::make_shared<Room>(rooms_[ind]);
         }
     }
 
     for (size_t ind = 0; ind < corridors_.size(); ++ind) {
         if (corridors_[ind].x <= x && corridors_[ind].x + corridors_[ind].width + 1 > x &&
             corridors_[ind].y <= y && corridors_[ind].y + corridors_[ind].height + 1 > y) {
-            return std::make_shared<Room>(corridors_[ind].x, corridors_[ind].y, corridors_[ind].width, corridors_[ind].height);
+            return std::make_shared<Room>(corridors_[ind]);
         }
     }
-
-    // for (const auto &room : rooms_) {
-    //     if (room.x <= x && room.x + room.width - 1 > x &&
-    //         room.y <= y && room.y + room.height - 1 > y) {
-    //         return std::make_shared<Room>(room);
-    //     }
-    // }
 
     return nullptr;
 }
