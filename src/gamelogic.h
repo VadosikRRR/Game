@@ -13,7 +13,7 @@ class GameLogic : public QObject
 {
     Q_OBJECT
 signals:
-    void statsUpdated();
+    void StatsUpdated();
 
 public:
     GameLogic(int mapWidth, int mapHeight, int levels, QObject *parent = nullptr);
@@ -25,12 +25,12 @@ public:
     const Map &GetCurrentMap() const;
     int GetCurrentLevel() const;
     std::vector<QPoint> GetChangedTiles() const;
-    bool isPlayerOnStairs() const;
-    void clearChangedTiles();
-    void interactWithStairs();
-    void setCurrentLevel(int level);
-    void setPlayerPosition(int x, int y);
-    void setMapData(const std::vector<std::vector<char>> &data);
+    bool IsPlayerOnStairs() const;
+    void ClearChangedTiles();
+    void InteractWithStairs();
+    void SetCurrentLevel(int level);
+    void SetPlayerPosition(int x, int y);
+    void SetMapData(const std::vector<std::vector<char>> &data);
     const std::vector<Map> &GetAllMaps() const;
     std::vector<std::shared_ptr<Item>> GetPlayerItems() const;
     void SetAllMaps(const std::vector<Map> &maps);
@@ -40,14 +40,14 @@ public:
     int GetCurrentItemIndex() const;
     void SelectNextItem();
     void SelectPreviousItem();
-    int getPlayerHealth() const;
+    int GetPlayerHealth() const;
     int GetPlayerMaxHealth() const;
-    int getPlayerAttackPower() const;
-    Player &getPlayer();
-    GameStatistics &getGameStatistics();
-    const GameStatistics &getGameStatistics() const;
+    int GetPlayerAttackPower() const;
+    Player &GetPlayer();
+    GameStatistics &GetGameStatistics();
+    const GameStatistics &GetGameStatistics() const;
 
-    void incrementEnemiesKilled();
+    void IncrementEnemiesKilled();
 
     std::shared_ptr<Enemy> GetAttackedEnemy();
 
@@ -56,9 +56,9 @@ public:
     void UpdateEnemies();
 
 private:
-    std::vector<Map> maps;
-    int currentLevel;
-    std::vector<QPoint> changedTiles;
+    std::vector<Map> maps_;
+    int current_level_;
+    std::vector<QPoint> changed_tiles_;
     GameStatistics game_statistics_;
 
     Player player_;

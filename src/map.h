@@ -29,13 +29,13 @@ class Map {
 public:
   Map(int mapWidth, int mapHeight);
 
-  void generateMap();
+  void GenerateMap();
 
-  bool isWalkable(int x, int y) const;
-  void setTile(int x, int y, char tile);
-  char getTile(int x, int y) const;
+  bool IsWalkable(int x, int y) const;
+  void SetTile(int x, int y, char tile);
+  char GetTile(int x, int y) const;
 
-  const std::vector<std::vector<char>> &getData() const;
+  const std::vector<std::vector<char>> &GetData() const;
   Room getRandomRoom() const;
   void setData(const std::vector<std::vector<char>> &newData);
   bool IsCellEmpty(int x, int y);

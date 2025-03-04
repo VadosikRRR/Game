@@ -37,15 +37,15 @@ void MainMenu::StartNewGame()
     if (dialog.exec() != QDialog::Accepted) {
         return;
     }
-    QString const playerName = dialog.getPlayerName();
-    if (playerName.isEmpty()) {
+    QString const player_name = dialog.getPlayerName();
+    if (player_name.isEmpty()) {
         return;
     }
 
     if (current_game_window_) {
         current_game_window_->close();
     }
-    current_game_window_ = std::make_unique<GameWindow>(playerName,
+    current_game_window_ = std::make_unique<GameWindow>(player_name,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
 
@@ -58,9 +58,7 @@ void MainMenu::StartNewGame()
     connect(current_game_window_.get(),
             &GameWindow::killCharacter,
             this,
-            &MainMenu::handleKillCharacter);
-    connect(current_game_window_.get(), &GameWindow::killCharacter, this, &MainMenu::handleKillCharacter);
-
+            &MainMenu::HandleKillCharacter);
 
     current_game_window_->show();
     continue_button_->setVisible(true);
@@ -69,37 +67,37 @@ void MainMenu::StartNewGame()
 
 void MainMenu::LoadGame()
 {
-    QDir const savesDir("saves");
-    if (!savesDir.exists()) {
+    QDir const saves_dir("saves");
+    if (!saves_dir.exists()) {
         QMessageBox::information(this, "Нет сохранений", "Сохраненные игры не найдены.");
         return;
     }
 
-    QStringList const saveFiles = savesDir.entryList(QStringList() << "*.json", QDir::Files);
+    QStringList const save_files = saves_dir.entryList(QStringList() << "*.json", QDir::Files);
 
-    if (saveFiles.isEmpty()) {
+    if (save_files.isEmpty()) {
         QMessageBox::information(this, "Нет сохранений", "Сохраненные игры не найдены.");
         return;
     }
 
     bool ok = false;
-    QString selectedSave = QInputDialog::getItem(this,
+    QString selected_save = QInputDialog::getItem(this,
                                                  "Загрузить игру",
                                                  "Выберите сохранение:",
-                                                 saveFiles,
+                                                 save_files,
                                                  0,
                                                  false,
                                                  &ok);
 
-    if (!ok || selectedSave.isEmpty()) {
+    if (!ok || selected_save.isEmpty()) {
         return;
     }
-    QString const playerName = selectedSave.replace("_save.json", "");
+    QString const player_name = selected_save.replace("_save.json", "");
 
     if (current_game_window_) {
         current_game_window_->close();
     }
-    current_game_window_ = std::make_unique<GameWindow>(playerName,
+    current_game_window_ = std::make_unique<GameWindow>(player_name,
                                                         config::kMapWidth,
                                                         config::kMapHeight);
     connect(current_game_window_.get(), &GameWindow::returnToMenu, this, [this]() {
@@ -110,7 +108,7 @@ void MainMenu::LoadGame()
     connect(current_game_window_.get(),
             &GameWindow::killCharacter,
             this,
-            &MainMenu::handleKillCharacter);
+            &MainMenu::HandleKillCharacter);
 
     if (current_game_window_->loadGameState()) {
         current_game_window_->show();
@@ -130,7 +128,7 @@ void MainMenu::ContinueGame()
 }
 
 
-void MainMenu::handleKillCharacter()
+void MainMenu::HandleKillCharacter()
 {
     current_game_window_->hide();
 

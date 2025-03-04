@@ -4,36 +4,34 @@
 #include <vector>
 
 Player::Player(const QString &name)
-    : baseHealth_(100), health_(100), maxHealth_(100), basePower(10),
-    attackPower(10), attackProbability_(PLAYER_ATTACK_PROBABILITY), name(std::move(name)) {}
+    : base_health_(100), health_(100), max_health_(100), base_power_(10),
+    attack_power_(10), attack_probability_(PLAYER_ATTACK_PROBABILITY), name(std::move(name)) {}
 
 void Player::EquipSword() {
-  std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
-  if (currItem) {
-    std::shared_ptr<Sword> const sword =
-        std::dynamic_pointer_cast<Sword>(currItem);
-    if (sword) {
-      sword_ = sword;
-      attackPower = basePower + sword_->GetDamage();
-      inventory_.Drop();
+    std::shared_ptr<Item> const current_item = inventory_.GetCurrItem();
+    if (current_item) {
+        std::shared_ptr<Sword> const sword = std::dynamic_pointer_cast<Sword>(current_item);
+        if (sword) {
+            sword_ = sword;
+            attack_power_ = base_power_ + sword_->GetDamage();
+            inventory_.Drop();
+        }
     }
-  }
 }
 
 void Player::EquipArmor() {
-  std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
-  if (currItem) {
-    std::shared_ptr<Armor> const armor =
-        std::dynamic_pointer_cast<Armor>(currItem);
-    if (armor) {
-      armor_ = armor;
-      maxHealth_ = baseHealth_ + armor_->GetDefense();
-      if (health_ - baseHealth_ > armor_->GetDefense()) {
-        health_ = maxHealth_;
-      }
-      inventory_.Drop();
+    std::shared_ptr<Item> const current_item = inventory_.GetCurrItem();
+    if (current_item) {
+        std::shared_ptr<Armor> const armor = std::dynamic_pointer_cast<Armor>(current_item);
+        if (armor) {
+            armor_ = armor;
+            max_health_ = base_health_ + armor_->GetDefense();
+            if (health_ - base_health_ > armor_->GetDefense()) {
+                health_ = max_health_;
+            }
+            inventory_.Drop();
+        }
     }
-  }
 }
 
 int Player::GetX() const { return position_.x(); }
@@ -54,22 +52,22 @@ void Player::PickUpItem(const std::shared_ptr<Item> &item) {
 std::shared_ptr<Item> Player::DropItem() { return inventory_.Drop(); }
 
 void Player::UseItem() {
-  std::shared_ptr<Item> const currItem = inventory_.GetCurrItem();
-  if (currItem) {
-    if (currItem->GetName() == "MedKit") {
+  std::shared_ptr<Item> const curr_item = inventory_.GetCurrItem();
+  if (curr_item) {
+    if (curr_item->GetName() == "MedKit") {
       health_ += kMedKitHeal;
-      if (health_ > maxHealth_) {
-        health_ = maxHealth_;
+      if (health_ > max_health_) {
+        health_ = max_health_;
       }
       inventory_.Drop();
     }
-    if (currItem->GetName().left(5) == "Sword") {
+    if (curr_item->GetName().left(5) == "Sword") {
       if (sword_) {
         PickUpItem(sword_);
       }
       EquipSword();
     }
-    if (currItem->GetName().left(5) == "Armor") {
+    if (curr_item->GetName().left(5) == "Armor") {
       if (armor_) {
         PickUpItem(armor_);
       }
@@ -91,15 +89,15 @@ std::shared_ptr<Item> Player::GetCurrentItem() {
 }
 int Player::GetHealth() const { return health_; }
 
-int Player::GetMaxHealth() const { return maxHealth_; }
+int Player::GetMaxHealth() const { return max_health_; }
 
-int Player::GetAttackPower() const { return attackPower; }
+int Player::GetAttackPower() const { return attack_power_; }
 
-int Player::GetAttackProbability() const { return attackProbability_; }
+int Player::GetAttackProbability() const { return attack_probability_; }
 
 void Player::SetHealth(int new_health) {
-    if(new_health > maxHealth_) {
-        health_ = maxHealth_;
+    if(new_health > max_health_) {
+        health_ = max_health_;
         return;
     }
     else if (new_health < 0) {

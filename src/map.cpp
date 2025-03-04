@@ -5,11 +5,11 @@
 #include <ctime>
 #include <stdexcept>
 
-const int DAMAGE = 10;
-const int ROOMCOUNT = 10;
-const int MINSIZE = 5;
-const int MAXSIZE = 10;
-const int DEFENSE = 50;
+const int kDamage = 10;
+const int kRoomcount = 10;
+const int kMinsize = 5;
+const int kMaxsize = 10;
+const int kDefense = 50;
 
 Map::Map(int mapWidth, int mapHeight)
     : mapWidth(mapWidth), mapHeight(mapHeight) {
@@ -18,8 +18,8 @@ Map::Map(int mapWidth, int mapHeight)
                                            std::vector<char>(mapWidth, '#'));
 }
 
-void Map::generateMap() {
-  generateRooms(ROOMCOUNT, MINSIZE, MAXSIZE);
+void Map::GenerateMap() {
+  generateRooms(kRoomcount, kMinsize, kMaxsize);
   connectRooms();
   addItemsToMap();
   AddEnemiesToMap();
@@ -34,11 +34,11 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
     Room const room = {x, y, width, height};
 
     bool intersects = false;
-    for (const auto &existingRoom : rooms) {
-      if (x < existingRoom.x + existingRoom.width &&
-          x + width > existingRoom.x &&
-          y < existingRoom.y + existingRoom.height &&
-          y + height > existingRoom.y) {
+    for (const auto &existing_room : rooms) {
+      if (x < existing_room.x + existing_room.width &&
+          x + width > existing_room.x &&
+          y < existing_room.y + existing_room.height &&
+          y + height > existing_room.y) {
         intersects = true;
         break;
       }
@@ -78,7 +78,7 @@ void Map::connectRooms() {
 void Map::drawRoom(const Room &room) {
   for (int y = room.y; y < room.y + room.height; ++y) {
     for (int x = room.x; x < room.x + room.width; ++x) {
-      setTile(x, y, '.');
+      SetTile(x, y, '.');
     }
   }
 }
@@ -88,7 +88,7 @@ void Map::drawHorizontalCorridor(int x1, int x2, int y) {
     std::swap(x1, x2);
   }
   for (int x = x1; x <= x2; ++x) {
-    setTile(x, y, '.');
+    SetTile(x, y, '.');
   }
 }
 
@@ -97,31 +97,31 @@ void Map::drawVerticalCorridor(int y1, int y2, int x) {
     std::swap(y1, y2);
   }
   for (int y = y1; y <= y2; ++y) {
-    setTile(x, y, '.');
+    SetTile(x, y, '.');
   }
 }
 
-bool Map::isWalkable(int x, int y) const {
+bool Map::IsWalkable(int x, int y) const {
   if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
     return false;
   }
   return mapData[y][x] == '.';
 }
 
-void Map::setTile(int x, int y, char tile) {
+void Map::SetTile(int x, int y, char tile) {
   if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
     mapData[y][x] = tile;
   }
 }
 
-char Map::getTile(int x, int y) const {
+char Map::GetTile(int x, int y) const {
   if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
     return mapData[y][x];
   }
   return '#';
 }
 
-const std::vector<std::vector<char>> &Map::getData() const { return mapData; }
+const std::vector<std::vector<char>> &Map::GetData() const { return mapData; }
 
 void Map::setData(const std::vector<std::vector<char>> &newData) {
     if (static_cast<int>(newData.size()) == mapHeight && !newData.empty() &&
@@ -137,7 +137,7 @@ int getRandomInRange(int min, int max) {
 }
 
 bool Map::IsCellEmpty(int x, int y) {
-  return getTile(x, y) == '.';
+  return GetTile(x, y) == '.';
 }
 
 bool Map::findNearbyPosition(int &x, int &y) {
@@ -159,12 +159,12 @@ bool Map::findNearbyPosition(int &x, int &y) {
 void Map::addItemsToMap() {
   for (const auto &room : rooms) {
 
-    int centerX = room.x + room.width / 2;
-    int centerY = room.y + room.height / 2;
+    int center_x = room.x + room.width / 2;
+    int center_y = room.y + room.height / 2;
 
-    if (!IsCellEmpty(centerX, centerY)) {
+    if (!IsCellEmpty(center_x, center_y)) {
 
-      if (!findNearbyPosition(centerX, centerY)) {
+      if (!findNearbyPosition(center_x, center_y)) {
         continue;
       }
     }
@@ -172,16 +172,16 @@ void Map::addItemsToMap() {
     int random = std::rand();
 
     if (random % 5 == 0) {
-      setTile(centerX, centerY, '+');
-      items_[QPoint(centerX, centerY)] = std::make_shared<MedKit>();
+      SetTile(center_x, center_y, '+');
+      items_[QPoint(center_x, center_y)] = std::make_shared<MedKit>();
     } else if (random % 7 == 0) {
-      int const damage = getRandomInRange(DAMAGE / 2, 3 * DAMAGE / 2);
-      setTile(centerX, centerY, '!');
-      items_[QPoint(centerX, centerY)] = std::make_shared<Sword>(damage);
+      int const damage = getRandomInRange(kDamage / 2, 3 * kDamage / 2);
+      SetTile(center_x, center_y, '!');
+      items_[QPoint(center_x, center_y)] = std::make_shared<Sword>(damage);
     } else if (random % 9 == 0) {
-      int const defense = getRandomInRange(DEFENSE / 2, 3 * DEFENSE / 2);
-      setTile(centerX, centerY, 'A');
-      items_[QPoint(centerX, centerY)] = std::make_shared<Armor>(defense);
+      int const defense = getRandomInRange(kDefense / 2, 3 * kDefense / 2);
+      SetTile(center_x, center_y, 'A');
+      items_[QPoint(center_x, center_y)] = std::make_shared<Armor>(defense);
     }
   }
 }
@@ -197,7 +197,7 @@ std::shared_ptr<Item> Map::getItemAt(int x, int y) {
 void Map::removeItemAt(int x, int y) {
   QPoint const pos(x, y);
   items_.erase(pos);
-  setTile(x, y, '.');
+  SetTile(x, y, '.');
 }
 
 void Map::LoadItem(int x, int y, const std::shared_ptr<Item> &item) {
@@ -209,15 +209,15 @@ void Map::LoadEnemy(std::shared_ptr<Enemy> p_enemy) {
 }
 
 void Map::AddItem(int x, int y, const std::shared_ptr<Item> &item) {
-  if (getTile(x, y) == '.') {
+  if (GetTile(x, y) == '.') {
     items_[QPoint(x, y)] = item;
-    setTile(x, y, item->GetTile());
+    SetTile(x, y, item->GetTile());
   }
 }
 
 void Map::AddEnemy(std::shared_ptr<Enemy> p_enemy) {
     if (IsCellEmpty(p_enemy->GetX(), p_enemy->GetY())) {
-        setTile(p_enemy->GetX(), p_enemy->GetY(), p_enemy->GetSymbol());
+        SetTile(p_enemy->GetX(), p_enemy->GetY(), p_enemy->GetSymbol());
         enemies_.push_front(p_enemy);
     }
 }
@@ -225,12 +225,12 @@ void Map::AddEnemy(std::shared_ptr<Enemy> p_enemy) {
 void Map::AddEnemiesToMap() {
     for (const auto &room : rooms) {
 
-        int centerX = room.x + room.width / 2;
-        int centerY = room.y + room.height / 2;
+        int center_x = room.x + room.width / 2;
+        int center_y = room.y + room.height / 2;
 
-        if (!IsCellEmpty(centerX, centerY)) {
+        if (!IsCellEmpty(center_x, center_y)) {
 
-            if (!findNearbyPosition(centerX, centerY)) {
+            if (!findNearbyPosition(center_x, center_y)) {
                 continue;
             }
         }
@@ -238,14 +238,14 @@ void Map::AddEnemiesToMap() {
         int random = std::rand();
 
         if (random % 5 == 0) {
-            enemies_.push_front(std::make_shared<Enemy>(Enemy(1, centerX, centerY)));
-            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(1, center_x, center_y)));
+            SetTile(center_x, center_y, enemies_.front()->GetSymbol());
         } else if (random % 7 == 0) {
-            enemies_.push_front(std::make_shared<Enemy>(Enemy(2, centerX, centerY)));
-            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(2, center_x, center_y)));
+            SetTile(center_x, center_y, enemies_.front()->GetSymbol());
         } else if (random % 9 == 0) {
-            enemies_.push_front(std::make_shared<Enemy>(Enemy(3, centerX, centerY)));
-            setTile(centerX, centerY, enemies_.front()->GetSymbol());
+            enemies_.push_front(std::make_shared<Enemy>(Enemy(3, center_x, center_y)));
+            SetTile(center_x, center_y, enemies_.front()->GetSymbol());
         }
     }
 }
@@ -268,7 +268,7 @@ void Map::DeleteEnemy(Enemy &enemy) {
             continue;
         }
 
-        setTile(x_coord, y_coord, '.');
+        SetTile(x_coord, y_coord, '.');
         enemies_.erase(iter);
         return;
     }

@@ -16,14 +16,14 @@ void Inventory::Add(const std::shared_ptr<Item> &item) {
 
 std::shared_ptr<Item> Inventory::Drop() {
   if (currentIndex_ != -1 && !container_.empty()) {
-    std::shared_ptr<Item> droppedItem = container_[currentIndex_];
+    std::shared_ptr<Item> dropped_item = container_[currentIndex_];
     container_.erase(container_.begin() + currentIndex_);
     if (container_.empty()) {
       currentIndex_ = -1;
     } else if (currentIndex_ >= static_cast<int>(container_.size())) {
         currentIndex_ = static_cast<int>(container_.size()) - 1;
     }
-    return droppedItem;
+    return dropped_item;
   }
   return nullptr;
 }

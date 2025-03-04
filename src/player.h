@@ -36,17 +36,17 @@ public:
   void ReduceHealthForHit(int d_health);
 
 private:
-  int baseHealth_;
-  int health_;
-  int maxHealth_;
-  int basePower;
-  int attackPower;
-  int attackProbability_;
-  QString name;
-  QPoint position_;
-  Inventory inventory_;
-  std::shared_ptr<Sword> sword_ = nullptr;
-  std::shared_ptr<Armor> armor_ = nullptr;
+    int base_health_;
+    int health_;
+    int max_health_;
+    int base_power_;
+    int attack_power_;
+    int attack_probability_;
+    QString name;
+    QPoint position_;
+    Inventory inventory_;
+    std::shared_ptr<Sword> sword_ = nullptr;
+    std::shared_ptr<Armor> armor_ = nullptr;
 };
 
 #endif // PLAYER_H

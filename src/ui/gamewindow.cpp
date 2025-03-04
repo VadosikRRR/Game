@@ -7,7 +7,7 @@
 #include "../gamelogic.h"
 #include "../gamesaverloader.h"
 
-const int PlayerVisibleDistance = 6;
+const int kPlayerVisibleDistance = 6;
 
 const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, QWidget *parent)
@@ -22,15 +22,15 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
     , is_space_pressed_(false)
 {
     setMenuBar(menuBar);
-    QMenu *fileMenu = menuBar->addMenu("Файл");
+    QMenu *file_menu = menuBar->addMenu("Файл");
 
     saveAction = new QAction("Сохранить игру", this);
     connect(saveAction, &QAction::triggered, this, &GameWindow::onSaveClicked);
-    fileMenu->addAction(saveAction);
+    file_menu->addAction(saveAction);
 
     returnToMenuAction = new QAction("Вернуться в меню", this);
     connect(returnToMenuAction, &QAction::triggered, this, &GameWindow::onReturnToMenuClicked);
-    fileMenu->addAction(returnToMenuAction);
+    file_menu->addAction(returnToMenuAction);
 
     inventoryWidget->setStyleSheet("QListWidget { background-color: #f0f0f0; }");
     inventoryWidget->setMinimumSize(200, 300);
@@ -39,31 +39,31 @@ GameWindow::GameWindow(const QString &playerName, int mapWidth, int mapHeight, Q
 
     auto *view = new QGraphicsView(scene_, this);
 
-    int sceneWidth = mapWidth * 10;
-    int sceneHeight = mapHeight * 10;
+    int scene_width = mapWidth * 10;
+    int scene_height = mapHeight * 10;
 
-    view->setFixedSize(sceneWidth, sceneHeight);
+    view->setFixedSize(scene_width, scene_height);
 
-    auto *rightPanel = new QWidget(this);
-    auto *rightLayout = new QVBoxLayout(rightPanel);
-    rightLayout->addWidget(inventoryWidget);
-    rightLayout->addWidget(attackedEnemyWidget);
+    auto *right_panel = new QWidget(this);
+    auto *right_layout = new QVBoxLayout(right_panel);
+    right_layout->addWidget(inventoryWidget);
+    right_layout->addWidget(attackedEnemyWidget);
 
-    auto *mainWidget = new QWidget(this);
-    auto *mainLayout = new QHBoxLayout(mainWidget);
-    mainLayout->addWidget(view, 3);
-    mainLayout->addWidget(rightPanel, 2);
+    auto *main_widget = new QWidget(this);
+    auto *main_layout = new QHBoxLayout(main_widget);
+    main_layout->addWidget(view, 3);
+    main_layout->addWidget(right_panel, 2);
 
     statusBarWidget = new StatusBarWidget(playerName,
-                                          game_logic_->getPlayerHealth(),
-                                          game_logic_->getPlayerAttackPower(),
+                                          game_logic_->GetPlayerHealth(),
+                                          game_logic_->GetPlayerAttackPower(),
                                           this);
-    connect(game_logic_.get(), &GameLogic::statsUpdated, this, &GameWindow::updateStatusBar);
+    connect(game_logic_.get(), &GameLogic::StatsUpdated, this, &GameWindow::updateStatusBar);
 
     auto *container = new QWidget(this);
-    auto *containerLayout = new QVBoxLayout(container);
-    containerLayout->addWidget(mainWidget);
-    containerLayout->addWidget(statusBarWidget);
+    auto *container_layout = new QVBoxLayout(container);
+    container_layout->addWidget(main_widget);
+    container_layout->addWidget(statusBarWidget);
 
     setCentralWidget(container);
 
@@ -146,7 +146,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
     } else if (event->key() == Qt::Key_D) {
         game_logic_->MovePlayer(1, dy);
     } else if (event->key() == Qt::Key_Less || event->key() == Qt::Key_Greater) {
-        game_logic_->interactWithStairs();
+        game_logic_->InteractWithStairs();
     } else if (event->key() == Qt::Key_E) {
         game_logic_->PickUpItem();
         updateInventoryDisplay();
@@ -177,64 +177,64 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
 }
 void GameWindow::updateTile(int x, int y, char tile)
 {
-    auto *tileItem = new QGraphicsSimpleTextItem();
-    tileItem->setText(QString(tile));
-    tileItem->setBrush(Qt::darkGray);
+    auto *tile_item = new QGraphicsSimpleTextItem();
+    tile_item->setText(QString(tile));
+    tile_item->setBrush(Qt::darkGray);
 
-    tileItem->setFont(QFont("Courier", 10));
-    tileItem->setPos(x * 10, y * 10);
+    tile_item->setFont(QFont("Courier", 10));
+    tile_item->setPos(x * 10, y * 10);
 
-    scene_->addItem(tileItem);
+    scene_->addItem(tile_item);
 }
 void GameWindow::updateChangedTiles()
 {
     for (const auto &tile : game_logic_->GetChangedTiles()) {
         int const x = tile.x();
         int const y = tile.y();
-        char const updatedTile = game_logic_->GetCurrentMap().getTile(x, y);
+        char const updated_tile = game_logic_->GetCurrentMap().GetTile(x, y);
 
-        updateTile(x, y, updatedTile);
+        updateTile(x, y, updated_tile);
     }
 
-    game_logic_->clearChangedTiles();
+    game_logic_->ClearChangedTiles();
 }
 
 void GameWindow::render()
 {
     scene_->clear();
 
-    const auto &mapData = game_logic_->GetCurrentMap().getData();
+    const auto &map_data = game_logic_->GetCurrentMap().GetData();
 
-    int const playerX = game_logic_->GetPlayerX();
-    int const playerY = game_logic_->GetPlayerY();
+    int const player_x = game_logic_->GetPlayerX();
+    int const player_y = game_logic_->GetPlayerY();
 
-    for (int y = 0; y < static_cast<int>(mapData.size()); ++y) {
-        for (int x = 0; x < static_cast<int>(mapData[y].size()); ++x) {
+    for (int y = 0; y < static_cast<int>(map_data.size()); ++y) {
+        for (int x = 0; x < static_cast<int>(map_data[y].size()); ++x) {
             updateTile(x, y, ' ');
         }
     }
 
-    for (int var = 1; var <= PlayerVisibleDistance; ++var) {
+    for (int var = 1; var <= kPlayerVisibleDistance; ++var) {
         for (int var2 = 0; var2 <= var; ++var2) {
-            int x = playerX + var - var2;
-            int y = playerY + var2;
-            drowVisibleTile(x, y, mapData);
+            int x = player_x + var - var2;
+            int y = player_y + var2;
+            drowVisibleTile(x, y, map_data);
 
-            x = playerX - (var - var2);
-            y = playerY - var2;
-            drowVisibleTile(x, y, mapData);
+            x = player_x - (var - var2);
+            y = player_y - var2;
+            drowVisibleTile(x, y, map_data);
 
-            x = playerX + var - var2;
-            y = playerY - var2;
-            drowVisibleTile(x, y, mapData);
+            x = player_x + var - var2;
+            y = player_y - var2;
+            drowVisibleTile(x, y, map_data);
 
-            x = playerX - (var - var2);
-            y = playerY + var2;
-            drowVisibleTile(x, y, mapData);
+            x = player_x - (var - var2);
+            y = player_y + var2;
+            drowVisibleTile(x, y, map_data);
         }
     }
 
-    updateTile(playerX, playerY, kPLayerChar);
+    updateTile(player_x, player_y, kPLayerChar);
 }
 
 void GameWindow::drowVisibleTile(int x, int y, const std::vector<std::vector<char>> &mapData) {
@@ -249,32 +249,32 @@ void GameWindow::updateInventoryDisplay()
     inventoryWidget->clear();
 
     const auto &inventory = game_logic_->GetPlayerItems();
-    int const currentIndex = game_logic_->GetCurrentItemIndex();
+    int const current_index = game_logic_->GetCurrentItemIndex();
 
     for (int i = 0; i < static_cast<int>(inventory.size()); ++i) {
-        QString itemInfo = inventory[i]->GetName();
+        QString item_info = inventory[i]->GetName();
 
         // if (auto collectible =
         // std::dynamic_pointer_cast<CollectiblesItem>(inventory[i])) {
         //     itemInfo += QString(" (x%1)").arg(collectible->GetCount());
         // }
 
-        if (i == currentIndex) {
-            itemInfo = "> " + itemInfo;
+        if (i == current_index) {
+            item_info = "> " + item_info;
         }
 
-        inventoryWidget->addItem(itemInfo);
+        inventoryWidget->addItem(item_info);
     }
 }
 
 void GameWindow::updateStatusBar()
 {
     if (statusBarWidget) {
-        const GameStatistics &stats = game_logic_->getGameStatistics();
-        statusBarWidget->setHealth(game_logic_->getPlayerHealth(),
+        const GameStatistics &stats = game_logic_->GetGameStatistics();
+        statusBarWidget->setHealth(game_logic_->GetPlayerHealth(),
                                    game_logic_->GetPlayerMaxHealth());
         statusBarWidget->setLevel(game_logic_->GetCurrentLevel());
-        statusBarWidget->setAttackPower(game_logic_->getPlayerAttackPower());
+        statusBarWidget->setAttackPower(game_logic_->GetPlayerAttackPower());
         statusBarWidget->setStepsTaken(stats.getTotalStepsTaken());
         statusBarWidget->setEnemiesKilled(stats.getTotalEnemiesKilled());
     }
@@ -289,24 +289,24 @@ void GameWindow::updateAttackedEnemies()
         return;
     }
 
-    QString enemyInfo = QString("%1 (%2): %3/%4")
+    QString enemy_info = QString("%1 (%2): %3/%4")
                             .arg(p_enemy->GetName())
                             .arg(QString(QChar(p_enemy->GetSymbol())))
                             .arg(p_enemy->GetHealth())
                             .arg(p_enemy->GetMaxHealth());
 
-    attackedEnemyWidget->addItem(enemyInfo);
+    attackedEnemyWidget->addItem(enemy_info);
 }
 
 
 void GameWindow::checkSurvivalStatus()
 {
-    if (game_logic_->getPlayerHealth() == 0) {
+    if (game_logic_->GetPlayerHealth() == 0) {
         emit killCharacter();
     }
 }
 GameStatistics &GameWindow::getGameStatistics()
 {
-    return game_logic_->getGameStatistics();
+    return game_logic_->GetGameStatistics();
 }
 

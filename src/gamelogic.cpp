@@ -4,35 +4,35 @@
 #include "map.h"
 #include <ctime>
 
-const int VISIBLE_DISTANCE = 5;
-const int FIGHT_DISTANCE = 1;
+const int kVisibleDistance = 5;
+const int kFightDistance = 1;
 
 GameLogic::GameLogic(int mapWidth, int mapHeight, int levels, QObject *parent)
     : QObject(parent)
-    , currentLevel(0)
+    , current_level_(0)
     , attactedEnemy_(nullptr)
 {
     srand(time(nullptr));
 
     for (int i = 0; i < levels; ++i) {
         Map map(mapWidth, mapHeight);
-        map.generateMap();
+        map.GenerateMap();
 
         if (i > 0) {
             Room const room = map.getRandomRoom();
             int x = room.x + room.width / 2;
             int y = room.y + room.height / 2;
 
-            while (map.getTile(x, y) != '.') {
+            while (map.GetTile(x, y) != '.') {
                 x = room.x + 1 + rand() % (room.width - 2);
                 y = room.y + 1 + rand() % (room.height - 2);
             }
             int less_x = room.x + room.width / 2;
             int less_y = room.y + room.height / 2;
-            if (map.getTile(less_x, less_y) != '.') {
+            if (map.GetTile(less_x, less_y) != '.') {
                 map.findNearbyPosition(less_x, less_y);
             }
-            map.setTile(less_x, less_y, '<');
+            map.SetTile(less_x, less_y, '<');
             map.setLessSign(QPoint(less_x, less_y));
         }
 
@@ -41,69 +41,69 @@ GameLogic::GameLogic(int mapWidth, int mapHeight, int levels, QObject *parent)
             int x = room.x + room.width / 2;
             int y = room.y + room.height / 2;
 
-            while (map.getTile(x, y) != '.') {
+            while (map.GetTile(x, y) != '.') {
                 x = room.x + 1 + rand() % (room.width - 2);
                 y = room.y + 1 + rand() % (room.height - 2);
             }
             int greater_x = room.x + room.width / 2;
             int greater_y = room.y + room.height / 2;
-            if (map.getTile(greater_x, greater_y) != '.') {
+            if (map.GetTile(greater_x, greater_y) != '.') {
                 map.findNearbyPosition(greater_x, greater_y);
             }
-            map.setTile(greater_x, greater_y, '>');
+            map.SetTile(greater_x, greater_y, '>');
             map.setGreaterSign(QPoint(greater_x, greater_y));
         }
 
-        maps.push_back(map);
+        maps_.push_back(map);
     }
 
-    Room const startRoom = maps[0].getRandomRoom();
-    int x = startRoom.x + 1 + rand() % (startRoom.width - 2);
-    int y = startRoom.y + 1 + rand() % (startRoom.height - 2);
+    Room const start_room = maps_[0].getRandomRoom();
+    int x = start_room.x + 1 + rand() % (start_room.width - 2);
+    int y = start_room.y + 1 + rand() % (start_room.height - 2);
 
-    while (maps[0].getTile(x, y) != '.') {
-        x = startRoom.x + 1 + rand() % (startRoom.width - 2);
-        y = startRoom.y + 1 + rand() % (startRoom.height - 2);
+    while (maps_[0].GetTile(x, y) != '.') {
+        x = start_room.x + 1 + rand() % (start_room.width - 2);
+        y = start_room.y + 1 + rand() % (start_room.height - 2);
     }
     player_.SetPosition(x, y);
 }
 
 void GameLogic::MovePlayer(int dx, int dy)
 {
-    int const newX = player_.GetX() + dx;
-    int const newY = player_.GetY() + dy;
+    int const new_x = player_.GetX() + dx;
+    int const new_y = player_.GetY() + dy;
 
-    const Map &map = maps[currentLevel];
+    const Map &map = maps_[current_level_];
 
-    if (map.getTile(newX, newY) == '.' || map.getTile(newX, newY) == '+'
-        || map.getTile(newX, newY) == 'A' || map.getTile(newX, newY) == '!'
-        || map.getTile(newX, newY) == '>') {
-        changedTiles.emplace_back(player_.GetX(), player_.GetY());
+    if (map.GetTile(new_x, new_y) == '.' || map.GetTile(new_x, new_y) == '+'
+        || map.GetTile(new_x, new_y) == 'A' || map.GetTile(new_x, new_y) == '!'
+        || map.GetTile(new_x, new_y) == '>') {
+        changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
 
-        player_.SetPosition(newX, newY);
+        player_.SetPosition(new_x, new_y);
 
-        changedTiles.emplace_back(player_.GetX(), player_.GetY());
+        changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
         game_statistics_.incrementStepsTaken();
-        emit statsUpdated();
+        emit StatsUpdated();
     }
 }
 
 void GameLogic::SwitchLevel(int direction)
 {
-    int const newLevel = currentLevel + direction;
+    int const new_level = current_level_ + direction;
 
-    if (newLevel >= 0 && newLevel < static_cast<int>(maps.size())) {
-        currentLevel = newLevel;
-        const Map &newMap = maps[currentLevel];
-        QPoint point = (direction == 1) ? newMap.getLessSign() : newMap.getGreaterSign();
+    if (new_level >= 0 && new_level < static_cast<int>(maps_.size())) {
+        current_level_ = new_level;
+        const Map &new_map = maps_[current_level_];
+        QPoint point = (direction == 1) ? new_map.getLessSign() : new_map.getGreaterSign();
         player_.SetPosition(point.x(), point.y());
-        game_statistics_.setCurrentLevel(currentLevel);
+        game_statistics_.setCurrentLevel(current_level_);
     }
 }
 
 const Map &GameLogic::GetCurrentMap() const
 {
-    return maps[currentLevel];
+    return maps_[current_level_];
 }
 
 int GameLogic::GetPlayerX() const
@@ -118,83 +118,83 @@ int GameLogic::GetPlayerY() const
 
 std::vector<QPoint> GameLogic::GetChangedTiles() const
 {
-    return changedTiles;
+    return changed_tiles_;
 }
 
-void GameLogic::clearChangedTiles()
+void GameLogic::ClearChangedTiles()
 {
-    changedTiles.clear();
+    changed_tiles_.clear();
 }
 
-bool GameLogic::isPlayerOnStairs() const
+bool GameLogic::IsPlayerOnStairs() const
 {
-    char const tile = maps[currentLevel].getTile(player_.GetX(), player_.GetY());
+    char const tile = maps_[current_level_].GetTile(player_.GetX(), player_.GetY());
     return (tile == '<' || tile == '>');
 }
 
 int GameLogic::GetCurrentLevel() const
 {
-    return currentLevel;
+    return current_level_;
 }
 
-void GameLogic::setCurrentLevel(int level)
+void GameLogic::SetCurrentLevel(int level)
 {
-    if (level >= 0 && level < static_cast<int>(maps.size())) {
-        currentLevel = level;
+    if (level >= 0 && level < static_cast<int>(maps_.size())) {
+        current_level_ = level;
     }
 }
 
-void GameLogic::interactWithStairs()
+void GameLogic::InteractWithStairs()
 {
-    if (isPlayerOnStairs()) {
-        char const stair = maps[currentLevel].getTile(player_.GetX(), player_.GetY());
+    if (IsPlayerOnStairs()) {
+        char const stair = maps_[current_level_].GetTile(player_.GetX(), player_.GetY());
         int const direction = (stair == '<') ? -1 : 1;
         SwitchLevel(direction);
     }
 }
 
-void GameLogic::setPlayerPosition(int x, int y)
+void GameLogic::SetPlayerPosition(int x, int y)
 {
     player_.SetPosition(x, y);
 }
 
-void GameLogic::setMapData(const std::vector<std::vector<char>> &data)
+void GameLogic::SetMapData(const std::vector<std::vector<char>> &data)
 {
-    if (currentLevel >= 0 && currentLevel < static_cast<int>(maps.size())) {
-        maps[currentLevel].setData(data);
+    if (current_level_ >= 0 && current_level_ < static_cast<int>(maps_.size())) {
+        maps_[current_level_].setData(data);
     }
 }
 
 const std::vector<Map> &GameLogic::GetAllMaps() const
 {
-    return maps;
+    return maps_;
 }
 
 void GameLogic::SetAllMaps(const std::vector<Map> &newMaps)
 {
-    maps = newMaps;
+    maps_ = newMaps;
 }
 
 void GameLogic::PickUpItem()
 {
     int const x = player_.GetX();
     int const y = player_.GetY();
-    std::shared_ptr<Item> const item = maps[currentLevel].getItemAt(x, y);
+    std::shared_ptr<Item> const item = maps_[current_level_].getItemAt(x, y);
     if (item) {
         player_.PickUpItem(item);
-        maps[currentLevel].removeItemAt(x, y);
+        maps_[current_level_].removeItemAt(x, y);
     }
 }
 
 void GameLogic::DropItem()
 {
-    std::shared_ptr<Item> const currentItem = player_.GetCurrentItem();
-    if (currentItem) {
+    std::shared_ptr<Item> const current_item = player_.GetCurrentItem();
+    if (current_item) {
         int const x = player_.GetX();
         int const y = player_.GetY();
 
-        if (maps[currentLevel].getTile(x, y) == '.') {
-            maps[currentLevel].AddItem(x, y, currentItem);
+        if (maps_[current_level_].GetTile(x, y) == '.') {
+            maps_[current_level_].AddItem(x, y, current_item);
             player_.DropItem();
         }
     }
@@ -225,7 +225,7 @@ void GameLogic::SelectPreviousItem()
     player_.SelectPreviousItem();
 }
 
-int GameLogic::getPlayerHealth() const
+int GameLogic::GetPlayerHealth() const
 {
     return player_.GetHealth();
 }
@@ -235,23 +235,23 @@ int GameLogic::GetPlayerMaxHealth() const
     return player_.GetMaxHealth();
 }
 
-int GameLogic::getPlayerAttackPower() const
+int GameLogic::GetPlayerAttackPower() const
 {
     return player_.GetAttackPower();
 }
 
-Player &GameLogic::getPlayer()
+Player &GameLogic::GetPlayer()
 {
     return player_;
 }
 
 void GameLogic::UpdateEnemies()
 {
-    const Map &map = maps[currentLevel];
+    const Map &map = maps_[current_level_];
     for (const auto &p_enemy : map.GetEnemies()) {
         Enemy &enemy = *p_enemy;
         int distance_to_player = enemy.StepsNumberToPlayer(player_.GetX(), player_.GetY());
-        if (distance_to_player > VISIBLE_DISTANCE) {
+        if (distance_to_player > kVisibleDistance) {
             enemy.RestEnemy();
             continue;
         }
@@ -259,7 +259,7 @@ void GameLogic::UpdateEnemies()
         int result_probability = getRandomInRange(0, 100);
 
         if (result_probability <= enemy.GetAttackProbability()
-            && distance_to_player <= FIGHT_DISTANCE && enemy.GetEnergy() >= ENERGY_FOR_HIT) {
+            && distance_to_player <= kFightDistance && enemy.GetEnergy() >= ENERGY_FOR_HIT) {
             player_.ReduceHealthForHit(enemy.GetAttackPower());
             continue;
         }
@@ -275,30 +275,30 @@ void GameLogic::UpdateEnemies()
 
 void GameLogic::MoveEnemy(Enemy &enemy, QPoint new_position)
 {
-    Map &map = maps[currentLevel];
-    int newX = new_position.x();
-    int newY = new_position.y();
-    char tile = map.getTile(newX, newY);
+    Map &map = maps_[current_level_];
+    int new_x = new_position.x();
+    int new_y = new_position.y();
+    char tile = map.GetTile(new_x, new_y);
 
     if (tile == '.' || tile == '+' || tile == 'A' || tile == '!') {
-        map.setTile(enemy.GetX(), enemy.GetY(), enemy.GetEatenTile());
+        map.SetTile(enemy.GetX(), enemy.GetY(), enemy.GetEatenTile());
         enemy.SetEatenTile(tile);
 
-        enemy.SetPosition(newX, newY);
+        enemy.SetPosition(new_x, new_y);
         enemy.ReduceEnergyForStep();
-        map.setTile(newX, newY, enemy.GetSymbol());
+        map.SetTile(new_x, new_y, enemy.GetSymbol());
         return;
     }
 
     enemy.RestEnemy();
 }
 
-GameStatistics &GameLogic::getGameStatistics()
+GameStatistics &GameLogic::GetGameStatistics()
 {
     return game_statistics_;
 }
 
-const GameStatistics &GameLogic::getGameStatistics() const
+const GameStatistics &GameLogic::GetGameStatistics() const
 {
     return game_statistics_;
 }
@@ -307,8 +307,8 @@ void GameLogic::HitEnemy(int dx, int dy)
 {
     int x_enemy = player_.GetX() + dx;
     int y_enemy = player_.GetY() + dy;
-    Map &map = maps[currentLevel];
-    char symbol = map.getTile(x_enemy, y_enemy);
+    Map &map = maps_[current_level_];
+    char symbol = map.GetTile(x_enemy, y_enemy);
     if (symbol != SYMBOL_1 && symbol != SYMBOL_2 && symbol != SYMBOL_3) {
         return;
     }
@@ -342,7 +342,7 @@ std::shared_ptr<Enemy> GameLogic::GetAttackedEnemy()
     return attactedEnemy_;
 }
 
-void GameLogic::incrementEnemiesKilled()
+void GameLogic::IncrementEnemiesKilled()
 {
     game_statistics_.incrementEnemiesKilled();
 }

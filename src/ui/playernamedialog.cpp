@@ -17,10 +17,10 @@ PlayerNameDialog::PlayerNameDialog(QWidget *parent)
 
   layout->addWidget(nameInput);
 
-  auto *confirmButton = new QPushButton("Confirm", this);
-  connect(confirmButton, &QPushButton::clicked, this,
+  auto *confirm_button = new QPushButton("Confirm", this);
+  connect(confirm_button, &QPushButton::clicked, this,
           &PlayerNameDialog::accept);
-  layout->addWidget(confirmButton);
+  layout->addWidget(confirm_button);
 }
 
 QString PlayerNameDialog::getPlayerName() const { return nameInput->text(); }

@@ -15,7 +15,7 @@ StatusBarWidget::StatusBarWidget(const QString &playerName,
 
     levelLabel = new QLabel(this);
     levelLabel->setStyleSheet("QLabel { color: green; font-size: 15px; }");
-    levelLabel->setText("Текущий уровень: " + QString::number(attackPower));
+    levelLabel->setText("Текущий уровень: 0");
     layout->addWidget(levelLabel);
 
     healthBar = new QProgressBar(this);

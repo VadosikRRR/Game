@@ -71,10 +71,10 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &gameLog
 {
     QJsonObject player_object;
     player_object["name"] = player_name_;
-    player_object["health"] = gameLogic.getPlayerHealth();
+    player_object["health"] = gameLogic.GetPlayerHealth();
     player_object["currentLevel"] = gameLogic.GetCurrentLevel();
 
-    const GameStatistics &stats = gameLogic.getGameStatistics();
+    const GameStatistics &stats = gameLogic.GetGameStatistics();
     player_object["totalStepsTaken"] = stats.getTotalStepsTaken();
     player_object["totalEnemiesKilled"] = stats.getTotalEnemiesKilled();
 
@@ -105,7 +105,7 @@ void GameSaverLoader::SaveMapData(QJsonArray &mapsArray, const GameLogic &gameLo
         QJsonObject map_object;
 
         QJsonArray data_array;
-        for (const auto &row : map.getData()) {
+        for (const auto &row : map.GetData()) {
             data_array.append(QString::fromStdString(std::string(row.begin(), row.end())));
         }
         map_object["data"] = data_array;
@@ -160,12 +160,12 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
         return false;
     }
     int current_level = player_object["currentLevel"].toInt();
-    gameLogic.setCurrentLevel(current_level);
+    gameLogic.SetCurrentLevel(current_level);
 
     int health = player_object["health"].toInt();
-    gameLogic.getPlayer().SetHealth(health);
+    gameLogic.GetPlayer().SetHealth(health);
 
-    GameStatistics &stats = gameLogic.getGameStatistics();
+    GameStatistics &stats = gameLogic.GetGameStatistics();
     stats.setCurrentLevel(current_level);
     stats.setStepsTaken(player_object["totalStepsTaken"].toInt());
     stats.setEnemiesKilled(player_object["totalEnemiesKilled"].toInt());
@@ -173,7 +173,7 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
     QJsonObject position_object = player_object["position"].toObject();
     int player_x = position_object["x"].toInt();
     int player_y = position_object["y"].toInt();
-    gameLogic.setPlayerPosition(player_x, player_y);
+    gameLogic.SetPlayerPosition(player_x, player_y);
 
     QJsonArray inventory_array = player_object["inventory"].toArray();
     for (const auto &item_value : inventory_array) {
@@ -196,7 +196,7 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &gameLog
         }
 
         if (item) {
-            gameLogic.getPlayer().PickUpItem(item);
+            gameLogic.GetPlayer().PickUpItem(item);
         }
     }
 

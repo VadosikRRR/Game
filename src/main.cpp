@@ -4,8 +4,8 @@
 auto main(int argc, char *argv[]) -> int {
   QApplication const app(argc, argv);
 
-  MainMenu mainMenu;
-  mainMenu.show();
+  MainMenu main_menu;
+  main_menu.show();
 
   return QApplication::exec();
 }
