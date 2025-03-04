@@ -77,7 +77,7 @@ void GameLogic::MovePlayer(int dx, int dy)
 
     if (map.GetTile(new_x, new_y) == '.' || map.GetTile(new_x, new_y) == '+'
         || map.GetTile(new_x, new_y) == 'A' || map.GetTile(new_x, new_y) == '!'
-        || map.GetTile(new_x, new_y) == '>') {
+        || map.GetTile(new_x, new_y) == '>' || map.GetTile(new_x, new_y) == '<') {
         changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
 
         player_.SetPosition(new_x, new_y);
