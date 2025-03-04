@@ -12,10 +12,10 @@ const int kMaxsize = 10;
 const int kDefense = 50;
 
 Map::Map(int mapWidth, int mapHeight)
-    : mapWidth(mapWidth), mapHeight(mapHeight) {
+    : map_width_(mapWidth), map_height_(mapHeight) {
 
-  mapData = std::vector<std::vector<char>>(mapHeight,
-                                           std::vector<char>(mapWidth, '#'));
+  map_data_ = std::vector<std::vector<char>>(map_height_,
+                                           std::vector<char>(map_width_, '#'));
 }
 
 void Map::GenerateMap() {
@@ -29,12 +29,12 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
   for (int i = 0; i < roomCount; ++i) {
     int const width = minSize + std::rand() % (maxSize - minSize + 1);
     int const height = minSize + std::rand() % (maxSize - minSize + 1);
-    int const x = std::rand() % (mapWidth - width - 1) + 1;
-    int const y = std::rand() % (mapHeight - height - 1) + 1;
+    int const x = std::rand() % (map_width_ - width - 1) + 1;
+    int const y = std::rand() % (map_height_ - height - 1) + 1;
     Room const room = {x, y, width, height};
 
     bool intersects = false;
-    for (const auto &existing_room : rooms) {
+    for (const auto &existing_room : rooms_) {
       if (x < existing_room.x + existing_room.width &&
           x + width > existing_room.x &&
           y < existing_room.y + existing_room.height &&
@@ -45,25 +45,25 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
     }
 
     if (!intersects) {
-      rooms.push_back(room);
+      rooms_.push_back(room);
       drawRoom(room);
     }
   }
 }
 Room Map::getRandomRoom() const {
-  if (rooms.empty()) {
+  if (rooms_.empty()) {
     return {0, 0, 1, 1};
   }
-  return rooms[std::rand() % static_cast<int>(rooms.size())];
+  return rooms_[std::rand() % static_cast<int>(rooms_.size())];
 }
 
 void Map::connectRooms() {
-  for (size_t i = 1; i < rooms.size(); ++i) {
-    int const x1 = rooms[i - 1].x + rooms[i - 1].width / 2;
-    int const y1 = rooms[i - 1].y + rooms[i - 1].height / 2;
+  for (size_t i = 1; i < rooms_.size(); ++i) {
+    int const x1 = rooms_[i - 1].x + rooms_[i - 1].width / 2;
+    int const y1 = rooms_[i - 1].y + rooms_[i - 1].height / 2;
 
-    int const x2 = rooms[i].x + rooms[i].width / 2;
-    int const y2 = rooms[i].y + rooms[i].height / 2;
+    int const x2 = rooms_[i].x + rooms_[i].width / 2;
+    int const y2 = rooms_[i].y + rooms_[i].height / 2;
 
     if (std::rand() % 2 == 0) {
       drawHorizontalCorridor(x1, x2, y1);
@@ -102,31 +102,31 @@ void Map::drawVerticalCorridor(int y1, int y2, int x) {
 }
 
 bool Map::IsWalkable(int x, int y) const {
-  if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
+  if (x < 0 || x >= map_width_ || y < 0 || y >= map_height_) {
     return false;
   }
-  return mapData[y][x] == '.';
+  return map_data_[y][x] == '.';
 }
 
 void Map::SetTile(int x, int y, char tile) {
-  if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
-    mapData[y][x] = tile;
+  if (x >= 0 && x < map_width_ && y >= 0 && y < map_height_) {
+    map_data_[y][x] = tile;
   }
 }
 
 char Map::GetTile(int x, int y) const {
-  if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) {
-    return mapData[y][x];
+  if (x >= 0 && x < map_width_ && y >= 0 && y < map_height_) {
+    return map_data_[y][x];
   }
   return '#';
 }
 
-const std::vector<std::vector<char>> &Map::GetData() const { return mapData; }
+const std::vector<std::vector<char>> &Map::GetData() const { return map_data_; }
 
 void Map::setData(const std::vector<std::vector<char>> &newData) {
-    if (static_cast<int>(newData.size()) == mapHeight && !newData.empty() &&
-        static_cast<int>(newData[0].size()) == mapWidth) {
-    mapData = newData;
+    if (static_cast<int>(newData.size()) == map_height_ && !newData.empty() &&
+        static_cast<int>(newData[0].size()) == map_width_) {
+    map_data_ = newData;
   } else {
     throw std::invalid_argument("Invalid map data size");
   }
@@ -157,7 +157,7 @@ bool Map::findNearbyPosition(int &x, int &y) {
 }
 
 void Map::addItemsToMap() {
-  for (const auto &room : rooms) {
+  for (const auto &room : rooms_) {
 
     int center_x = room.x + room.width / 2;
     int center_y = room.y + room.height / 2;
@@ -223,7 +223,7 @@ void Map::AddEnemy(std::shared_ptr<Enemy> p_enemy) {
 }
 
 void Map::AddEnemiesToMap() {
-    for (const auto &room : rooms) {
+    for (const auto &room : rooms_) {
 
         int center_x = room.x + room.width / 2;
         int center_y = room.y + room.height / 2;

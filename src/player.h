@@ -42,7 +42,7 @@ private:
     int base_power_;
     int attack_power_;
     int attack_probability_;
-    QString name;
+    QString name_;
     QPoint position_;
     Inventory inventory_;
     std::shared_ptr<Sword> sword_ = nullptr;

@@ -36,12 +36,12 @@ class Enemy {
 private:
     char symbol_;
     int level_;
-    int attackPower_;
+    int attack_power_;
     int health_;
-    int maxHealth_;
+    int max_health_;
     int energy_;
-    int maxEnergy_;
-    int attackProbability_;
+    int max_energy_;
+    int attack_probability_;
     QString name_;
     QPoint position_;
 

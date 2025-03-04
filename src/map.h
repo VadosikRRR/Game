@@ -60,9 +60,9 @@ public:
   QPoint getLessSign() const;
 
 private:
-  int mapWidth, mapHeight;
-  std::vector<std::vector<char>> mapData;
-  std::vector<Room> rooms;
+  int map_width_, map_height_;
+  std::vector<std::vector<char>> map_data_;
+  std::vector<Room> rooms_;
   std::unordered_map<QPoint, std::shared_ptr<Item>> items_;
   std::list<std::shared_ptr<Enemy>> enemies_;
 

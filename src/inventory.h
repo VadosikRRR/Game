@@ -19,7 +19,7 @@ public:
 
 private:
   std::vector<std::shared_ptr<Item>> container_;
-  int currentIndex_;
+  int current_index_;
 };
 
 #endif // INVENTORY_H

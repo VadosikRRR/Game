@@ -5,7 +5,7 @@
 
 Player::Player(const QString &name)
     : base_health_(100), health_(100), max_health_(100), base_power_(10),
-    attack_power_(10), attack_probability_(PLAYER_ATTACK_PROBABILITY), name(std::move(name)) {}
+    attack_power_(10), attack_probability_(PLAYER_ATTACK_PROBABILITY), name_(std::move(name)) {}
 
 void Player::EquipSword() {
     std::shared_ptr<Item> const current_item = inventory_.GetCurrItem();
