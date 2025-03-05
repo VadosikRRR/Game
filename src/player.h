@@ -32,6 +32,8 @@ public:
   void SelectNextItem();
   void SelectPreviousItem();
   void SetHealth(int new_health);
+  void SetMaxHealth(int new_max_health);
+  void SetDamage(int new_damage);
 
   void ReduceHealthForHit(int d_health);
 

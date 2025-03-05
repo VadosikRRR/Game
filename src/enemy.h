@@ -46,9 +46,6 @@ private:
     QPoint position_;
 
     char eaten_tile_ = '.';
-
-    void SetEnergy(int new_enegry);
-    void SetHealth(int new_health);
 public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
 
@@ -65,6 +62,8 @@ public:
     QString GetName() const;
 
     void SetPosition(int x, int y);
+    void SetEnergy(int new_enegry);
+    void SetHealth(int new_health);
     void RestEnemy();
     void ReduceEnergyForStep();
     void ReduceEnergyForHit();
