@@ -53,26 +53,37 @@ std::shared_ptr<Item> Player::DropItem() { return inventory_.Drop(); }
 
 void Player::UseItem() {
   std::shared_ptr<Item> const curr_item = inventory_.GetCurrItem();
-  if (curr_item) {
-    if (curr_item->GetName() == "MedKit") {
-      health_ += Constant::med_kit_heal;
-      if (health_ > max_health_) {
-        health_ = max_health_;
+
+  if (!curr_item) {
+      return;
+  }
+  if (curr_item->GetName().left(6) == "MedKit") {
+      std::shared_ptr<CollectiblesItem> medkit = std::dynamic_pointer_cast<CollectiblesItem>(
+          curr_item);
+      if (!medkit) {
+          return;
       }
-      inventory_.Drop();
-    }
-    if (curr_item->GetName().left(5) == "Sword") {
+      health_ += kMedKitHeal;
+
+      if (health_ > max_health_) {
+          health_ = max_health_;
+      }
+      medkit->Drop();
+      if (medkit->GetCount() == 0) {
+          inventory_.Drop();
+      }
+  }
+  if (curr_item->GetName().left(5) == "Sword") {
       if (sword_) {
-        PickUpItem(sword_);
+          PickUpItem(sword_);
       }
       EquipSword();
-    }
-    if (curr_item->GetName().left(5) == "Armor") {
+  }
+  if (curr_item->GetName().left(5) == "Armor") {
       if (armor_) {
-        PickUpItem(armor_);
+          PickUpItem(armor_);
       }
       EquipArmor();
-    }
   }
 }
 std::vector<std::shared_ptr<Item>> Player::GetItems() const {

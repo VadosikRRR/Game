@@ -100,6 +100,8 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &game_lo
             item_object["damage"] = sword->GetDamage();
         } else if (auto armor = std::dynamic_pointer_cast<Armor>(item)) {
             item_object["defence"] = armor->GetDefense();
+        } else if (auto medkit = std::dynamic_pointer_cast<MedKit>(item)) {
+            item_object["defence"] = medkit->GetCount();
         }
         inventory_array.append(item_object);
     }
@@ -118,6 +120,16 @@ void GameSaverLoader::SaveMapData(QJsonArray &maps_array, const GameLogic &game_
             data_array.append(QString::fromStdString(std::string(row.begin(), row.end())));
         }
         map_object["data"] = data_array;
+
+        QJsonObject stairs_object;
+        QPoint less_sign = map.GetLessSign();
+        QPoint greater_sign = map.GetGreaterSign();
+        stairs_object["less_x"] = less_sign.x();
+        stairs_object["less_y"] = less_sign.y();
+        stairs_object["greater_x"] = greater_sign.x();
+        stairs_object["greater_y"] = greater_sign.y();
+        map_object["stairs"] = stairs_object;
+
         SaveRooms(map_object, map);
         SaveCorridors(map_object, map);
         SaveItems(map_object, map);
@@ -254,7 +266,8 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &game_lo
             int damage = item_param.toInt();
             item = std::make_shared<Sword>(damage);
         } else if (item_name == "MedKit") {
-            item = std::make_shared<MedKit>();
+            int count = item_param.toInt();
+            item = std::make_shared<MedKit>(count);
         } else if (item_name == "Armor") {
             int defense = item_param.toInt();
             item = std::make_shared<Armor>(defense);
@@ -287,6 +300,12 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_
 
         Map map(map_data[0].size(), map_data.size());
         map.SetData(map_data);
+
+        QJsonObject stairs_object = map_object["stairs"].toObject();
+        QPoint less_sign(stairs_object["less_x"].toInt(), stairs_object["less_y"].toInt());
+        QPoint greater_sign(stairs_object["greater_x"].toInt(), stairs_object["greater_y"].toInt());
+        map.SetLessSign(less_sign);
+        map.SetGreaterSign(greater_sign);
 
         LoadRooms(map_object["rooms"].toArray(), map);
         LoadCorridors(map_object["corridors"].toArray(), map);

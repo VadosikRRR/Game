@@ -16,7 +16,7 @@ public:
 
 class CollectiblesItem : public Item {
 public:
-  void Add();
+  void Add(int num);
   void Drop();
   int GetCount() const;
   virtual ~CollectiblesItem() = default;
@@ -41,6 +41,7 @@ private:
 class MedKit : public CollectiblesItem {
 public:
   MedKit() = default;
+  MedKit(unsigned count);
   ~MedKit() = default;
   QString GetName() const override;
   char GetTile() const override;
