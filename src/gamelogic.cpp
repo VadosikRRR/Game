@@ -66,6 +66,7 @@ GameLogic::GameLogic(int map_width, int map_height, int levels, QObject *parent)
         y = start_room.y + 1 + rand() % (start_room.height - 2);
     }
     player_.SetPosition(x, y);
+    UpdateVisibleZone();
 }
 
 void GameLogic::MovePlayer(int dx, int dy)
@@ -77,14 +78,29 @@ void GameLogic::MovePlayer(int dx, int dy)
 
     if (map.GetTile(new_x, new_y) == '.' || map.GetTile(new_x, new_y) == '+'
         || map.GetTile(new_x, new_y) == 'A' || map.GetTile(new_x, new_y) == '!'
-        || map.GetTile(new_x, new_y) == '>') {
+        || map.GetTile(new_x, new_y) == '>' || map.GetTile(new_x, new_y) == '<') {
         changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
 
         player_.SetPosition(new_x, new_y);
-
+        UpdateVisibleZone();
         changed_tiles_.emplace_back(player_.GetX(), player_.GetY());
         game_statistics_.IncrementStepsTaken();
         emit StatsUpdated();
+    }
+}
+
+void GameLogic::UpdateVisibleZone() {
+    std::shared_ptr<Room> p_room = maps_[current_level_].GetRoom(player_.GetX(), player_.GetY());
+    if (p_room) {
+        RoomExplored(*p_room);
+    }
+}
+
+void GameLogic::RoomExplored(Room &room) {
+    for (int y = room.y - 1; y <= room.y + room.height; ++y) {
+        for (int x = room.x - 1; x <= room.x + room.width; ++x) {
+            maps_[current_level_].TileExplored(x, y);
+        }
     }
 }
 
@@ -98,6 +114,7 @@ void GameLogic::SwitchLevel(int direction)
         QPoint point = (direction == 1) ? new_map.getLessSign() : new_map.getGreaterSign();
         player_.SetPosition(point.x(), point.y());
         game_statistics_.SetCurrentLevel(current_level_);
+        UpdateVisibleZone();
     }
 }
 
@@ -345,4 +362,17 @@ std::shared_ptr<Enemy> GameLogic::GetAttackedEnemy()
 void GameLogic::IncrementEnemiesKilled()
 {
     game_statistics_.IncrementEnemiesKilled();
+}
+
+void GameLogic::SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new_visilbe_zones) {
+    for (int ind1 = 0; ind1 < static_cast<int>(maps_.size()); ++ind1) {
+        Map &map = maps_[ind1];
+        std::vector<std::vector<bool>> &new_visible_zone = new_visilbe_zones[ind1];
+        for (int y = 0; y < static_cast<int>(new_visible_zone.size()); ++y) {
+            std::vector<bool> row = new_visible_zone[y];
+            for (int x = 0; x < static_cast<int>(row.size()); ++x) {
+                map.SetExplored(x, y, row[x]);
+            }
+        }
+    }
 }

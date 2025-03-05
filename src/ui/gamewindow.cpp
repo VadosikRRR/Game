@@ -110,6 +110,7 @@ void GameWindow::OnSaveClicked()
 bool GameWindow::LoadGameState()
 {
     if (game_saver_loader_->LoadGame(*game_logic_)) {
+        game_logic_->UpdateVisibleZone();
         Render();
         return true;
     }
@@ -202,35 +203,21 @@ void GameWindow::UpdateChangedTiles()
 void GameWindow::Render()
 {
     scene_->clear();
-
+    const Map & now_map = game_logic_->GetCurrentMap();
     const auto &map_data = game_logic_->GetCurrentMap().GetData();
 
     int const player_x = game_logic_->GetPlayerX();
     int const player_y = game_logic_->GetPlayerY();
 
+
+
     for (int y = 0; y < static_cast<int>(map_data.size()); ++y) {
         for (int x = 0; x < static_cast<int>(map_data[y].size()); ++x) {
-            UpdateTile(x, y, ' ');
-        }
-    }
-
-    for (int var = 1; var <= kPlayerVisibleDistance; ++var) {
-        for (int var2 = 0; var2 <= var; ++var2) {
-            int x = player_x + var - var2;
-            int y = player_y + var2;
-            DrawVisibleTile(x, y, map_data);
-
-            x = player_x - (var - var2);
-            y = player_y - var2;
-            DrawVisibleTile(x, y, map_data);
-
-            x = player_x + var - var2;
-            y = player_y - var2;
-            DrawVisibleTile(x, y, map_data);
-
-            x = player_x - (var - var2);
-            y = player_y + var2;
-            DrawVisibleTile(x, y, map_data);
+            if (now_map.IsExplored(x, y)) {
+                UpdateTile(x, y, map_data[y][x]);
+            } else {
+                UpdateTile(x, y, ' ');
+            }
         }
     }
 

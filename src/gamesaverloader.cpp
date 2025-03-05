@@ -30,6 +30,10 @@ bool GameSaverLoader::SaveGame(const GameLogic &game_logic)
     SaveMapData(maps_array, game_logic);
     json["maps"] = maps_array;
 
+    QJsonArray visible_zones_array;
+    SaveVisibleZoneData(visible_zones_array, game_logic);
+    json["visible_zones"] = visible_zones_array;
+
     QFile file(GetSaveFilePath());
     if (!file.open(QIODevice::WriteOnly)) {
         return false;
@@ -61,6 +65,9 @@ bool GameSaverLoader::LoadGame(GameLogic &game_logic)
         return false;
     }
     if (!LoadMapData(json["maps"].toArray(), game_logic)) {
+        return false;
+    }
+    if (!LoadVisibleZoneData(json["visible_zones"].toArray(), game_logic)) {
         return false;
     }
 
@@ -109,12 +116,41 @@ void GameSaverLoader::SaveMapData(QJsonArray &maps_array, const GameLogic &game_
             data_array.append(QString::fromStdString(std::string(row.begin(), row.end())));
         }
         map_object["data"] = data_array;
-
+        SaveRooms(map_object, map);
+        SaveCorridors(map_object, map);
         SaveItems(map_object, map);
         SaveEnemies(map_object, map);
 
         maps_array.append(map_object);
     }
+}
+
+void GameSaverLoader::SaveRooms(QJsonObject &map_object, const Map &map) {
+    QJsonArray rooms_array;
+    for (const auto &room : map.GetRooms()) {
+        QJsonObject room_object;
+        room_object["x"] = room.x;
+        room_object["y"] = room.y;
+        room_object["width"] = room.width;
+        room_object["height"] = room.height;
+        rooms_array.push_back(room_object);
+    }
+
+    map_object["rooms"] = rooms_array;
+}
+
+void GameSaverLoader::SaveCorridors(QJsonObject &map_object, const Map &map) {
+    QJsonArray corridors_array;
+    for (const auto &corridor : map.GetCorridors()) {
+        QJsonObject corridor_object;
+        corridor_object["x"] = corridor.x;
+        corridor_object["y"] = corridor.y;
+        corridor_object["width"] = corridor.width;
+        corridor_object["height"] = corridor.height;
+        corridors_array.push_back(corridor_object);
+    }
+
+    map_object["corridors"] = corridors_array;
 }
 
 void GameSaverLoader::SaveItems(QJsonObject &map_object, const Map &map)
@@ -146,6 +182,25 @@ void GameSaverLoader::SaveEnemies(QJsonObject &map_object, const Map &map)
         enemies_array.append(enemy_object);
     }
     map_object["enemies"] = enemies_array;
+}
+
+void GameSaverLoader::SaveVisibleZoneData(QJsonArray &visible_zones_array, const GameLogic &game_logic) {
+    for (const auto &map : game_logic.GetAllMaps()) {
+        QJsonObject map_object;
+
+        QJsonArray data_array;
+        for (const auto &row : map.GetVisibleZone()) {
+            QJsonArray row_array;
+            for (size_t ind = 0; ind < row.size(); ++ind) {
+                row_array.push_back(row[ind]);
+            }
+
+            data_array.push_back(row_array);
+        }
+
+        map_object["visible_zone"] = data_array;
+        visible_zones_array.append(map_object);
+    }
 }
 
 bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &game_logic)
@@ -215,7 +270,7 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_
             QString row = row_value.toString();
             std::vector<char> row_data;
             for (QChar qchar : row) {
- row_data.push_back(qchar.toLatin1());
+                row_data.push_back(qchar.toLatin1());
             }
             map_data.push_back(row_data);
         }
@@ -223,6 +278,8 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_
         Map map(map_data[0].size(), map_data.size());
         map.setData(map_data);
 
+        LoadRooms(map_object["rooms"].toArray(), map);
+        LoadCorridors(map_object["corridors"].toArray(), map);
         LoadItems(map_object["items"].toArray(), map);
         LoadEnemies(map_object["enemies"].toArray(), map);
 
@@ -230,6 +287,34 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_
     }
 
     game_logic.SetAllMaps(maps);
+    return true;
+}
+
+bool GameSaverLoader::LoadRooms(const QJsonArray &rooms_array, Map &map) {
+    for (const auto &room_value : rooms_array) {
+        QJsonObject room_object = room_value.toObject();
+        int x = room_object["x"].toInt();
+        int y = room_object["y"].toInt();
+        int width = room_object["width"].toInt();
+        int height = room_object["height"].toInt();
+        Room room = {x, y, width, height};
+        map.LoadRoom(room);
+    }
+
+    return true;
+}
+
+bool GameSaverLoader::LoadCorridors(const QJsonArray &corridors_array, Map &map) {
+    for (const auto &corridor_value : corridors_array) {
+        QJsonObject corridor_object = corridor_value.toObject();
+        int x = corridor_object["x"].toInt();
+        int y = corridor_object["y"].toInt();
+        int width = corridor_object["width"].toInt();
+        int height = corridor_object["height"].toInt();
+        Room corridor = {x, y, width, height};
+        map.LoadCorridor(corridor);
+    }
+
     return true;
 }
 
@@ -277,5 +362,30 @@ bool GameSaverLoader::LoadEnemies(const QJsonArray &enemies_array, Map &map)
         std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(level, x, y);
         map.LoadEnemy(enemy);
     }
+    return true;
+}
+
+bool GameSaverLoader::LoadVisibleZoneData(const QJsonArray &visible_zones_array, GameLogic &game_logic) {
+    std::vector<std::vector<std::vector<bool>>> new_visible_zones;
+
+    for (qsizetype ind1 = 0; ind1 < visible_zones_array.size(); ++ind1) {
+        std::vector<std::vector<bool>> new_visible_zone;
+        QJsonObject visible_zone_object = visible_zones_array[ind1].toObject();
+        QJsonArray visible_zone = visible_zone_object["visible_zone"].toArray();
+        for (qsizetype ind2 = 0; ind2 < visible_zone.size(); ++ind2) {
+            std::vector<bool> new_row;
+            QJsonArray row = visible_zone[ind2].toArray();
+            for (qsizetype ind3 = 0; ind3 < row.size(); ++ind3) {
+                new_row.push_back(row[ind3].toBool());
+            }
+
+            new_visible_zone.push_back(new_row);
+        }
+
+        new_visible_zones.push_back(new_visible_zone);
+    }
+
+    game_logic.SetVisibleZones(new_visible_zones);
+
     return true;
 }
