@@ -32,6 +32,10 @@
 #define ENERGY_REST 10
 #define ENERGY_FOR_HIT 15
 
+#define DROP_PROBABILITY_1 25
+#define DROP_PROBABILITY_2 50
+#define DROP_PROBABILITY_3 75
+
 class Enemy {
 private:
     char symbol_;

@@ -68,6 +68,7 @@ private:
     std::shared_ptr<Enemy> attacked_enemy_;
 
     void RoomExplored(Room &room);
+    void DropWithEnemy(Enemy &enemy);
 };
 
 #endif // GAMELOGIC_H

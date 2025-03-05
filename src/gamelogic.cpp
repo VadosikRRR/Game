@@ -90,9 +90,11 @@ void GameLogic::MovePlayer(int dx, int dy)
 }
 
 void GameLogic::UpdateVisibleZone() {
-    std::shared_ptr<Room> p_room = maps_[current_level_].GetRoom(player_.GetX(), player_.GetY());
-    if (p_room) {
-        RoomExplored(*p_room);
+    auto p_rooms_vect = maps_[current_level_].GetRoomsWithPlayer(player_.GetX(), player_.GetY());
+    for (const auto & p_room : *p_rooms_vect) {
+        if (p_room) {
+            RoomExplored(*(p_room));
+        }
     }
 }
 
@@ -347,6 +349,7 @@ void GameLogic::HitEnemy(int dx, int dy)
 
         if (p_enemy->GetHealth() <= 0) {
             map.DeleteEnemy(*p_enemy);
+            DropWithEnemy(*p_enemy);
             game_statistics_.IncrementEnemiesKilled();
         }
 
@@ -374,5 +377,22 @@ void GameLogic::SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new
                 map.SetExplored(x, y, row[x]);
             }
         }
+    }
+}
+
+void GameLogic::DropWithEnemy(Enemy &enemy) {
+    int result_probability = GetRandomInRange(0, 100);
+
+    if (enemy.GetSymbol() == SYMBOL_1 && result_probability > DROP_PROBABILITY_1) {
+        return;
+    } else if (enemy.GetSymbol() == SYMBOL_2 && result_probability > DROP_PROBABILITY_2) {
+        return;
+    } else if (enemy.GetSymbol() == SYMBOL_3 && result_probability > DROP_PROBABILITY_3) {
+        return;
+    }
+
+    std::shared_ptr<Item> p_item = GetRandomItem();
+    if (p_item) {
+        maps_[current_level_].AddItem(enemy.GetX(), enemy.GetY(), p_item);
     }
 }
