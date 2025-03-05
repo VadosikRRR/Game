@@ -5,7 +5,7 @@
 
 Player::Player(const QString &name)
     : base_health_(100), health_(100), max_health_(100), base_power_(10),
-    attack_power_(10), attack_probability_(PLAYER_ATTACK_PROBABILITY), name_(std::move(name)) {}
+    attack_power_(10), attack_probability_(Constant::player_attack_probability), name_(std::move(name)) {}
 
 void Player::EquipSword() {
     std::shared_ptr<Item> const current_item = inventory_.GetCurrItem();
@@ -53,6 +53,7 @@ std::shared_ptr<Item> Player::DropItem() { return inventory_.Drop(); }
 
 void Player::UseItem() {
   std::shared_ptr<Item> const curr_item = inventory_.GetCurrItem();
+
   if (!curr_item) {
       return;
   }
@@ -63,6 +64,7 @@ void Player::UseItem() {
           return;
       }
       health_ += kMedKitHeal;
+
       if (health_ > max_health_) {
           health_ = max_health_;
       }
@@ -119,4 +121,25 @@ void Player::SetHealth(int new_health) {
 
 void Player::ReduceHealthForHit(int d_health) {
     SetHealth(health_ - d_health);
+}
+
+void Player::SetMaxHealth(int new_max_health) {
+    if (new_max_health < 0) {
+        max_health_ = 100;
+        return;
+    }
+    if (new_max_health < health_) {
+        health_ = new_max_health;
+    }
+
+    max_health_ = new_max_health;
+}
+
+void Player::SetDamage(int new_damage) {
+    if (new_damage < 0) {
+        attack_power_ = 10;
+        return;
+    }
+
+    attack_power_ = new_damage;
 }

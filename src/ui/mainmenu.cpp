@@ -2,7 +2,6 @@
 #include <QDir>
 #include <QInputDialog>
 #include <QMessageBox>
-#include "../config.h"
 #include "playernamedialog.h"
 
 MainMenu::MainMenu(QWidget *parent)
@@ -46,8 +45,8 @@ void MainMenu::StartNewGame()
         current_game_window_->close();
     }
     current_game_window_ = std::make_unique<GameWindow>(player_name,
-                                                        config::kMapWidth,
-                                                        config::kMapHeight);
+                                                        Constant::map_width,
+                                                        Constant::map_height);
 
     connect(current_game_window_.get(), &GameWindow::ReturnToMenu, this, [this]() {
         current_game_window_->hide();
@@ -98,8 +97,8 @@ void MainMenu::LoadGame()
         current_game_window_->close();
     }
     current_game_window_ = std::make_unique<GameWindow>(player_name,
-                                                        config::kMapWidth,
-                                                        config::kMapHeight);
+                                                        Constant::map_width,
+                                                        Constant::map_height);
     connect(current_game_window_.get(), &GameWindow::ReturnToMenu, this, [this]() {
         current_game_window_->hide();
         continue_button_->setVisible(true);

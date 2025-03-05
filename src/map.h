@@ -40,7 +40,7 @@ public:
   void SetExplored(int x, int y, bool is_explored);
 
   const std::vector<std::vector<char>> &GetData() const;
-  std::shared_ptr<Room> GetRoom(int x, int y) const;
+  std::shared_ptr<std::vector<std::shared_ptr<Room>>> GetRoomsWithPlayer(int x, int y) const;
   const std::vector<Room> &GetRooms() const;
   const std::vector<Room> &GetCorridors() const;
   Room GetRandomRoom() const;
@@ -91,5 +91,6 @@ public:
 };
 
 int GetRandomInRange(int min, int max);
+std::shared_ptr<Item> GetRandomItem();
 
 #endif // MAP_H

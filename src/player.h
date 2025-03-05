@@ -5,8 +5,7 @@
 #include <QPoint>
 #include <QString>
 #include <memory>
-
-#define PLAYER_ATTACK_PROBABILITY 75
+#include "constants.h"
 
 class Player {
 public:
@@ -32,7 +31,8 @@ public:
   void SelectNextItem();
   void SelectPreviousItem();
   void SetHealth(int new_health);
-
+  void SetMaxHealth(int new_max_health);
+  void SetDamage(int new_damage);
   void ReduceHealthForHit(int d_health);
 
 private:

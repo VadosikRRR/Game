@@ -79,6 +79,8 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &game_lo
     QJsonObject player_object;
     player_object["name"] = player_name_;
     player_object["health"] = game_logic.GetPlayerHealth();
+    player_object["max_health"] = game_logic.GetPlayerMaxHealth();
+    player_object["damage"] = game_logic.GetPlayerAttackPower();
     player_object["currentLevel"] = game_logic.GetCurrentLevel();
 
     const GameStatistics &stats = game_logic.GetGameStatistics();
@@ -186,6 +188,8 @@ void GameSaverLoader::SaveEnemies(QJsonObject &map_object, const Map &map)
     for (const auto &enemy : map.GetEnemies()) {
         QJsonObject enemy_object;
         enemy_object["type"] = enemy->GetName();
+        enemy_object["health"] = enemy->GetHealth();
+        enemy_object["energy"] = enemy->GetEnergy();
         enemy_object["level"] = enemy->GetLevel();
         QJsonObject position_object;
         position_object["x"] = enemy->GetX();
@@ -231,6 +235,12 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &game_lo
 
     int health = player_object["health"].toInt();
     game_logic.GetPlayer().SetHealth(health);
+
+    int max_health = player_object["max_health"].toInt();
+    game_logic.GetPlayer().SetMaxHealth(max_health);
+
+    int damage = player_object["damage"].toInt();
+    game_logic.GetPlayer().SetDamage(damage);
 
     GameStatistics &stats = game_logic.GetGameStatistics();
     stats.SetCurrentLevel(current_level);
@@ -373,12 +383,16 @@ bool GameSaverLoader::LoadEnemies(const QJsonArray &enemies_array, Map &map)
     for (const auto &enemy_value : enemies_array) {
         QJsonObject enemy_object = enemy_value.toObject();
         QString enemy_type = enemy_object["type"].toString();
+        int health = enemy_object["health"].toInt();
+        int energy = enemy_object["energy"].toInt();
         int level = enemy_object["level"].toInt();
         QJsonObject position_object = enemy_object["position"].toObject();
         int x = position_object["x"].toInt();
         int y = position_object["y"].toInt();
 
         std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(level, x, y);
+        enemy->SetHealth(health);
+        enemy->SetEnergy(energy);
         map.LoadEnemy(enemy);
     }
     return true;

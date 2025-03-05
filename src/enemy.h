@@ -2,35 +2,7 @@
 #define ENEMY_H
 #include <QString>
 #include <QPoint>
-
-
-#define ATTACK_POWER_1 5
-#define ATTACK_POWER_2 10
-#define ATTACK_POWER_3 15
-
-#define MAX_HEALTH_1 30
-#define MAX_HEALTH_2 45
-#define MAX_HEALTH_3 60
-
-#define MAX_ENERGY_1 50
-#define MAX_ENERGY_2 100
-#define MAX_ENERGY_3 150
-
-#define ATTACK_PROBABILITY_1 25
-#define ATTACK_PROBABILITY_2 50
-#define ATTACK_PROBABILITY_3 50
-
-#define NAME_1 "Barbarian"
-#define NAME_2 "Pekka"
-#define NAME_3 "GODZILLA"
-
-#define SYMBOL_1 'E'
-#define SYMBOL_2 'N'
-#define SYMBOL_3 'H'
-
-#define ENERGY_FOR_STEP 10
-#define ENERGY_REST 10
-#define ENERGY_FOR_HIT 15
+#include "constants.h"
 
 class Enemy {
 private:
@@ -46,9 +18,6 @@ private:
     QPoint position_;
 
     char eaten_tile_ = '.';
-
-    void SetEnergy(int new_enegry);
-    void SetHealth(int new_health);
 public:
     explicit Enemy(int level_enemy, int x_coordinate, int y_coordinate);
 
@@ -65,6 +34,8 @@ public:
     QString GetName() const;
 
     void SetPosition(int x, int y);
+    void SetEnergy(int new_enegry);
+    void SetHealth(int new_health);
     void RestEnemy();
     void ReduceEnergyForStep();
     void ReduceEnergyForHit();

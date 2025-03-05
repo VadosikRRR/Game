@@ -11,6 +11,7 @@
 #include "../gamelogic.h"
 #include "../gamesaverloader.h"
 #include "statusbarwidget.h"
+#include "../constants.h"
 #include <memory>
 
 class GameWindow : public QMainWindow

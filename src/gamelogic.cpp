@@ -90,9 +90,11 @@ void GameLogic::MovePlayer(int dx, int dy)
 }
 
 void GameLogic::UpdateVisibleZone() {
-    std::shared_ptr<Room> p_room = maps_[current_level_].GetRoom(player_.GetX(), player_.GetY());
-    if (p_room) {
-        RoomExplored(*p_room);
+    auto p_rooms_vect = maps_[current_level_].GetRoomsWithPlayer(player_.GetX(), player_.GetY());
+    for (const auto & p_room : *p_rooms_vect) {
+        if (p_room) {
+            RoomExplored(*(p_room));
+        }
     }
 }
 
@@ -276,12 +278,12 @@ void GameLogic::UpdateEnemies()
         int result_probability = GetRandomInRange(0, 100);
 
         if (result_probability <= enemy.GetAttackProbability()
-            && distance_to_player <= kFightDistance && enemy.GetEnergy() >= ENERGY_FOR_HIT) {
+            && distance_to_player <= kFightDistance && enemy.GetEnergy() >= Constant::energy_for_hit) {
             player_.ReduceHealthForHit(enemy.GetAttackPower());
             continue;
         }
 
-        if (enemy.GetEnergy() < ENERGY_FOR_STEP) {
+        if (enemy.GetEnergy() < Constant::energy_for_step) {
             enemy.RestEnemy();
             continue;
         }
@@ -326,7 +328,7 @@ void GameLogic::HitEnemy(int dx, int dy)
     int y_enemy = player_.GetY() + dy;
     Map &map = maps_[current_level_];
     char symbol = map.GetTile(x_enemy, y_enemy);
-    if (symbol != SYMBOL_1 && symbol != SYMBOL_2 && symbol != SYMBOL_3) {
+    if (symbol != Constant::enemy_symbol_1 && symbol != Constant::enemy_symbol_2 && symbol != Constant::enemy_symbol_3) {
         return;
     }
 
@@ -347,6 +349,7 @@ void GameLogic::HitEnemy(int dx, int dy)
 
         if (p_enemy->GetHealth() <= 0) {
             map.DeleteEnemy(*p_enemy);
+            DropWithEnemy(*p_enemy);
             game_statistics_.IncrementEnemiesKilled();
         }
 
@@ -374,5 +377,22 @@ void GameLogic::SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new
                 map.SetExplored(x, y, row[x]);
             }
         }
+    }
+}
+
+void GameLogic::DropWithEnemy(Enemy &enemy) {
+    int result_probability = GetRandomInRange(0, 100);
+
+    if (enemy.GetSymbol() == Constant::enemy_symbol_1 && result_probability > Constant::drop_probability_1) {
+        return;
+    } else if (enemy.GetSymbol() == Constant::enemy_symbol_2 && result_probability > Constant::drop_probability_1) {
+        return;
+    } else if (enemy.GetSymbol() == Constant::enemy_symbol_3 && result_probability > Constant::drop_probability_1) {
+        return;
+    }
+
+    std::shared_ptr<Item> p_item = GetRandomItem();
+    if (p_item) {
+        maps_[current_level_].AddItem(enemy.GetX(), enemy.GetY(), p_item);
     }
 }
