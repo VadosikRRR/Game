@@ -91,5 +91,6 @@ public:
 };
 
 int GetRandomInRange(int min, int max);
+std::shared_ptr<Item> GetRandomItem();
 
 #endif // MAP_H

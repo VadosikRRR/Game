@@ -381,3 +381,19 @@ void Map::LoadRoom(Room &room) {
 void Map::LoadCorridor(Room &corridor) {
     corridors_.push_back(corridor);
 }
+
+std::shared_ptr<Item> GetRandomItem() {
+    int random = std::rand();
+
+    if (random % 7 == 0 || random % 4 == 0) {
+        int const damage = GetRandomInRange(kDamage / 2, 3 * kDamage / 2);
+        return std::make_shared<Sword>(damage);
+    } else if (random % 9 == 0) {
+        int const defense = GetRandomInRange(kDefense / 2, 3 * kDefense / 2);
+        return std::make_shared<Armor>(defense);
+    } else {
+        return std::make_shared<MedKit>();
+    }
+
+    return nullptr;
+}
