@@ -16,7 +16,7 @@ public:
 
 class CollectiblesItem : public Item {
 public:
-  void Add();
+  void Add(int num);
   void Drop();
   int GetCount() const;
   virtual ~CollectiblesItem() = default;

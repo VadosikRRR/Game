@@ -4,9 +4,9 @@ Sword::Sword(int damage) : damage_(damage) {}
 
 int Sword::GetDamage() const { return damage_; }
 
-void CollectiblesItem::Add()
+void CollectiblesItem::Add(int num)
 {
-    count_++;
+    count_ += num;
 }
 
 void CollectiblesItem::Drop() {

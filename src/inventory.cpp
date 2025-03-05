@@ -20,7 +20,7 @@ void Inventory::Add(const std::shared_ptr<Item> &item)
             if (existing_collectible
                 && existing_collectible->GetName().section('(', 0, 0).trimmed()
                        == collectible->GetName().section('(', 0, 0).trimmed()) {
-                existing_collectible->Add();
+                existing_collectible->Add(collectible->GetCount());
                 return;
             }
         }
