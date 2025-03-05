@@ -63,7 +63,7 @@ void Player::UseItem() {
       if (!medkit) {
           return;
       }
-      health_ += kMedKitHeal;
+      health_ += Constant::med_kit_heal;
 
       if (health_ > max_health_) {
           health_ = max_health_;
