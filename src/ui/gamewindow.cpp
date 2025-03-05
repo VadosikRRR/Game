@@ -7,9 +7,7 @@
 #include "../gamelogic.h"
 #include "../gamesaverloader.h"
 
-const int kPlayerVisibleDistance = 6;
 
-const char kPLayerChar = '@';
 GameWindow::GameWindow(const QString &player_name, int map_width, int map_height, QWidget *parent)
     : QMainWindow(parent)
     , scene_(new QGraphicsScene(this))
@@ -221,7 +219,7 @@ void GameWindow::Render()
         }
     }
 
-    UpdateTile(player_x, player_y, kPLayerChar);
+    UpdateTile(player_x, player_y, Constant::player_char);
 }
 
 void GameWindow::DrawVisibleTile(int x, int y, const std::vector<std::vector<char>> &map_data) {

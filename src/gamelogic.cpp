@@ -276,12 +276,12 @@ void GameLogic::UpdateEnemies()
         int result_probability = getRandomInRange(0, 100);
 
         if (result_probability <= enemy.GetAttackProbability()
-            && distance_to_player <= kFightDistance && enemy.GetEnergy() >= ENERGY_FOR_HIT) {
+            && distance_to_player <= kFightDistance && enemy.GetEnergy() >= Constant::energy_for_hit) {
             player_.ReduceHealthForHit(enemy.GetAttackPower());
             continue;
         }
 
-        if (enemy.GetEnergy() < ENERGY_FOR_STEP) {
+        if (enemy.GetEnergy() < Constant::energy_for_step) {
             enemy.RestEnemy();
             continue;
         }
@@ -326,7 +326,7 @@ void GameLogic::HitEnemy(int dx, int dy)
     int y_enemy = player_.GetY() + dy;
     Map &map = maps_[current_level_];
     char symbol = map.GetTile(x_enemy, y_enemy);
-    if (symbol != SYMBOL_1 && symbol != SYMBOL_2 && symbol != SYMBOL_3) {
+    if (symbol != Constant::enemy_symbol_1 && symbol != Constant::enemy_symbol_2 && symbol != Constant::enemy_symbol_3) {
         return;
     }
 

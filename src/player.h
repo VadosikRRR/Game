@@ -5,8 +5,7 @@
 #include <QPoint>
 #include <QString>
 #include <memory>
-
-#define PLAYER_ATTACK_PROBABILITY 75
+#include "constants.h"
 
 class Player {
 public:

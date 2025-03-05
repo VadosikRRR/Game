@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include "gamewindow.h"
+#include "../constants.h"
 
 class MainMenu : public QWidget
 {

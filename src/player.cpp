@@ -5,7 +5,7 @@
 
 Player::Player(const QString &name)
     : base_health_(100), health_(100), max_health_(100), base_power_(10),
-    attack_power_(10), attack_probability_(PLAYER_ATTACK_PROBABILITY), name_(std::move(name)) {}
+    attack_power_(10), attack_probability_(Constant::player_attack_probability), name_(std::move(name)) {}
 
 void Player::EquipSword() {
     std::shared_ptr<Item> const current_item = inventory_.GetCurrItem();
@@ -55,7 +55,7 @@ void Player::UseItem() {
   std::shared_ptr<Item> const curr_item = inventory_.GetCurrItem();
   if (curr_item) {
     if (curr_item->GetName() == "MedKit") {
-      health_ += kMedKitHeal;
+      health_ += Constant::med_kit_heal;
       if (health_ > max_health_) {
         health_ = max_health_;
       }
