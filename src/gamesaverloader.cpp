@@ -98,6 +98,8 @@ void GameSaverLoader::SavePlayerData(QJsonObject &json, const GameLogic &game_lo
             item_object["damage"] = sword->GetDamage();
         } else if (auto armor = std::dynamic_pointer_cast<Armor>(item)) {
             item_object["defence"] = armor->GetDefense();
+        } else if (auto medkit = std::dynamic_pointer_cast<MedKit>(item)) {
+            item_object["defence"] = medkit->GetCount();
         }
         inventory_array.append(item_object);
     }
@@ -254,7 +256,8 @@ bool GameSaverLoader::LoadPlayerData(const QJsonObject &json, GameLogic &game_lo
             int damage = item_param.toInt();
             item = std::make_shared<Sword>(damage);
         } else if (item_name == "MedKit") {
-            item = std::make_shared<MedKit>();
+            int count = item_param.toInt();
+            item = std::make_shared<MedKit>(count);
         } else if (item_name == "Armor") {
             int defense = item_param.toInt();
             item = std::make_shared<Armor>(defense);
