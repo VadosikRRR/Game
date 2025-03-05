@@ -43,20 +43,20 @@ public:
   std::shared_ptr<Room> GetRoom(int x, int y) const;
   const std::vector<Room> &GetRooms() const;
   const std::vector<Room> &GetCorridors() const;
-  Room getRandomRoom() const;
-  void setData(const std::vector<std::vector<char>> &newData);
+  Room GetRandomRoom() const;
+  void SetData(const std::vector<std::vector<char>> &newData);
   bool IsCellEmpty(int x, int y);
-  bool findNearbyPosition(int &x, int &y);
+  bool FindNearbyPosition(int &x, int &y);
 
   void LoadRoom(Room &room);
   void LoadCorridor(Room &corridor);
 
-  void addItemsToMap();
-  std::shared_ptr<Item> getItemAt(int x, int y);
-  void removeItemAt(int x, int y);
+  void AddItemsToMap();
+  std::shared_ptr<Item> GetItemAt(int x, int y);
+  void RemoveItemAt(int x, int y);
   void AddItem(int x, int y, const std::shared_ptr<Item> &item);
   void LoadItem(int x, int y, const std::shared_ptr<Item> &item);
-  const std::unordered_map<QPoint, std::shared_ptr<Item>> &getItems() const;
+  const std::unordered_map<QPoint, std::shared_ptr<Item>> &GetItems() const;
   const std::list<std::shared_ptr<Enemy>> &GetEnemies() const;
 
   void AddEnemy(std::shared_ptr<Enemy> p_enemy);
@@ -64,12 +64,12 @@ public:
   void AddEnemiesToMap();
   void DeleteEnemy(Enemy &enemy);
 
-  void setGreaterSign(QPoint point);
-  QPoint getGreaterSign() const;
-  void setLessSign(QPoint point);
-  QPoint getLessSign() const;
+  void SetGreaterSign(QPoint point);
+  QPoint GetGreaterSign() const;
+  void SetLessSign(QPoint point);
+  QPoint GetLessSign() const;
 
-private:
+  private:
   int map_width_, map_height_;
   std::vector<std::vector<char>> map_data_;
   std::vector<std::vector<bool>> visible_zone_;
@@ -81,15 +81,15 @@ private:
   QPoint greater_sign_;
   QPoint less_sign_;
 
-  void generateRooms(int roomCount, int minSize, int maxSize);
-  void connectRooms();
-  void addHorizontalCorridor(int x1, int x2, int y);
-  void addVerticalCorridor(int y1, int y2, int x);
-  void drawRoom(const Room &room);
-  void drawHorizontalCorridor(int x1, int x2, int y);
-  void drawVerticalCorridor(int y1, int y2, int x);
+  void GenerateRooms(int roomCount, int minSize, int maxSize);
+  void ConnectRooms();
+  void AddHorizontalCorridor(int x1, int x2, int y);
+  void AddVerticalCorridor(int y1, int y2, int x);
+  void DrawRoom(const Room &room);
+  void DrawHorizontalCorridor(int x1, int x2, int y);
+  void DrawVerticalCorridor(int y1, int y2, int x);
 };
 
-int getRandomInRange(int min, int max);
+int GetRandomInRange(int min, int max);
 
 #endif // MAP_H

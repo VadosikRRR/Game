@@ -10,14 +10,13 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-fix")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 йREQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 file( GLOB PROJECT_SOURCES
         src/**/*.cpp
         src/*.cpp
         src/*.h
-        src/*.ui
         
 )
 

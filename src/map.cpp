@@ -22,13 +22,14 @@ Map::Map(int mapWidth, int mapHeight)
 }
 
 void Map::GenerateMap() {
-  generateRooms(kRoomcount, kMinsize, kMaxsize);
-  connectRooms();
-  addItemsToMap();
-  AddEnemiesToMap();
+    GenerateRooms(kRoomcount, kMinsize, kMaxsize);
+    ConnectRooms();
+    AddItemsToMap();
+    AddEnemiesToMap();
 }
 
-void Map::generateRooms(int roomCount, int minSize, int maxSize) {
+void Map::GenerateRooms(int roomCount, int minSize, int maxSize)
+{
     for (int i = 0; i < roomCount; ++i) {
         int const width = minSize + std::rand() % (maxSize - minSize + 1);
         int const height = minSize + std::rand() % (maxSize - minSize + 1);
@@ -49,41 +50,43 @@ void Map::generateRooms(int roomCount, int minSize, int maxSize) {
 
         if (!intersects) {
             rooms_.push_back(room);
-            drawRoom(room);
+            DrawRoom(room);
         }
     }
 }
-Room Map::getRandomRoom() const {
-  if (rooms_.empty()) {
-    return {0, 0, 1, 1};
-  }
-  return rooms_[std::rand() % static_cast<int>(rooms_.size())];
-}
-
-void Map::connectRooms() {
-  for (size_t i = 1; i < rooms_.size(); ++i) {
-    int const x1 = rooms_[i - 1].x + rooms_[i - 1].width / 2;
-    int const y1 = rooms_[i - 1].y + rooms_[i - 1].height / 2;
-
-    int const x2 = rooms_[i].x + rooms_[i].width / 2;
-    int const y2 = rooms_[i].y + rooms_[i].height / 2;
-
-
-    if (std::rand() % 2 == 0) {
-      addHorizontalCorridor(x1, x2, y1);
-      drawHorizontalCorridor(x1, x2, y1);
-      addVerticalCorridor(y1, y2, x2);
-      drawVerticalCorridor(y1, y2, x2);
-    } else {
-      addVerticalCorridor(y1, y2, x1);
-      drawVerticalCorridor(y1, y2, x1);
-      addHorizontalCorridor(x1, x2, y2);
-      drawHorizontalCorridor(x1, x2, y2);
+Room Map::GetRandomRoom() const
+{
+    if (rooms_.empty()) {
+        return {0, 0, 1, 1};
     }
-  }
+    return rooms_[std::rand() % static_cast<int>(rooms_.size())];
 }
 
-void Map::addHorizontalCorridor(int x1, int x2, int y) {
+void Map::ConnectRooms()
+{
+    for (size_t i = 1; i < rooms_.size(); ++i) {
+        int const x1 = rooms_[i - 1].x + rooms_[i - 1].width / 2;
+        int const y1 = rooms_[i - 1].y + rooms_[i - 1].height / 2;
+
+        int const x2 = rooms_[i].x + rooms_[i].width / 2;
+        int const y2 = rooms_[i].y + rooms_[i].height / 2;
+
+        if (std::rand() % 2 == 0) {
+            AddHorizontalCorridor(x1, x2, y1);
+            DrawHorizontalCorridor(x1, x2, y1);
+            AddVerticalCorridor(y1, y2, x2);
+            DrawVerticalCorridor(y1, y2, x2);
+        } else {
+            AddVerticalCorridor(y1, y2, x1);
+            DrawVerticalCorridor(y1, y2, x1);
+            AddHorizontalCorridor(x1, x2, y2);
+            DrawHorizontalCorridor(x1, x2, y2);
+        }
+    }
+}
+
+void Map::AddHorizontalCorridor(int x1, int x2, int y)
+{
     if (x1 > x2) {
         std::swap(x1, x2);
     }
@@ -91,7 +94,8 @@ void Map::addHorizontalCorridor(int x1, int x2, int y) {
     corridors_.push_back(room);
 }
 
-void Map::addVerticalCorridor(int y1, int y2, int x) {
+void Map::AddVerticalCorridor(int y1, int y2, int x)
+{
     if (y1 > y2) {
         std::swap(y1, y2);
     }
@@ -100,25 +104,28 @@ void Map::addVerticalCorridor(int y1, int y2, int x) {
     corridors_.push_back(room);
 }
 
-void Map::drawRoom(const Room &room) {
-  for (int y = room.y; y < room.y + room.height; ++y) {
-    for (int x = room.x; x < room.x + room.width; ++x) {
-      SetTile(x, y, '.');
+void Map::DrawRoom(const Room &room)
+{
+    for (int y = room.y; y < room.y + room.height; ++y) {
+        for (int x = room.x; x < room.x + room.width; ++x) {
+            SetTile(x, y, '.');
+        }
     }
-  }
 }
 
-void Map::drawHorizontalCorridor(int x1, int x2, int y) {
-  if (x1 > x2) {
-    std::swap(x1, x2);
-  }
+void Map::DrawHorizontalCorridor(int x1, int x2, int y)
+{
+    if (x1 > x2) {
+        std::swap(x1, x2);
+    }
 
-  for (int x = x1; x <= x2; ++x) {
-    SetTile(x, y, '.');
-  }
+    for (int x = x1; x <= x2; ++x) {
+        SetTile(x, y, '.');
+    }
 }
 
-void Map::drawVerticalCorridor(int y1, int y2, int x) {
+void Map::DrawVerticalCorridor(int y1, int y2, int x)
+{
     if (y1 > y2) {
         std::swap(y1, y2);
     }
@@ -150,7 +157,8 @@ char Map::GetTile(int x, int y) const {
 
 const std::vector<std::vector<char>> &Map::GetData() const { return map_data_; }
 
-void Map::setData(const std::vector<std::vector<char>> &newData) {
+void Map::SetData(const std::vector<std::vector<char>> &newData)
+{
     if (static_cast<int>(newData.size()) == map_height_ && !newData.empty() &&
         static_cast<int>(newData[0].size()) == map_width_) {
     map_data_ = newData;
@@ -159,72 +167,75 @@ void Map::setData(const std::vector<std::vector<char>> &newData) {
   }
 }
 
-int getRandomInRange(int min, int max) {
-  return min + std::rand() % (max - min + 1);
+int GetRandomInRange(int min, int max)
+{
+    return min + std::rand() % (max - min + 1);
 }
 
 bool Map::IsCellEmpty(int x, int y) {
   return GetTile(x, y) == '.';
 }
 
-bool Map::findNearbyPosition(int &x, int &y) {
-  for (int dx = -1; dx <= 1; ++dx) {
-    for (int dy = -1; dy <= 1; ++dy) {
-      if (dx == 0 && dy == 0) {
-        continue;
-      }
-      if (IsCellEmpty(x + dx, y + dy)) {
-        x += dx;
-        y += dy;
-        return true;
-      }
+bool Map::FindNearbyPosition(int &x, int &y)
+{
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) {
+                continue;
+            }
+            if (IsCellEmpty(x + dx, y + dy)) {
+                x += dx;
+                y += dy;
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
-void Map::addItemsToMap() {
-  for (const auto &room : rooms_) {
+void Map::AddItemsToMap()
+{
+    for (const auto &room : rooms_) {
+        int center_x = room.x + room.width / 2;
+        int center_y = room.y + room.height / 2;
 
-    int center_x = room.x + room.width / 2;
-    int center_y = room.y + room.height / 2;
+        if (!IsCellEmpty(center_x, center_y)) {
+            if (!FindNearbyPosition(center_x, center_y)) {
+                continue;
+            }
+        }
 
-    if (!IsCellEmpty(center_x, center_y)) {
+        int random = std::rand();
 
-      if (!findNearbyPosition(center_x, center_y)) {
-        continue;
-      }
+        if (random % 5 == 0) {
+            SetTile(center_x, center_y, '+');
+            items_[QPoint(center_x, center_y)] = std::make_shared<MedKit>();
+        } else if (random % 7 == 0) {
+            int const damage = GetRandomInRange(kDamage / 2, 3 * kDamage / 2);
+            SetTile(center_x, center_y, '!');
+            items_[QPoint(center_x, center_y)] = std::make_shared<Sword>(damage);
+        } else if (random % 9 == 0) {
+            int const defense = GetRandomInRange(kDefense / 2, 3 * kDefense / 2);
+            SetTile(center_x, center_y, 'A');
+            items_[QPoint(center_x, center_y)] = std::make_shared<Armor>(defense);
+        }
     }
-
-    int random = std::rand();
-
-    if (random % 5 == 0) {
-      SetTile(center_x, center_y, '+');
-      items_[QPoint(center_x, center_y)] = std::make_shared<MedKit>();
-    } else if (random % 7 == 0) {
-      int const damage = getRandomInRange(kDamage / 2, 3 * kDamage / 2);
-      SetTile(center_x, center_y, '!');
-      items_[QPoint(center_x, center_y)] = std::make_shared<Sword>(damage);
-    } else if (random % 9 == 0) {
-      int const defense = getRandomInRange(kDefense / 2, 3 * kDefense / 2);
-      SetTile(center_x, center_y, 'A');
-      items_[QPoint(center_x, center_y)] = std::make_shared<Armor>(defense);
-    }
-  }
 }
 
-std::shared_ptr<Item> Map::getItemAt(int x, int y) {
-  QPoint const pos(x, y);
-  if (items_.find(pos) != items_.end()) {
-    return items_[pos];
-  }
-  return nullptr;
+std::shared_ptr<Item> Map::GetItemAt(int x, int y)
+{
+    QPoint const pos(x, y);
+    if (items_.find(pos) != items_.end()) {
+        return items_[pos];
+    }
+    return nullptr;
 }
 
-void Map::removeItemAt(int x, int y) {
-  QPoint const pos(x, y);
-  items_.erase(pos);
-  SetTile(x, y, '.');
+void Map::RemoveItemAt(int x, int y)
+{
+    QPoint const pos(x, y);
+    items_.erase(pos);
+    SetTile(x, y, '.');
 }
 
 void Map::LoadItem(int x, int y, const std::shared_ptr<Item> &item) {
@@ -256,8 +267,7 @@ void Map::AddEnemiesToMap() {
         int center_y = room.y + room.height / 2;
 
         if (!IsCellEmpty(center_x, center_y)) {
-
-            if (!findNearbyPosition(center_x, center_y)) {
+            if (!FindNearbyPosition(center_x, center_y)) {
                 continue;
             }
         }
@@ -277,8 +287,9 @@ void Map::AddEnemiesToMap() {
     }
 }
 
-const std::unordered_map<QPoint, std::shared_ptr<Item>> &Map::getItems() const {
-  return items_;
+const std::unordered_map<QPoint, std::shared_ptr<Item>> &Map::GetItems() const
+{
+    return items_;
 }
 
 const std::list<std::shared_ptr<Enemy>> &Map::GetEnemies() const {
@@ -301,13 +312,25 @@ void Map::DeleteEnemy(Enemy &enemy) {
     }
 }
 
-void Map::setGreaterSign(QPoint point) { greater_sign_ = point; }
+void Map::SetGreaterSign(QPoint point)
+{
+    greater_sign_ = point;
+}
 
-QPoint Map::getGreaterSign() const { return greater_sign_; }
+QPoint Map::GetGreaterSign() const
+{
+    return greater_sign_;
+}
 
-void Map::setLessSign(QPoint point) { less_sign_ = point; }
+void Map::SetLessSign(QPoint point)
+{
+    less_sign_ = point;
+}
 
-QPoint Map::getLessSign() const { return less_sign_; }
+QPoint Map::GetLessSign() const
+{
+    return less_sign_;
+}
 
 bool Map::IsExplored(int x, int y) const {
     return visible_zone_[y][x];

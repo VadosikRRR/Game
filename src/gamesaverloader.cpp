@@ -156,7 +156,7 @@ void GameSaverLoader::SaveCorridors(QJsonObject &map_object, const Map &map) {
 void GameSaverLoader::SaveItems(QJsonObject &map_object, const Map &map)
 {
     QJsonArray items_array;
-    for (const auto &[pos, item] : map.getItems()) {
+    for (const auto &[pos, item] : map.GetItems()) {
         QJsonObject item_object;
         item_object["type"] = item->GetName();
         QJsonObject position_object;
@@ -276,7 +276,7 @@ bool GameSaverLoader::LoadMapData(const QJsonArray &maps_array, GameLogic &game_
         }
 
         Map map(map_data[0].size(), map_data.size());
-        map.setData(map_data);
+        map.SetData(map_data);
 
         LoadRooms(map_object["rooms"].toArray(), map);
         LoadCorridors(map_object["corridors"].toArray(), map);
