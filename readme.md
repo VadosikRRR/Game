@@ -10,7 +10,7 @@ The best game of 2025. Developed by students of matmech:
 
 ### How to run (ONLY LINUX)
 
-#### 1. Clone the repository into a convenient folder and go to the `Game` folder
+#### 1. Clone the repository and go to the `Game` folder
 
 ```bash
 git clone git@github.com:VadosikRRR/Game.git
@@ -22,18 +22,16 @@ cd Game
 ```bash
 mkdir build
 cd build
-mkdir Desktop-Debug
-cd Desktop-Debug
 ```
 
 #### 3. Next is the compilation
 
 ```bash
-cmake ../..
+cmake ..
 ```
 
 ```bash
-make
+cmake --build .
 ```
 
 #### 4. Launch `Roguelike`
