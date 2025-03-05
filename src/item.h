@@ -41,6 +41,7 @@ private:
 class MedKit : public CollectiblesItem {
 public:
   MedKit() = default;
+  MedKit(unsigned count);
   ~MedKit() = default;
   QString GetName() const override;
   char GetTile() const override;

@@ -16,7 +16,8 @@ void Inventory::Add(const std::shared_ptr<Item> &item)
         for (auto &existing_item : container_) {
             std::shared_ptr<CollectiblesItem> existing_collectible
                 = std::dynamic_pointer_cast<CollectiblesItem>(existing_item);
-            if (existing_collectible && existing_collectible->GetName() == collectible->GetName()) {
+            if (existing_collectible->GetName().section('(', 0, 0).trimmed()
+                == collectible->GetName().section('(', 0, 0).trimmed()) {
                 existing_collectible->Add();
                 return;
             }

@@ -28,6 +28,11 @@ char Sword::GetTile() const { return '!'; }
 
 char MedKit::GetTile() const { return '+'; }
 
+MedKit::MedKit(unsigned count)
+{
+    count_ = count;
+}
+
 Armor::Armor(int defence) : defense_(defence) {}
 
 int Armor::GetDefense() const { return defense_; }
