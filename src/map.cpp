@@ -29,29 +29,29 @@ void Map::GenerateMap() {
 }
 
 void Map::generateRooms(int roomCount, int minSize, int maxSize) {
-  for (int i = 0; i < roomCount; ++i) {
-    int const width = minSize + std::rand() % (maxSize - minSize + 1);
-    int const height = minSize + std::rand() % (maxSize - minSize + 1);
-    int const x = std::rand() % (map_width_ - width - 1) + 1;
-    int const y = std::rand() % (map_height_ - height - 1) + 1;
-    Room const room = {x, y, width, height};
+    for (int i = 0; i < roomCount; ++i) {
+        int const width = minSize + std::rand() % (maxSize - minSize + 1);
+        int const height = minSize + std::rand() % (maxSize - minSize + 1);
+        int const x = std::rand() % (map_width_ - width - 1) + 1;
+        int const y = std::rand() % (map_height_ - height - 1) + 1;
+        Room const room = {x, y, width, height};
 
-    bool intersects = false;
-    for (const auto &existing_room : rooms_) {
-      if (x < existing_room.x + existing_room.width &&
-          x + width > existing_room.x &&
-          y < existing_room.y + existing_room.height &&
-          y + height > existing_room.y) {
-        intersects = true;
-        break;
-      }
-    }
+        bool intersects = false;
+        for (const auto &existing_room : rooms_) {
+            if (x < existing_room.x + existing_room.width &&
+                x + width > existing_room.x &&
+                y < existing_room.y + existing_room.height &&
+                y + height > existing_room.y) {
+                intersects = true;
+                break;
+            }
+        }
 
-    if (!intersects) {
-      rooms_.push_back(room);
-      drawRoom(room);
+        if (!intersects) {
+            rooms_.push_back(room);
+            drawRoom(room);
+        }
     }
-  }
 }
 Room Map::getRandomRoom() const {
   if (rooms_.empty()) {
@@ -68,15 +68,16 @@ void Map::connectRooms() {
     int const x2 = rooms_[i].x + rooms_[i].width / 2;
     int const y2 = rooms_[i].y + rooms_[i].height / 2;
 
+
     if (std::rand() % 2 == 0) {
       addHorizontalCorridor(x1, x2, y1);
-      addVerticalCorridor(y1, y2, x2);
       drawHorizontalCorridor(x1, x2, y1);
+      addVerticalCorridor(y1, y2, x2);
       drawVerticalCorridor(y1, y2, x2);
     } else {
       addVerticalCorridor(y1, y2, x1);
-      addHorizontalCorridor(x1, x2, y2);
       drawVerticalCorridor(y1, y2, x1);
+      addHorizontalCorridor(x1, x2, y2);
       drawHorizontalCorridor(x1, x2, y2);
     }
   }
@@ -118,6 +119,10 @@ void Map::drawHorizontalCorridor(int x1, int x2, int y) {
 }
 
 void Map::drawVerticalCorridor(int y1, int y2, int x) {
+    if (y1 > y2) {
+        std::swap(y1, y2);
+    }
+
   for (int y = y1; y <= y2; ++y) {
     SetTile(x, y, '.');
   }
