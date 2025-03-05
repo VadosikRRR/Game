@@ -336,22 +336,23 @@ bool Map::IsExplored(int x, int y) const {
     return visible_zone_[y][x];
 }
 
-std::shared_ptr<Room> Map::GetRoom(int x, int y) const{
+std::shared_ptr<std::vector<std::shared_ptr<Room>>> Map::GetRoomsWithPlayer(int x, int y) const{
+    auto p_rooms_vect = std::make_shared<std::vector<std::shared_ptr<Room>>>();
     for (size_t ind = 0; ind < rooms_.size(); ++ind) {
         if (rooms_[ind].x <= x && rooms_[ind].x + rooms_[ind].width + 1 > x &&
             rooms_[ind].y <= y && rooms_[ind].y + rooms_[ind].height + 1 > y) {
-            return std::make_shared<Room>(rooms_[ind]);
+            p_rooms_vect->push_back(std::make_shared<Room>(rooms_[ind]));
         }
     }
 
     for (size_t ind = 0; ind < corridors_.size(); ++ind) {
         if (corridors_[ind].x <= x && corridors_[ind].x + corridors_[ind].width + 1 > x &&
             corridors_[ind].y <= y && corridors_[ind].y + corridors_[ind].height + 1 > y) {
-            return std::make_shared<Room>(corridors_[ind]);
+            p_rooms_vect->push_back(std::make_shared<Room>(corridors_[ind]));
         }
     }
 
-    return nullptr;
+    return p_rooms_vect;
 }
 
 void Map::TileExplored(int x, int y) {

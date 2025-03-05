@@ -90,9 +90,11 @@ void GameLogic::MovePlayer(int dx, int dy)
 }
 
 void GameLogic::UpdateVisibleZone() {
-    std::shared_ptr<Room> p_room = maps_[current_level_].GetRoom(player_.GetX(), player_.GetY());
-    if (p_room) {
-        RoomExplored(*p_room);
+    auto p_rooms_vect = maps_[current_level_].GetRoomsWithPlayer(player_.GetX(), player_.GetY());
+    for (const auto & p_room : *p_rooms_vect) {
+        if (p_room) {
+            RoomExplored(*(p_room));
+        }
     }
 }
 
