@@ -4,10 +4,6 @@
 #include <QPoint>
 #include "constants.h"
 
-#define DROP_PROBABILITY_1 25
-#define DROP_PROBABILITY_2 50
-#define DROP_PROBABILITY_3 75
-
 class Enemy {
 private:
     char symbol_;

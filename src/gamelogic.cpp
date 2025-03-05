@@ -383,11 +383,11 @@ void GameLogic::SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new
 void GameLogic::DropWithEnemy(Enemy &enemy) {
     int result_probability = GetRandomInRange(0, 100);
 
-    if (enemy.GetSymbol() == SYMBOL_1 && result_probability > DROP_PROBABILITY_1) {
+    if (enemy.GetSymbol() == Constant::enemy_symbol_1 && result_probability > Constant::drop_probability_1) {
         return;
-    } else if (enemy.GetSymbol() == SYMBOL_2 && result_probability > DROP_PROBABILITY_2) {
+    } else if (enemy.GetSymbol() == Constant::enemy_symbol_2 && result_probability > Constant::drop_probability_1) {
         return;
-    } else if (enemy.GetSymbol() == SYMBOL_3 && result_probability > DROP_PROBABILITY_3) {
+    } else if (enemy.GetSymbol() == Constant::enemy_symbol_3 && result_probability > Constant::drop_probability_1) {
         return;
     }
 

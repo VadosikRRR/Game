@@ -36,5 +36,9 @@ namespace Constant{
 
     constexpr int map_width = 80;
     constexpr int map_height = 60;
+
+    constexpr int drop_probability_1 = 25;
+    constexpr int drop_probability_2 = 50;
+    constexpr int drop_probability_3 = 75;
 }
 #endif // CONSTANTS_H
