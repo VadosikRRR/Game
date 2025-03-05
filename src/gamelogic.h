@@ -55,6 +55,9 @@ public:
     void MoveEnemy(Enemy &enemy, QPoint new_position);
     void UpdateEnemies();
 
+    void UpdateVisibleZone();
+    void SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new_visilbe_zones);
+
 private:
     std::vector<Map> maps_;
     int current_level_;
@@ -64,7 +67,6 @@ private:
     Player player_;
     std::shared_ptr<Enemy> attacked_enemy_;
 
-    void UpdateVisibleZone();
     void RoomExplored(Room &room);
 };
 

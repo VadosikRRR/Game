@@ -36,13 +36,20 @@ public:
   void SetTile(int x, int y, char tile);
   char GetTile(int x, int y) const;
   void TileExplored(int x, int y);
+  const std::vector<std::vector<bool>> & GetVisibleZone() const;
+  void SetExplored(int x, int y, bool is_explored);
 
   const std::vector<std::vector<char>> &GetData() const;
   std::shared_ptr<Room> GetRoom(int x, int y) const;
+  const std::vector<Room> &GetRooms() const;
+  const std::vector<Room> &GetCorridors() const;
   Room getRandomRoom() const;
   void setData(const std::vector<std::vector<char>> &newData);
   bool IsCellEmpty(int x, int y);
   bool findNearbyPosition(int &x, int &y);
+
+  void LoadRoom(Room &room);
+  void LoadCorridor(Room &corridor);
 
   void addItemsToMap();
   std::shared_ptr<Item> getItemAt(int x, int y);

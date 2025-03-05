@@ -363,3 +363,16 @@ void GameLogic::IncrementEnemiesKilled()
 {
     game_statistics_.IncrementEnemiesKilled();
 }
+
+void GameLogic::SetVisibleZones(std::vector<std::vector<std::vector<bool>>> &new_visilbe_zones) {
+    for (int ind1 = 0; ind1 < static_cast<int>(maps_.size()); ++ind1) {
+        Map &map = maps_[ind1];
+        std::vector<std::vector<bool>> &new_visible_zone = new_visilbe_zones[ind1];
+        for (int y = 0; y < static_cast<int>(new_visible_zone.size()); ++y) {
+            std::vector<bool> row = new_visible_zone[y];
+            for (int x = 0; x < static_cast<int>(row.size()); ++x) {
+                map.SetExplored(x, y, row[x]);
+            }
+        }
+    }
+}

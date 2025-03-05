@@ -329,3 +329,27 @@ std::shared_ptr<Room> Map::GetRoom(int x, int y) const{
 void Map::TileExplored(int x, int y) {
     visible_zone_[y][x] = true;
 }
+
+const std::vector<std::vector<bool>> & Map::GetVisibleZone() const {
+    return visible_zone_;
+}
+
+void Map::SetExplored(int x, int y, bool is_explored) {
+    visible_zone_[y][x] = is_explored;
+}
+
+const std::vector<Room> &Map::GetRooms() const {
+    return rooms_;
+}
+
+const std::vector<Room> &Map::GetCorridors() const {
+    return corridors_;
+}
+
+void Map::LoadRoom(Room &room) {
+    rooms_.push_back(room);
+}
+
+void Map::LoadCorridor(Room &corridor) {
+    corridors_.push_back(corridor);
+}

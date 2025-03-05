@@ -110,6 +110,7 @@ void GameWindow::OnSaveClicked()
 bool GameWindow::LoadGameState()
 {
     if (game_saver_loader_->LoadGame(*game_logic_)) {
+        game_logic_->UpdateVisibleZone();
         Render();
         return true;
     }
