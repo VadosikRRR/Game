@@ -40,7 +40,6 @@ else()
     else()
         add_executable(RogueLike
             ${PROJECT_SOURCES}
-            src/config.h
 
 
 

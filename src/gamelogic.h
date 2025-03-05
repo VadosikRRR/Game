@@ -8,6 +8,7 @@
 #include "player.h"
 #include <memory>
 #include <vector>
+#include "constants.h"
 
 class GameLogic : public QObject
 {
