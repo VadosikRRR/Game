@@ -111,3 +111,24 @@ void Player::SetHealth(int new_health) {
 void Player::ReduceHealthForHit(int d_health) {
     SetHealth(health_ - d_health);
 }
+
+void Player::SetMaxHealth(int new_max_health) {
+    if (new_max_health <= 0) {
+        max_health_ = 100;
+        return;
+    }
+    if (new_max_health < health_) {
+        health_ = new_max_health;
+    }
+
+    max_health_ = new_max_health;
+}
+
+void Player::SetDamage(int new_damage) {
+    if (new_damage < 0) {
+        attack_power_ = 10;
+        return;
+    }
+
+    attack_power_ = new_damage;
+}
